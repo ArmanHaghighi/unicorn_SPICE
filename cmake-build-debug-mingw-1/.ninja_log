@@ -1,0 +1,16 @@
+# ninja log v6
+504	2786	7700782075496329	CMakeFiles/OOP_Project.dir/main.cpp.obj	c696459923c0b9e7
+15	617	7700781742063467	CMakeFiles/OOP_Project.dir/Model/model.cpp.obj.ddi	9d1a7cce29e0ee74
+472	502	7700782075171459	CMakeFiles/OOP_Project.dir/CXX.dd	6ab95cbe42574594
+675	3532	7700781748671623	CMakeFiles/OOP_Project.dir/Controller/controller.cpp.obj	e79cffd4a323fe20
+2786	2896	7700782098314972	OOP_Project.exe	90687f9480b0c9d4
+23	630	7700781742153184	CMakeFiles/OOP_Project.dir/Controller/controller.cpp.obj.ddi	f8447ce90a8d7fa0
+9	471	7700782070536501	CMakeFiles/OOP_Project.dir/main.cpp.obj.ddi	aa3fa95eabc8a8c9
+472	502	7700782075171459	C:/Users/Arman/Documents/GitHub/OOP_Project/cmake-build-debug-mingw-1/CMakeFiles/OOP_Project.dir/CXXModules.json	6ab95cbe42574594
+472	502	7700782075171459	CMakeFiles/OOP_Project.dir/main.cpp.obj.modmap	6ab95cbe42574594
+19	630	7700781742102628	CMakeFiles/OOP_Project.dir/View/view.cpp.obj.ddi	e10482034b66669f
+472	502	7700782075171459	CMakeFiles/OOP_Project.dir/Model/model.cpp.obj.modmap	6ab95cbe42574594
+472	502	7700782075171459	CMakeFiles/OOP_Project.dir/Controller/controller.cpp.obj.modmap	6ab95cbe42574594
+670	3489	7700781748623942	CMakeFiles/OOP_Project.dir/View/view.cpp.obj	c427dd2e2c850622
+472	502	7700782075171459	CMakeFiles/OOP_Project.dir/View/view.cpp.obj.modmap	6ab95cbe42574594
+666	3471	7700781748583825	CMakeFiles/OOP_Project.dir/Model/model.cpp.obj	56d29dd40e1ebdb8
