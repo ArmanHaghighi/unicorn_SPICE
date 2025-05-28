@@ -26,27 +26,42 @@ public:
 
 class Node {
 private:
-    int id;
-    double voltage;
+    string name;
     list<pair<Element*, double>> elements; //elemets connected to node and their currents
+//so that we can change the voltage for a ground
+protected:
+        double voltage;
 public:
     explicit Node(int id);
     void connectElement(Element* element);
     void removeElement(Element* element);
     double KCL_CurrentCalc(Element* element);
     double getVoltage();
+    void setVoltage(double v){
+        voltage = v;
+    }
+    list<pair<Element*, double>> returnConnectedElements();
 };
+
 class Element {
 private:
     string name;
 protected:
-    vector<Node*> nodes; // nodes of the element (can be replaced with node1* and node2* for elements with only 2 legs)
+    Node* node1;
+    Node* node2;
     double value;
 public:
     virtual ~Element() = default;
 
     virtual void addToMatrix (MatrixXd& matrix)=0;
     virtual double getCurrent()=0;
+};
+
+class ground : public Node {
+public:
+    explicit ground(int id) : Node(id) {
+        setVoltage(0.0);
+    }
 };
 
 class Resistor : public Element {
@@ -80,6 +95,11 @@ public:
     void addToMatrix(MatrixXd &matrix) override{};
     double getCurrent() override{};
 };
-
+class Diode : public Element {
+public:
+    string model;
+    void addToMatrix(MatrixXd &matrix) override{};
+    double getCurrent() override{};
+};
 
 #endif //MODEL_H
