@@ -34,7 +34,7 @@
 			{
 				"command" : 1,
 				"file" : 0,
-				"line" : 15,
+				"line" : 18,
 				"parent" : 0
 			}
 		]
@@ -68,9 +68,10 @@
 			"sourceIndexes" : 
 			[
 				0,
-				1,
-				3,
-				5
+				2,
+				4,
+				6,
+				7
 			]
 		}
 	],
@@ -104,29 +105,25 @@
 			"sourceIndexes" : 
 			[
 				0,
-				1,
-				3,
-				5
+				2,
+				4,
+				6,
+				7
 			]
 		},
 		{
 			"name" : "Header Files",
 			"sourceIndexes" : 
 			[
-				2,
-				4,
-				6
+				1,
+				3,
+				5,
+				8
 			]
 		}
 	],
 	"sources" : 
 	[
-		{
-			"backtrace" : 1,
-			"compileGroupIndex" : 0,
-			"path" : "main.cpp",
-			"sourceGroupIndex" : 0
-		},
 		{
 			"backtrace" : 1,
 			"compileGroupIndex" : 0,
@@ -158,6 +155,23 @@
 		{
 			"backtrace" : 1,
 			"path" : "Controller/controller.h",
+			"sourceGroupIndex" : 1
+		},
+		{
+			"backtrace" : 1,
+			"compileGroupIndex" : 0,
+			"path" : "main.cpp",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 1,
+			"compileGroupIndex" : 0,
+			"path" : "Model/CLI_regexes.cpp",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 1,
+			"path" : "Model/CLI_regexes.h",
 			"sourceGroupIndex" : 1
 		}
 	],
