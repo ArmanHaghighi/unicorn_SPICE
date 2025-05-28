@@ -1,0 +1,67 @@
+//
+// Created by Arman on 5/28/2025.
+//
+
+#include "CLI_regexes.h"
+
+
+// Initialize static regex members
+// Resistor commands
+const std::regex Cli_regexes::RESISTOR_ADD(R"(^\s*add\s+(R[\w\d]+)\s+(\w+)\s+(\w+)\s+([\d\.]+[kmu]?)\s*$)", std::regex::icase);
+const std::regex Cli_regexes::RESISTOR_DELETE(R"(^\s*delete\s+(R[\w\d]+)\s*$)", std::regex::icase);
+
+// Capacitor commands
+const std::regex Cli_regexes::CAPACITOR_ADD(R"(^\s*add\s+(C[\w\d]+)\s+(\w+)\s+(\w+)\s+([\d\.]+[u]?)\s*$)", std::regex::icase);
+const std::regex Cli_regexes::CAPACITOR_DELETE(R"(^\s*delete\s+(C[\w\d]+)\s*$)", std::regex::icase);
+
+// Inductor commands
+const std::regex Cli_regexes::INDUCTOR_ADD(R"(^\s*add\s+(L[\w\d]+)\s+(\w+)\s+(\w+)\s+([\d\.]+[m]?)\s*$)", std::regex::icase);
+const std::regex Cli_regexes::INDUCTOR_DELETE(R"(^\s*delete\s+(L[\w\d]+)\s*$)", std::regex::icase);
+
+// Diode commands
+const std::regex Cli_regexes::DIODE_ADD(R"(^\s*add\s+(D[\w\d]+)\s+(\w+)\s+(\w+)\s+(\w+)\s*$)", std::regex::icase);
+const std::regex Cli_regexes::DIODE_DELETE(R"(^\s*delete\s+(D[\w\d]+)\s*$)", std::regex::icase);
+
+// Ground commands
+const std::regex Cli_regexes::GROUND_ADD(R"(^\s*add\s+GND\s+(\w+)\s*$)", std::regex::icase);
+const std::regex Cli_regexes::GROUND_DELETE(R"(^\s*delete\s+GND\s+(\w+)\s*$)", std::regex::icase);
+
+// Source commands
+const std::regex Cli_regexes::VOLTAGE_SOURCE_ADD(R"(^\s*add\s+VoltageSource([\w\d]+)\s+(\w+)\s+(\w+)\s+([\d\.]+)\s*$)", std::regex::icase);
+const std::regex Cli_regexes::CURRENT_SOURCE_ADD(R"(^\s*add\s+CurrentSource([\w\d]+)\s+(\w+)\s+(\w+)\s+([\d\.]+)\s*$)", std::regex::icase);
+const std::regex Cli_regexes::SIN_SOURCE_ADD(R"(^\s*add\s+(V[\w\d]+)\s+(\w+)\s+(\w+)\s+SIN\(\s*([\d\.]+)\s+([\d\.]+)\s+([\d\.]+)\s*\)\s*$)", std::regex::icase);
+const std::regex Cli_regexes::PULSE_SOURCE_ADD(R"(^\s*add\s+(V[\w\d]+)\s+(\w+)\s+(\w+)\s+PULSE\s+(\w+)\s+([\d\.]+)\s*$)", std::regex::icase);
+
+// Dependent source commands
+const std::regex Cli_regexes::VCVS_ADD(R"(^\s*add\s+(E[\w\d]+)\s+(\w+)\s+(\w+)\s+(\w+)\s+(\w+)\s+([\d\.]+)\s*$)", std::regex::icase);
+const std::regex Cli_regexes::VCCS_ADD(R"(^\s*add\s+(G[\w\d]+)\s+(\w+)\s+(\w+)\s+(\w+)\s+(\w+)\s+([\d\.]+)\s*$)", std::regex::icase);
+const std::regex Cli_regexes::CCVS_ADD(R"(^\s*add\s+(H[\w\d]+)\s+(\w+)\s+(\w+)\s+(\w+)\s+([\d\.]+)\s*$)", std::regex::icase);
+const std::regex Cli_regexes::CCCS_ADD(R"(^\s*add\s+(F[\w\d]+)\s+(\w+)\s+(\w+)\s+(\w+)\s+([\d\.]+)\s*$)", std::regex::icase);
+
+// Node operations
+const std::regex Cli_regexes::NODES_LIST(R"(^\s*\.nodes\s*$)", std::regex::icase);
+const std::regex Cli_regexes::NODE_RENAME(R"(^\s*\.rename\s+node\s+(\w+)\s+(\w+)\s*$)", std::regex::icase);
+const std::regex Cli_regexes::ELEMENTS_LIST(R"(^\s*\.list(?:\s+(\w+))?\s*$)", std::regex::icase);
+
+// Print commands
+const std::regex Cli_regexes::PRINT_TRAN_V(R"(^\s*\.print\s+TRAN\s+([\d\.]+[mun]?s?)\s+([\d\.]+[mun]?s?)(?:\s+([\d\.]+[mun]?s?))?(?:\s+([\d\.]+[mun]?s?))?\s+V\((\w+)\)\s*$)", std::regex::icase);
+const std::regex Cli_regexes::PRINT_TRAN_I(R"(^\s*\.print\s+TRAN\s+([\d\.]+[mun]?s?)\s+([\d\.]+[mun]?s?)(?:\s+([\d\.]+[mun]?s?))?(?:\s+([\d\.]+[mun]?s?))?\s+I\(([\w\d]+)\)\s*$)", std::regex::icase);
+const std::regex Cli_regexes::PRINT_DC_V(R"(^\s*\.print\s+DC\s+(\w+)\s+([\d\.]+)\s+([\d\.]+)\s+([\d\.]+)\s+V\((\w+)\)\s*$)", std::regex::icase);
+const std::regex Cli_regexes::PRINT_DC_I(R"(^\s*\.print\s+DC\s+(\w+)\s+([\d\.]+)\s+([\d\.]+)\s+([\d\.]+)\s+I\(([\w\d]+)\)\s*$)", std::regex::icase);
+
+// File operations
+const std::regex Cli_regexes::NEW_FILE(R"(^\s*NewFile\s+(\S+)\s*$)", std::regex::icase);
+const std::regex Cli_regexes::SHOW_SCHEMATICS(R"(^\s*\-show\s+existing\s+schematics\s*$)", std::regex::icase);
+const std::regex Cli_regexes::CHOOSE_SCHEMATIC(R"(^\s*\-choose\s+existing\s+schematic:\s*(\d+)\s*$)", std::regex::icase);
+const std::regex Cli_regexes::RETURN_CMD(R"(^\s*return\s*$)", std::regex::icase);
+
+// Analysis commands
+const std::regex Cli_regexes::TRAN_ANALYSIS(R"(^\s*TRAN\s+([\d\.]+[mun]?s?)\s+([\d\.]+[mun]?s?)(?:\s+([\d\.]+[mun]?s?))?(?:\s+([\d\.]+[mun]?s?))?\s*$)", std::regex::icase);
+const std::regex Cli_regexes::DC_ANALYSIS(R"(^\s*DC\s+(\w+)\s+([\d\.]+)\s+([\d\.]+)\s+([\d\.]+)\s*$)", std::regex::icase);
+
+std::string Cli_regexes::trim(const std::string& str) {
+    size_t first = str.find_first_not_of(' ');
+    if (first == std::string::npos) return "";
+    size_t last = str.find_last_not_of(' ');
+    return str.substr(first, (last - first + 1));
+}

@@ -7,6 +7,15 @@
 #include <exception>
 #ifndef CONTROLLER_H
 #define CONTROLLER_H
+class Controller {
+private:
+    string type;
+    CLI* cli;
+public:
+    Controller(string type);
+    ~Controller();
+    void parse(string line);
+};
 class SPICE_Exception : public std::exception {};
 
 class ParsingException : public SPICE_Exception {
