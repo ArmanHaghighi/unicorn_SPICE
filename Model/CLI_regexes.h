@@ -81,16 +81,11 @@ class Cli_regexes {
 
     // Print commands
     // Command: .print TRAN <Tstep> <Tstop> [<Tstart>] [<Tmaxstep>] V(<node>)
-    static const std::regex PRINT_TRAN_V;
-
     // Command: .print TRAN <Tstep> <Tstop> [<Tstart>] [<Tmaxstep>] I(<component>)
-    static const std::regex PRINT_TRAN_I;
-
     // Command: .print DC <SourceName> <StartValue> <EndValue> <Increment> V(<node>)
-    static const std::regex PRINT_DC_V;
-
     // Command: .print DC <SourceName> <StartValue> <EndValue> <Increment> I(<component>)
-    static const std::regex PRINT_DC_I;
+
+    static const std::regex PRINT_COMMAND;
 
     // File operations
     // Command: NewFile <file_path>
@@ -111,6 +106,8 @@ class Cli_regexes {
 
     // Command: DC <SourceName> <StartValue> <EndValue> <Increment>
     static const std::regex DC_ANALYSIS;
+
+    static const std::regex EXIT_CMD;
 
     // Utility function
     static std::string trim(const std::string& str);

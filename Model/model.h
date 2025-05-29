@@ -1,9 +1,10 @@
-#pragma once
-
-#include  <bits/stdc++.h>
-#include <Eigen/Eigen>
-#ifndef MODEL_H
-#define MODEL_H
+// #pragma once
+// #include "../Controller/controller.h"
+// #include "../view/view.h"
+// #include  <bits/stdc++.h>
+// #include <Eigen/Eigen>
+// #ifndef MODEL_H
+// #define MODEL_H
 //
 // using namespace std;
 // using namespace Eigen;
@@ -101,4 +102,4 @@
 //     double getCurrent() override{};
 // };
 //
-#endif //MODEL_H
+// #endif //MODEL_H

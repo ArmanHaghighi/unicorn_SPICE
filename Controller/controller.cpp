@@ -14,12 +14,20 @@ Controller::~Controller() {
     delete cli;
 }
 void Controller::parse(string line) {
-        try {
-            cli->prompt(line);
-        }
-        catch(ParsingException &e) {
-            cerr << e.what() << endl;
-        }
+    try {
+        cli->prompt(line);
+    }
+    catch(ParsingException &e) {
+        cout << e.what() << endl;
+    }
+    cout<<">>";
+}
 
+ParsingException::ParsingException(int code, string parameterName):code(code){
+    this->parameterName=parameterName;
+}
+
+const char *ParsingException::what() const noexcept {
+    return ("Error: "+errors[code]).c_str();
 }
 

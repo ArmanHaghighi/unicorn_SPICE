@@ -14,6 +14,7 @@ public:
     CLI();
 public:
     void prompt(string line);
+    static double parseNumber(string n);
 };
 
 #ifndef VIEW_H
