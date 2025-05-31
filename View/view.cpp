@@ -75,7 +75,7 @@ void CLI::prompt(string line) {
         string node2 = matches[3].str();
         double value = parseNumber(matches[4].str());
 
-        cout<<"vs\n";
+        cout << "vs\n";
         // controller::AddVs
     } else if (regex_match(line, matches, Cli_regexes::CURRENT_SOURCE_ADD)) {
         string name = matches[1].str();
@@ -84,7 +84,7 @@ void CLI::prompt(string line) {
         double value = parseNumber(matches[4].str());
         // Controller::addCs
     } else if (regex_match(line, matches, Cli_regexes::SIN_SOURCE_ADD)) {
-        cout<<"vsin\n";
+        cout << "vsin\n";
         string name = matches[1].str();
         string node1 = matches[2].str();
         string node2 = matches[3].str();
@@ -113,7 +113,8 @@ void CLI::prompt(string line) {
         } else {
             //.list
         }
-    } else if (regex_match(line, matches, Cli_regexes::PRINT_COMMAND)) {        //costume syntax error command not implemented
+    } else if (regex_match(line, matches, Cli_regexes::PRINT_COMMAND)) {
+        //costume syntax error command not implemented
         string analysis = matches[1].str();
         if (analysis == "TRAN") {
             double step = parseNumber(matches[2].str());
@@ -148,11 +149,10 @@ void CLI::prompt(string line) {
             }
             //Controller::analyse
         }
-    // } else if (regex_match(line, matches, Cli_regexes::NEW_FILE)) {
-    // } else if (regex_match(line, matches, Cli_regexes::SHOW_SCHEMATICS)) {
-    // } else if (regex_match(line, matches, Cli_regexes::CHOOSE_SCHEMATIC)) {
-    // } else if (regex_match(line, matches, Cli_regexes::RETURN_CMD)) {
-
+        // } else if (regex_match(line, matches, Cli_regexes::NEW_FILE)) {
+        // } else if (regex_match(line, matches, Cli_regexes::SHOW_SCHEMATICS)) {
+        // } else if (regex_match(line, matches, Cli_regexes::CHOOSE_SCHEMATIC)) {
+        // } else if (regex_match(line, matches, Cli_regexes::RETURN_CMD)) {
     } else if (regex_match(line, matches, Cli_regexes::TRAN_ANALYSIS)) {
         double step = parseNumber(matches[2].str());
         double stop = parseNumber(matches[3].str());
@@ -171,11 +171,10 @@ void CLI::prompt(string line) {
         double end = parseNumber(matches[4].str());
         double increment = parseNumber(matches[5].str());
 
-         //Controller::analyse
+        //Controller::analyse
     } else if (regex_match(line, matches, Cli_regexes::EXIT_CMD)) {
         exit(0);
-    }
-    else if (!line.empty())
+    } else if (!line.empty())
         throw ParsingException(0);
 }
 
@@ -209,4 +208,9 @@ double CLI::parseNumber(string n) {
             exp = 0;
     }
     return (stod(n) * pow(10, exp));
+}
+
+void CLI::fileMenu() {
+
+
 }

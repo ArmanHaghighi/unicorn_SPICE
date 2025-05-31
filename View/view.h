@@ -15,6 +15,7 @@ public:
 public:
     void prompt(string line);
     static double parseNumber(string n);
+    void fileMenu();
 };
 
 #ifndef VIEW_H
