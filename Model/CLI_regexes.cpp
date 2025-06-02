@@ -26,16 +26,16 @@ const std::regex Cli_regexes::DIODE_ADD(R"(^\s*add\s+(D[\w\d]+)\s+(\w+)\s+(\w+)\
 const std::regex Cli_regexes::DIODE_DELETE(R"(^\s*delete\s+(D[\w\d]+)\s*$)", std::regex::icase);
 
 // Ground commands
-const std::regex Cli_regexes::GROUND_ADD(R"(^\s*add\s+GND\s+(\w+)\s*$)", std::regex::icase);
-const std::regex Cli_regexes::GROUND_DELETE(R"(^\s*delete\s+GND\s+(\w+)\s*$)", std::regex::icase);
+const std::regex Cli_regexes::GROUND_ADD(R"(^\s*add\s+GND\s*(\w+)\s*$)", std::regex::icase);
+const std::regex Cli_regexes::GROUND_DELETE(R"(^\s*delete\s+GND\s*(\w+)\s*$)", std::regex::icase);
 
 // Source commands
-const std::regex Cli_regexes::VOLTAGE_SOURCE_ADD(R"(^\s*add\s+VoltageSource\s+([\w\d]+)\s+(\w+)\s+(\w+)\s+([\d\.]+)\s*$)",
+const std::regex Cli_regexes::VOLTAGE_SOURCE_ADD(R"(^\s*add\s+(?:VoltageSource|V)\s*([\w\d]+)\s+(\w+)\s+(\w+)\s+([\d\.]+)\s*$)",
                                                  std::regex::icase);
-const std::regex Cli_regexes::CURRENT_SOURCE_ADD(R"(^\s*add\s+CurrentSource\s+([\w\d]+)\s+(\w+)\s+(\w+)\s+([\d\.]+)\s*$)",
+const std::regex Cli_regexes::CURRENT_SOURCE_ADD(R"(^\s*add\s+CurrentSource\s*([\w\d]+)\s+(\w+)\s+(\w+)\s+([\d\.]+)\s*$)",
                                                  std::regex::icase);
 const std::regex Cli_regexes::SIN_SOURCE_ADD(
-    R"(^\s*add\s+V\s+([\w\d]+)\s+(\w+)\s+(\w+)\s+SIN\(\s*([\d\.]+)\s+([\d\.]+)\s+([\d\.]+)\s*\)\s*$)", std::regex::icase);
+    R"(^\s*add\s+V([\w\d]+)\s+(\w+)\s+(\w+)\s+SINE?\(\s*([\d\.]+)\s+([\d\.]+)\s+([\d\.]+)\s*\)\s*$)", std::regex::icase);
 const std::regex Cli_regexes::PULSE_SOURCE_ADD(
     R"(^\s*add\s+V\s+([\w\d]+)\s+(\w+)\s+(\w+)\s+PULSE\s+(\w+)\s+([\d\.]+)\s*$)", std::regex::icase);
 
@@ -67,7 +67,7 @@ const std::regex Cli_regexes::RETURN_CMD(R"(^\s*return\s*$)", std::regex::icase)
 
 // Analysis commands
 const std::regex Cli_regexes::TRAN_ANALYSIS(
-    R"(^\s*TRAN\s+([\d\.]+[mun]?s?)\s+([\d\.]+[mun]?s?)(?:\s+([\d\.]+[mun]?s?))?(?:\s+([\d\.]+[mun]?s?))?\s*$)",
+    R"(^\s*\.?TRAN\s+([\d\.]+[mun]?s?)\s+([\d\.]+[mun]?s?)(?:\s+([\d\.]+[mun]?s?))?(?:\s+([\d\.]+[mun]?s?))?\s*$)",
     std::regex::icase);
 const std::regex Cli_regexes::DC_ANALYSIS(R"(^\s*DC\s+(\w+)\s+([\d\.]+)\s+([\d\.]+)\s+([\d\.]+)\s*$)",
                                           std::regex::icase);

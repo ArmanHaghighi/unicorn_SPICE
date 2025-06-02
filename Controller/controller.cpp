@@ -31,3 +31,7 @@ const char *ParsingException::what() const noexcept {
     return ("Error: "+errors[code]).c_str();
 }
 
+const char * FileExp::what() const noexcept {
+    return ("Cannot open file-File not found or is not a valid txt file");
+}
+

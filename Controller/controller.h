@@ -26,6 +26,10 @@ public:
     ParsingException(int code,string parameterName="");
     const char* what() const noexcept override ;
 };
+class FileExp:public SPICE_Exception {
+    public:
+    const char* what() const noexcept override ;
+};
 class CircuitException : public SPICE_Exception {
 
 };

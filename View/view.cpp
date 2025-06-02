@@ -8,6 +8,9 @@
 #include "../Model/CLI_regexes.h"
 
 CLI::CLI() {
+    for (auto d: filesystem::directory_iterator("..\\files")) {
+        files.push_back(d.path());
+    }
     cout << "<****************--SPICE--****************>" << endl;
     cout << ">>";
 }
@@ -15,7 +18,7 @@ CLI::CLI() {
 void CLI::prompt(string line) {
     smatch matches;
     if (regex_match(line, matches, Cli_regexes::RESISTOR_ADD)) {
-        string name = matches[1].str().substr(1);
+        string name = matches[1].str();
         if (name[0] != 'R')
             throw ParsingException(2, name);
         string node1 = matches[2].str();
@@ -27,7 +30,7 @@ void CLI::prompt(string line) {
         //Controller::addResistor();
     } else if (regex_match(line, matches, Cli_regexes::RESISTOR_DELETE)) {
     } else if (regex_match(line, matches, Cli_regexes::CAPACITOR_ADD)) {
-        string name = matches[1].str().substr(1);
+        string name = matches[1].str();
         if (name[0] != 'C')
             throw ParsingException(2, name);
         string node1 = matches[2].str();
@@ -39,7 +42,7 @@ void CLI::prompt(string line) {
         //Controller::addCapacitor();
     } else if (regex_match(line, matches, Cli_regexes::CAPACITOR_DELETE)) {
     } else if (regex_match(line, matches, Cli_regexes::INDUCTOR_ADD)) {
-        string name = matches[1].str().substr(1);
+        string name = matches[1].str();
         if (name[0] != 'L')
             throw ParsingException(2, name);
         string node1 = matches[2].str();
@@ -51,7 +54,7 @@ void CLI::prompt(string line) {
         //Controller::addResistor();
     } else if (regex_match(line, matches, Cli_regexes::INDUCTOR_DELETE)) {
     } else if (regex_match(line, matches, Cli_regexes::DIODE_ADD)) {
-        string name = matches[1].str().substr(1);
+        string name = matches[1].str();
         if (name[0] != 'D')
             throw ParsingException(2, name);
         string node1 = matches[2].str();
@@ -149,27 +152,25 @@ void CLI::prompt(string line) {
             }
             //Controller::analyse
         }
-        // } else if (regex_match(line, matches, Cli_regexes::NEW_FILE)) {
-        // } else if (regex_match(line, matches, Cli_regexes::SHOW_SCHEMATICS)) {
-        // } else if (regex_match(line, matches, Cli_regexes::CHOOSE_SCHEMATIC)) {
-        // } else if (regex_match(line, matches, Cli_regexes::RETURN_CMD)) {
+    } else if (regex_match(line, matches, Cli_regexes::SHOW_SCHEMATICS)) {
+        fileMenu();
     } else if (regex_match(line, matches, Cli_regexes::TRAN_ANALYSIS)) {
-        double step = parseNumber(matches[2].str());
-        double stop = parseNumber(matches[3].str());
+        double step = parseNumber(matches[1].str());
+        double stop = parseNumber(matches[2].str());
         double start = 0, maxStep = 0;
         if (matches[4].matched) {
-            start = parseNumber(matches[4].str());
+            start = parseNumber(matches[3].str());
         }
         if (matches[5].matched) {
-            maxStep = parseNumber(matches[5].str());
+            maxStep = parseNumber(matches[4].str());
         }
 
         //Controller::analyse
     } else if (regex_match(line, matches, Cli_regexes::DC_ANALYSIS)) {
-        string SourceName = matches[2].str();
-        double start = parseNumber(matches[3].str());
-        double end = parseNumber(matches[4].str());
-        double increment = parseNumber(matches[5].str());
+        string SourceName = matches[1].str();
+        double start = parseNumber(matches[2].str());
+        double end = parseNumber(matches[3].str());
+        double increment = parseNumber(matches[4].str());
 
         //Controller::analyse
     } else if (regex_match(line, matches, Cli_regexes::EXIT_CMD)) {
@@ -210,7 +211,59 @@ double CLI::parseNumber(string n) {
     return (stod(n) * pow(10, exp));
 }
 
+
 void CLI::fileMenu() {
+    openFile(showFileMenu());
+    string command;
+    smatch matches;
+    while (getline(cin, command)) {
+        if (regex_match(command, matches, Cli_regexes::NEW_FILE)) {
+        } else if (regex_match(command, matches, Cli_regexes::CHOOSE_SCHEMATIC)) {
+        } else if (regex_match(command, matches, Cli_regexes::RETURN_CMD)) {
+            return;
+        }
+    }
+}
 
+int CLI::showFileMenu() {
+    cout << "-choose existing schematic:" << endl;
+    for (int i = 0; i < files.size(); i++) {
+        cout << i + 1 << '-' << ' ' << files.at(i).filename().generic_string() << endl;
+    }
+    string i;
+    cin >> i;
+    try {
+        int n=stoi(i);
+        if (n<=0||n>files.size())
+            throw FileExp();
+        return n - 1;
+    }
+    catch (...) {
+        cout << "-Error : Inappropriate input"<<endl;
+    }
+}
 
+void CLI::openFile(int n) {
+    try {
+        fstream file(files.at(n).c_str());
+        if (!file.is_open()) {
+            throw FileExp();
+        }
+        cout << files.at(n).filename().generic_string() << ": " << endl;
+        while (file.good()) {
+            string line;
+            getline(file, line);
+            cout << line << endl;
+            if (line == ".end")
+                return;
+            string pr;
+            if (line[0]!='.')
+                pr ="add ";
+            pr+= line ;
+            if (line[0] != '*')
+                prompt( pr);
+        }
+    } catch (FileExp &e) {
+        cout << e.what() << endl;
+    }
 }
