@@ -7,15 +7,23 @@
 #include <exception>
 #ifndef CONTROLLER_H
 #define CONTROLLER_H
-class Controller {
+class Controller{
 private:
     string type;
     CLI* cli;
+    Circuit* circuit;
 public:
     Controller(string type);
     ~Controller();
     void parse(string line);
+    void addElement(string type,string name,string n1,string n2 , double value,string model="",bool sin=false,double offset =0, double freq=0);
+    void deleteElement();
+    void renameNode();
+
 };
+
+
+
 class SPICE_Exception : public std::exception {};
 
 class ParsingException : public SPICE_Exception {
@@ -31,7 +39,20 @@ class FileExp:public SPICE_Exception {
     const char* what() const noexcept override ;
 };
 class CircuitException : public SPICE_Exception {
-
+    protected:
+    string thing;
+    public:
+    CircuitException(string thing):thing(thing){}
+};
+class ExistExp:public CircuitException {
+    public:
+    ExistExp(string type,string name):CircuitException(type+' '+name){}
+    const char* what() const noexcept override ;
+};
+class NotFound:public CircuitException {
+    using CircuitException::CircuitException;
+    public:
+    const char* what() const noexcept override ;
 };
 class AnalysisException : public SPICE_Exception {
 

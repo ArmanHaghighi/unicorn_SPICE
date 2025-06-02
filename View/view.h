@@ -2,16 +2,17 @@
 // Created by Arman on 5/27/2025.
 //
 #pragma once
-// #include "../Controller/controller.h"
-// #include "../Model/model.h"
+#include "../Controller/controller.h"
 #include <bits/stdc++.h>
 
+class Controller;
 using namespace std;
 class CLI {
+    Controller* controller;
     string line;
     vector<filesystem::path> files;
 public:
-    CLI();
+    CLI(Controller* controller);
 public:
     void prompt(string line);
     static double parseNumber(string n);

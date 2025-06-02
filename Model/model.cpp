@@ -4,6 +4,23 @@
 
 #include "model.h"
 
+bool Circuit::checkElementNameExistence(const string& name) const {
+    for (auto el:elements) {
+        if (el->getName()==name) {
+            return true;
+        }
+    }
+    return false;
+}
+Node* Circuit::checkNodeNameExistence(const string& name) const {
+    for (auto n:nodes) {
+        if (n->getName()==name) {
+            return n;
+        }
+    }
+    return nullptr;
+}
+
 void Circuit::addElement(Element *element) {
     elements.emplace(element);
     if (!nodes.contains(element->node1))
@@ -32,6 +49,10 @@ MatrixXd Circuit::getMatrix() {
 return conductanceMatrix;
 }
 
+
+string Node::getName() {
+    return name;
+}
 
 void Node::connectElement(Element *element) {
     elements.emplace(element,nullopt);
@@ -66,6 +87,10 @@ map<Element *, double> Node::returnConnectedElements() {
         connectedElements.insert(p);
     }
     return connectedElements;
+}
+
+string Element::getName() {
+    return name;
 }
 
 void Resistor::addToMatrix(MatrixXd &matrix) {

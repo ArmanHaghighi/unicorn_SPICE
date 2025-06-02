@@ -15,6 +15,10 @@ private:
     set<Node*> nodes;
     MatrixXd conductanceMatrix;
 public:
+    bool checkElementNameExistence(const string &name) const;
+
+    Node* checkNodeNameExistence(const string &name) const;
+
     void addElement(Element* element);
     void removeElement(Element* element);
     void removeNode(Node* node);
@@ -30,6 +34,7 @@ private:
 protected:
     double voltage;
 public:
+    string getName();
     explicit Node(const string &name):name(name){}
     void connectElement(Element* element);
     bool removeElement(Element* element);
@@ -48,6 +53,7 @@ private:
 protected:
     double value;
 public:
+    string getName();
     Node* node1;
     Node* node2;
     virtual ~Element() = default;

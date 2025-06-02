@@ -3,11 +3,9 @@
 //
 
 #include "view.h"
-
-#include "../Controller/controller.h"
 #include "../Model/CLI_regexes.h"
 
-CLI::CLI() {
+CLI::CLI(Controller* controller):controller(controller) {
     for (auto d: filesystem::directory_iterator("..\\files")) {
         files.push_back(d.path());
     }
@@ -27,7 +25,7 @@ void CLI::prompt(string line) {
         if (value <= 0)
             throw ParsingException(1, "Resistance");
         cout << "added res " << name << ' ' << node1 << ' ' << node2 << ' ' << value << endl;
-        //Controller::addResistor();
+        controller->addElement("resistor",name,node1,node2,value);
     } else if (regex_match(line, matches, Cli_regexes::RESISTOR_DELETE)) {
     } else if (regex_match(line, matches, Cli_regexes::CAPACITOR_ADD)) {
         string name = matches[1].str();
@@ -39,7 +37,7 @@ void CLI::prompt(string line) {
         if (value <= 0)
             throw ParsingException(1, "Capacitance");
         cout << "added cap " << name << ' ' << node1 << ' ' << node2 << ' ' << value << endl;
-        //Controller::addCapacitor();
+        controller->addElement("capacitor",name,node1,node2,value);
     } else if (regex_match(line, matches, Cli_regexes::CAPACITOR_DELETE)) {
     } else if (regex_match(line, matches, Cli_regexes::INDUCTOR_ADD)) {
         string name = matches[1].str();
@@ -51,7 +49,7 @@ void CLI::prompt(string line) {
         if (value <= 0)
             throw ParsingException(1, "Inductance");
         cout << "added ind " << name << ' ' << node1 << ' ' << node2 << ' ' << value << endl;
-        //Controller::addResistor();
+        controller->addElement("inductor",name,node1,node2,value);
     } else if (regex_match(line, matches, Cli_regexes::INDUCTOR_DELETE)) {
     } else if (regex_match(line, matches, Cli_regexes::DIODE_ADD)) {
         string name = matches[1].str();
@@ -61,8 +59,7 @@ void CLI::prompt(string line) {
         string node2 = matches[3].str();
         string model = matches[4].str();
         cout << "added diod " << name << ' ' << node1 << ' ' << node2 << ' ' << model << endl;
-
-        //Controller::addResistor();
+        controller->addElement("diode",name,node1,node2,0,model);
     } else if (regex_match(line, matches, Cli_regexes::DIODE_DELETE)) {
     } else if (regex_match(line, matches, Cli_regexes::GROUND_ADD)) {
         if (matches[1].str() != "GND")
@@ -77,24 +74,22 @@ void CLI::prompt(string line) {
         string node1 = matches[2].str();
         string node2 = matches[3].str();
         double value = parseNumber(matches[4].str());
-
-        cout << "vs\n";
-        // controller::AddVs
+        controller->addElement("voltage Source",name,node1,node2,value,name);
     } else if (regex_match(line, matches, Cli_regexes::CURRENT_SOURCE_ADD)) {
         string name = matches[1].str();
         string node1 = matches[2].str();
         string node2 = matches[3].str();
         double value = parseNumber(matches[4].str());
-        // Controller::addCs
+        controller->addElement("current Source",name,node1,node2,value,name);
     } else if (regex_match(line, matches, Cli_regexes::SIN_SOURCE_ADD)) {
-        cout << "vsin\n";
+        // cout << "vsin\n";
         string name = matches[1].str();
         string node1 = matches[2].str();
         string node2 = matches[3].str();
         double vOffset = parseNumber(matches[4].str());
         double vAmp = parseNumber(matches[5].str());
         double freq = parseNumber(matches[6].str());
-        //Controller::addVsin
+        controller->addElement("sine voltage source",name,node1,node2,vAmp,"",true,vOffset,freq);
     }
     // else   if (regex_match(line,matches,Cli_regexes::PULSE_SOURCE_ADD)) {
     //
