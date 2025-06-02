@@ -4,6 +4,7 @@
 
 #include "view.h"
 #include "../Model/CLI_regexes.h"
+#include "../Controller/controller.h"
 
 CLI::CLI(Controller* controller):controller(controller) {
     for (auto d: filesystem::directory_iterator("..\\files")) {
@@ -24,7 +25,7 @@ void CLI::prompt(string line) {
         double value = parseNumber(matches[4].str());
         if (value <= 0)
             throw ParsingException(1, "Resistance");
-        cout << "added res " << name << ' ' << node1 << ' ' << node2 << ' ' << value << endl;
+        // cout << "added res " << name << ' ' << node1 << ' ' << node2 << ' ' << value << endl;
         controller->addElement("resistor",name,node1,node2,value);
     } else if (regex_match(line, matches, Cli_regexes::RESISTOR_DELETE)) {
     } else if (regex_match(line, matches, Cli_regexes::CAPACITOR_ADD)) {
@@ -36,7 +37,7 @@ void CLI::prompt(string line) {
         double value = parseNumber(matches[4].str());
         if (value <= 0)
             throw ParsingException(1, "Capacitance");
-        cout << "added cap " << name << ' ' << node1 << ' ' << node2 << ' ' << value << endl;
+        // cout << "added cap " << name << ' ' << node1 << ' ' << node2 << ' ' << value << endl;
         controller->addElement("capacitor",name,node1,node2,value);
     } else if (regex_match(line, matches, Cli_regexes::CAPACITOR_DELETE)) {
     } else if (regex_match(line, matches, Cli_regexes::INDUCTOR_ADD)) {
@@ -48,7 +49,7 @@ void CLI::prompt(string line) {
         double value = parseNumber(matches[4].str());
         if (value <= 0)
             throw ParsingException(1, "Inductance");
-        cout << "added ind " << name << ' ' << node1 << ' ' << node2 << ' ' << value << endl;
+        // cout << "added ind " << name << ' ' << node1 << ' ' << node2 << ' ' << value << endl;
         controller->addElement("inductor",name,node1,node2,value);
     } else if (regex_match(line, matches, Cli_regexes::INDUCTOR_DELETE)) {
     } else if (regex_match(line, matches, Cli_regexes::DIODE_ADD)) {
@@ -58,7 +59,7 @@ void CLI::prompt(string line) {
         string node1 = matches[2].str();
         string node2 = matches[3].str();
         string model = matches[4].str();
-        cout << "added diod " << name << ' ' << node1 << ' ' << node2 << ' ' << model << endl;
+        // cout << "added diod " << name << ' ' << node1 << ' ' << node2 << ' ' << model << endl;
         controller->addElement("diode",name,node1,node2,0,model);
     } else if (regex_match(line, matches, Cli_regexes::DIODE_DELETE)) {
     } else if (regex_match(line, matches, Cli_regexes::GROUND_ADD)) {
@@ -99,7 +100,7 @@ void CLI::prompt(string line) {
     // } else if (regex_match(line, matches, Cli_regexes::CCCS_ADD)) {
     // } else if (regex_match(line, matches, Cli_regexes::CCVS_ADD)) {}
     else if (regex_match(line, matches, Cli_regexes::NODES_LIST)) {
-        //Controller::listNodes
+        controller->listNodes();
     } else if (regex_match(line, matches, Cli_regexes::NODE_RENAME)) {
         if (matches[1].str() != "node" && !matches[2].str().empty() && !matches[3].str().empty())
             throw ParsingException(4);
@@ -107,9 +108,9 @@ void CLI::prompt(string line) {
         cout << "SUCCESS: Node renamed from " << matches[2].str() << " to " << matches[3].str() << endl;
     } else if (regex_match(line, matches, Cli_regexes::ELEMENTS_LIST)) {
         if (matches[1].length() > 0) {
-            //.list [element]
+            controller->listElementsByType(matches[1].str());
         } else {
-            //.list
+            controller->listElements();
         }
     } else if (regex_match(line, matches, Cli_regexes::PRINT_COMMAND)) {
         //costume syntax error command not implemented
@@ -236,6 +237,7 @@ int CLI::showFileMenu() {
     catch (...) {
         cout << "-Error : Inappropriate input"<<endl;
     }
+    return NAN;
 }
 
 void CLI::openFile(int n) {

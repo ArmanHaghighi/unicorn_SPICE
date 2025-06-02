@@ -19,7 +19,9 @@ public:
     void addElement(string type,string name,string n1,string n2 , double value,string model="",bool sin=false,double offset =0, double freq=0);
     void deleteElement();
     void renameNode();
-
+    void listNodes() const;
+    void listElements() const;
+    void listElementsByType(string type);
 };
 
 

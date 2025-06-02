@@ -6,6 +6,7 @@
 
 Controller::Controller(string type) {
     this->type = type;
+    circuit=new Circuit();
     if (type=="CLI") {
         cli=new CLI(this);
     }
@@ -17,15 +18,15 @@ void Controller::parse(string line) {
     try {
         cli->prompt(line);
     }
-    catch(CircuitException &e) {
+    catch(SPICE_Exception &e) {
         cout << e.what() << endl;
     }
     cout<<">>";
 }
 
 void Controller::addElement( string type ,string name, string n1, string n2, double value, string model ,bool sin,double offset , double freq) {
-    if ( !circuit->checkElementNameExistence(name))
-       throw ExistExp(type,name);
+    if (circuit->checkElementNameExistence(name))
+        throw ExistExp(type,name);
     Node* node1,*node2;
     if (!((node1= circuit->checkNodeNameExistence(n1))))
         node1 =new Node(n1);
@@ -34,13 +35,13 @@ void Controller::addElement( string type ,string name, string n1, string n2, dou
     Element*e = nullptr;
     switch (name[0]) {
         case 'R':
-             e=new Resistor(name,node1,node2,value);
+            e=new Resistor(name,node1,node2,value);
             break;
         case 'C':
-             e=new Capacitor(name,node1,node2,value);
+            e=new Capacitor(name,node1,node2,value);
             break;
         case 'L':
-             e=new Inductor(name,node1,node2,value);
+            e=new Inductor(name,node1,node2,value);
             break;
         case 'D':
             e=new Diode(name,node1,node2,model);
@@ -61,8 +62,31 @@ void Controller::addElement( string type ,string name, string n1, string n2, dou
     }
     if (e)
         circuit->addElement(e);
-    else
+    else{
+        delete e;
+        delete node1;
+        delete node2;
         throw ParsingException(2,name);
+    }
+}
+
+void Controller::listNodes() const {
+    cout<<"Available nodes:"<<endl;
+    for (Node* n:circuit->getNodes()) {
+        cout<<n->getName()<<", ";
+    }
+    cout<<endl;
+}
+
+void Controller::listElements() const {
+    for (Element* e:circuit->getElements()) {
+        cout<<e->getName()<<", ";
+    }
+    cout<<endl;
+}
+
+void Controller::listElementsByType(string type) {
+
 }
 
 

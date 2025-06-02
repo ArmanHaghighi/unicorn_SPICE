@@ -24,6 +24,8 @@ public:
     void removeNode(Node* node);
     MatrixXd getMatrix();
     void analyse(string type);// probably needs to be a class itself
+    auto getNodes();
+    auto getElements();
 };
 
 class Node {

@@ -21,7 +21,9 @@ Node* Circuit::checkNodeNameExistence(const string& name) const {
     return nullptr;
 }
 
-void Circuit::addElement(Element *element) {
+void Circuit::
+
+addElement(Element *element) {
     elements.emplace(element);
     if (!nodes.contains(element->node1))
         nodes.emplace(element->node1);
@@ -47,6 +49,14 @@ void Circuit::removeNode(Node *node) {
 
 MatrixXd Circuit::getMatrix() {
 return conductanceMatrix;
+}
+
+auto Circuit::getNodes() {
+    return nodes;
+}
+
+auto Circuit::getElements() {
+    return elements;
 }
 
 
