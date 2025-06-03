@@ -51,11 +51,11 @@ MatrixXd Circuit::getMatrix() {
 return conductanceMatrix;
 }
 
-auto Circuit::getNodes() {
+set<Node*> Circuit::getNodes() {
     return nodes;
 }
 
-auto Circuit::getElements() {
+set<Element*> Circuit::getElements() {
     return elements;
 }
 

@@ -7,11 +7,27 @@
 #include "../Controller/controller.h"
 
 CLI::CLI(Controller* controller):controller(controller) {
-    for (auto d: filesystem::directory_iterator("..\\files")) {
-        files.push_back(d.path());
+    fstream filesList("../Model/filesList.txt",ios::ate|ios::in|ios::out);
+    int n=1;
+    for (auto d: filesystem::directory_iterator("..\\files\\autosave\\")) {
+        if (d.path().stem().string()==to_string(n)+"_autosave")
+            n++;
     }
+    string path="../files/autosave/"+to_string(n%10==0?1:n%10)+"_autosave.txt";
+    fout.open(path.c_str());
+    filesList<<path<<endl;
+    filesList.seekg(0);
+    string fileName;
+    if (filesList.bad())
+        throw FileExp();
+    do  {
+        getline(filesList,fileName);
+        if (fileName.length()>0)
+            files.push_back(fileName);
+    }while(filesList.good());
     cout << "<****************--SPICE--****************>" << endl;
     cout << ">>";
+    filesList.close();
 }
 
 void CLI::prompt(string line) {
@@ -25,7 +41,7 @@ void CLI::prompt(string line) {
         double value = parseNumber(matches[4].str());
         if (value <= 0)
             throw ParsingException(1, "Resistance");
-        // cout << "added res " << name << ' ' << node1 << ' ' << node2 << ' ' << value << endl;
+        fout << name << ' ' << node1 << ' ' << node2 << ' ' << value <<endl;
         controller->addElement("resistor",name,node1,node2,value);
     } else if (regex_match(line, matches, Cli_regexes::RESISTOR_DELETE)) {
     } else if (regex_match(line, matches, Cli_regexes::CAPACITOR_ADD)) {
@@ -37,7 +53,7 @@ void CLI::prompt(string line) {
         double value = parseNumber(matches[4].str());
         if (value <= 0)
             throw ParsingException(1, "Capacitance");
-        // cout << "added cap " << name << ' ' << node1 << ' ' << node2 << ' ' << value << endl;
+        fout << name << ' ' << node1 << ' ' << node2 << ' ' << value << endl;
         controller->addElement("capacitor",name,node1,node2,value);
     } else if (regex_match(line, matches, Cli_regexes::CAPACITOR_DELETE)) {
     } else if (regex_match(line, matches, Cli_regexes::INDUCTOR_ADD)) {
@@ -49,7 +65,7 @@ void CLI::prompt(string line) {
         double value = parseNumber(matches[4].str());
         if (value <= 0)
             throw ParsingException(1, "Inductance");
-        // cout << "added ind " << name << ' ' << node1 << ' ' << node2 << ' ' << value << endl;
+        fout << name << ' ' << node1 << ' ' << node2 << ' ' << value << endl;
         controller->addElement("inductor",name,node1,node2,value);
     } else if (regex_match(line, matches, Cli_regexes::INDUCTOR_DELETE)) {
     } else if (regex_match(line, matches, Cli_regexes::DIODE_ADD)) {
@@ -59,7 +75,7 @@ void CLI::prompt(string line) {
         string node1 = matches[2].str();
         string node2 = matches[3].str();
         string model = matches[4].str();
-        // cout << "added diod " << name << ' ' << node1 << ' ' << node2 << ' ' << model << endl;
+        fout<< name << ' ' << node1 << ' ' << node2 << ' ' << model << endl;
         controller->addElement("diode",name,node1,node2,0,model);
     } else if (regex_match(line, matches, Cli_regexes::DIODE_DELETE)) {
     } else if (regex_match(line, matches, Cli_regexes::GROUND_ADD)) {
@@ -75,12 +91,14 @@ void CLI::prompt(string line) {
         string node1 = matches[2].str();
         string node2 = matches[3].str();
         double value = parseNumber(matches[4].str());
+        fout<<name<<' '<<node1<<' '<<node2<<' '<<value<<endl;
         controller->addElement("voltage Source",name,node1,node2,value,name);
     } else if (regex_match(line, matches, Cli_regexes::CURRENT_SOURCE_ADD)) {
         string name = matches[1].str();
         string node1 = matches[2].str();
         string node2 = matches[3].str();
         double value = parseNumber(matches[4].str());
+        fout<<name<<' '<<node1<<' '<<node2<<' '<<value<<endl;
         controller->addElement("current Source",name,node1,node2,value,name);
     } else if (regex_match(line, matches, Cli_regexes::SIN_SOURCE_ADD)) {
         // cout << "vsin\n";
@@ -90,6 +108,7 @@ void CLI::prompt(string line) {
         double vOffset = parseNumber(matches[4].str());
         double vAmp = parseNumber(matches[5].str());
         double freq = parseNumber(matches[6].str());
+        fout<<name<<' '<<node1<<' '<<node2<<" SINE("<<vOffset<<' '<<vAmp<<' '<<freq<<')'<<endl;
         controller->addElement("sine voltage source",name,node1,node2,vAmp,"",true,vOffset,freq);
     }
     // else   if (regex_match(line,matches,Cli_regexes::PULSE_SOURCE_ADD)) {
@@ -171,7 +190,20 @@ void CLI::prompt(string line) {
         //Controller::analyse
     } else if (regex_match(line, matches, Cli_regexes::EXIT_CMD)) {
         exit(0);
-    } else if (!line.empty())
+    }
+    else if (regex_match(line, matches, Cli_regexes::NEW_FILE)) {
+        filesystem::path path=matches[1].str();
+        if (path.extension()==".txt") {
+            files.push_back(path);
+            ofstream fileslist("../Model/filesList.txt");
+            fileslist <<path.generic_string()<<endl;
+            fout.close();
+            fout.open(files.back().c_str(), ios::out | ios::app);
+            controller->restart();
+        }
+        else
+            throw FileExp();
+    }else if (!line.empty())
         throw ParsingException(0);
 }
 
@@ -213,8 +245,7 @@ void CLI::fileMenu() {
     string command;
     smatch matches;
     while (getline(cin, command)) {
-        if (regex_match(command, matches, Cli_regexes::NEW_FILE)) {
-        } else if (regex_match(command, matches, Cli_regexes::CHOOSE_SCHEMATIC)) {
+        if (regex_match(command, matches, Cli_regexes::CHOOSE_SCHEMATIC)) {
         } else if (regex_match(command, matches, Cli_regexes::RETURN_CMD)) {
             return;
         }
@@ -237,12 +268,14 @@ int CLI::showFileMenu() {
     catch (...) {
         cout << "-Error : Inappropriate input"<<endl;
     }
-    return NAN;
+    return 0;
 }
 
 void CLI::openFile(int n) {
     try {
-        fstream file(files.at(n).c_str());
+        if (n<=0||n>files.size())
+            throw invalid_argument("Inappropriate input");
+        ifstream file(files.at(n).c_str());
         if (!file.is_open()) {
             throw FileExp();
         }
@@ -254,12 +287,13 @@ void CLI::openFile(int n) {
             if (line == ".end")
                 return;
             string pr;
-            if (line[0]!='.')
+            if (line[0]!='.' && line[0]!='*')
                 pr ="add ";
             pr+= line ;
-            if (line[0] != '*')
+            if (line[0] != '*'&&!line.empty())
                 prompt( pr);
         }
+
     } catch (FileExp &e) {
         cout << e.what() << endl;
     }

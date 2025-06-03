@@ -10,6 +10,7 @@ class CLI {
     Controller* controller;
     string line;
     vector<filesystem::path> files;
+    ofstream fout;
 public:
     CLI(Controller* controller);
 public:

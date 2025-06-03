@@ -4,7 +4,6 @@
 // #include "view/view.h"
 // #include "model/model.h"
 using namespace std;
-
 int main() {
     string line;
     Controller CliController("CLI");
@@ -13,3 +12,4 @@ int main() {
     }
     return 0;
 }
+

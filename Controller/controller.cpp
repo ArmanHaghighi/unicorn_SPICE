@@ -11,9 +11,17 @@ Controller::Controller(string type) {
         cli=new CLI(this);
     }
 }
+
 Controller::~Controller() {
     delete cli;
+    delete circuit;
 }
+
+void Controller::restart() {
+    delete circuit;
+    circuit=new Circuit();
+}
+
 void Controller::parse(string line) {
     try {
         cli->prompt(line);
@@ -44,6 +52,9 @@ void Controller::addElement( string type ,string name, string n1, string n2, dou
             e=new Inductor(name,node1,node2,value);
             break;
         case 'D':
+            if (model != "D" && model != "Z") {
+                throw ParsingException(2, "Diode model: " + model);
+            }
             e=new Diode(name,node1,node2,model);
             break;
         case'V':
@@ -71,22 +82,39 @@ void Controller::addElement( string type ,string name, string n1, string n2, dou
 }
 
 void Controller::listNodes() const {
+    string s;
     cout<<"Available nodes:"<<endl;
     for (Node* n:circuit->getNodes()) {
-        cout<<n->getName()<<", ";
+        s.append(n->getName()+", ");
     }
-    cout<<endl;
+    s.pop_back();
+    s.pop_back();
+    cout<<s<<endl;
 }
 
 void Controller::listElements() const {
+    string s;
     for (Element* e:circuit->getElements()) {
-        cout<<e->getName()<<", ";
+        s.append(e->getName()+", ");
     }
-    cout<<endl;
-}
+    s.pop_back();
+    s.pop_back();
+    cout<<s<<endl;}
 
-void Controller::listElementsByType(string type) {
-
+void Controller::listElementsByType(string type) const {
+    string s;
+    for (Element* e:circuit->getElements()) {
+        if (tolower(e->getName()[0])==tolower(type[0]))
+            s.append(e->getName()+", ");
+    }
+    try{
+        s.pop_back();
+        s.pop_back();
+        cout<<s<<endl;
+    }catch (...) {
+        cout<<"Exception occurred during listing of elements";
+        throw;
+    }
 }
 
 

@@ -30,14 +30,14 @@ const std::regex Cli_regexes::GROUND_ADD(R"(^\s*add\s+GND\s*(\w+)\s*$)", std::re
 const std::regex Cli_regexes::GROUND_DELETE(R"(^\s*delete\s+GND\s*(\w+)\s*$)", std::regex::icase);
 
 // Source commands
-const std::regex Cli_regexes::VOLTAGE_SOURCE_ADD(R"(^\s*add\s+(?:VoltageSource|V)\s*([\w\d]+)\s+(\w+)\s+(\w+)\s+([\d\.]+)\s*$)",
+const std::regex Cli_regexes::VOLTAGE_SOURCE_ADD(R"(^\s*add\s+(?:VoltageSource\s+)?(V[\w\d]+)\s+(\w+)\s+(\w+)\s+([\d\.]+)\s*$)",
                                                  std::regex::icase);
-const std::regex Cli_regexes::CURRENT_SOURCE_ADD(R"(^\s*add\s+CurrentSource\s*([\w\d]+)\s+(\w+)\s+(\w+)\s+([\d\.]+)\s*$)",
+const std::regex Cli_regexes::CURRENT_SOURCE_ADD( R"(^\s*add\s+(?:CurrentSource\s+)?(I[\w\d]+)\s+(\w+)\s+(\w+)\s+([\d\.]+)\s*$)",
                                                  std::regex::icase);
 const std::regex Cli_regexes::SIN_SOURCE_ADD(
-    R"(^\s*add\s+V([\w\d]+)\s+(\w+)\s+(\w+)\s+SINE?\(\s*([\d\.]+)\s+([\d\.]+)\s+([\d\.]+)\s*\)\s*$)", std::regex::icase);
+    R"(^\s*add\s+(V[\w\d]+)\s+(\w+)\s+(\w+)\s+SINE?\(\s*([\d\.]+)\s+([\d\.]+)\s+([\d\.]+)\s*\)\s*$)", std::regex::icase);
 const std::regex Cli_regexes::PULSE_SOURCE_ADD(
-    R"(^\s*add\s+V\s+([\w\d]+)\s+(\w+)\s+(\w+)\s+PULSE\s+(\w+)\s+([\d\.]+)\s*$)", std::regex::icase);
+    R"(^\s*add\s+V\s*([\w\d]+)\s+(\w+)\s+(\w+)\s+PULSE\s+(\w+)\s+([\d\.]+)\s*$)", std::regex::icase);
 
 // Dependent source commands
 const std::regex Cli_regexes::VCVS_ADD(R"(^\s*add\s+(E[\w\d]+)\s+(\w+)\s+(\w+)\s+(\w+)\s+(\w+)\s+([\d\.]+)\s*$)",
@@ -51,7 +51,7 @@ const std::regex Cli_regexes::CCCS_ADD(R"(^\s*add\s+(F[\w\d]+)\s+(\w+)\s+(\w+)\s
 
 // Node operations
 const std::regex Cli_regexes::NODES_LIST(R"(^\s*\.nodes\s*$)", std::regex::icase);
-const std::regex Cli_regexes::NODE_RENAME(R"(^\s*\.rename(?:\s+(\w+))?\s*$)", std::regex::icase);
+const std::regex Cli_regexes::NODE_RENAME(R"(^\s*\.rename\s+node\s+(\w+)\s+(\w+)\s*$)", std::regex::icase);
 const std::regex Cli_regexes::ELEMENTS_LIST(R"(^\s*\.list(?:\s+(\w+))?\s*$)", std::regex::icase);
 
 // Print commands
