@@ -1,2 +1,3 @@
-../files/h.txt
-../files/autosave/1_autosave.txt
+C:/Users/Arman/Desktop/testSC.txt
+../files/autosave/20_autosave.txt
+../files/autosave/21_autosave.txt

@@ -9,11 +9,13 @@
 CLI::CLI(Controller* controller):controller(controller) {
     fstream filesList("../Model/filesList.txt",ios::ate|ios::in|ios::out);
     int n=1;
+    set<filesystem::path> ffiles;
     for (auto d: filesystem::directory_iterator("..\\files\\autosave\\")) {
-        if (d.path().stem().string()==to_string(n)+"_autosave")
-            n++;
+     ffiles.emplace(d.path().stem());
+
     }
-    string path="../files/autosave/"+to_string(n%10==0?1:n%10)+"_autosave.txt";
+    n=ffiles.size()+1;
+    string path="../files/autosave/"+to_string(n)+"_autosave.txt";
     fout.open(path.c_str());
     filesList<<path<<endl;
     filesList.seekg(0);
@@ -273,12 +275,14 @@ int CLI::showFileMenu() {
 
 void CLI::openFile(int n) {
     try {
-        if (n<=0||n>files.size())
-            throw invalid_argument("Inappropriate input");
+        if (n<0||n>files.size())
+            return;
         ifstream file(files.at(n).c_str());
         if (!file.is_open()) {
             throw FileExp();
         }
+        controller->restart();
+        fout.close();
         cout << files.at(n).filename().generic_string() << ": " << endl;
         while (file.good()) {
             string line;
@@ -293,6 +297,7 @@ void CLI::openFile(int n) {
             if (line[0] != '*'&&!line.empty())
                 prompt( pr);
         }
+        fout.open(files.at(n).c_str(), ios::out | ios::app);
 
     } catch (FileExp &e) {
         cout << e.what() << endl;
