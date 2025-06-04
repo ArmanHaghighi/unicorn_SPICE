@@ -1,6 +1,8 @@
 #pragma once
 #include  <bits/stdc++.h>
 #include <Eigen/Eigen>
+
+#include "model.h"
 #ifndef MODEL_H
 #define MODEL_H
 
@@ -124,8 +126,14 @@ public:
 };
 class Diode : public Element {
 public:
-    Diode(const string &name,Node* n1,Node*n2, const string &model):Element(name,n1,n2,0),model(model){}
-    string model;
+    using Element::Element;
+    void addToMatrix(MatrixXd &matrix) override;;
+    double getCurrent() override;;
+};
+class Zener : public Element {
+public:
+
+    using Element::Element;
     void addToMatrix(MatrixXd &matrix) override;;
     double getCurrent() override;;
 };

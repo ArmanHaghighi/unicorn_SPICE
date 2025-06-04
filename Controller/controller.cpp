@@ -55,7 +55,12 @@ void Controller::addElement( string type ,string name, string n1, string n2, dou
             if (model != "D" && model != "Z") {
                 throw ParsingException(2, "Diode model: " + model);
             }
-            e=new Diode(name,node1,node2,model);
+            if (model == "D") {
+                e=new Diode(name,node1,node2,0);
+            }
+            else if (model == "Z") {
+                e=new Zener(name,node1,node2,0.7);
+            }
             break;
         case'V':
             if (!sin)

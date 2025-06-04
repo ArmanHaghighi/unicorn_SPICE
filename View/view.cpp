@@ -89,7 +89,7 @@ void CLI::prompt(string line) {
         fout<< name << ' ' << node1 << ' ' << node2 << ' ' << model << endl;
         controller->addElement("diode",name,node1,node2,0,model);
     } else if (regex_match(line, matches, Cli_regexes::DIODE_DELETE)) {
-        if (matches[1].str()[0] != 'D')
+        if (matches[1].str()[0] != 'D'&&matches[1].str()[0] != 'Z')
             throw ParsingException(2);
         controller->deleteElement(matches[1],"diode");
     } else if (regex_match(line, matches, Cli_regexes::GROUND_ADD)) {
