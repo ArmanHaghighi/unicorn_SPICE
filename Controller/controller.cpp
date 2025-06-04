@@ -81,6 +81,17 @@ void Controller::addElement( string type ,string name, string n1, string n2, dou
     }
 }
 
+void Controller::deleteElement(string name,string element) {
+    Element* elm=nullptr;
+    for (auto e:circuit->getElements()) {
+        if (e->getName() == name)
+            elm=e;
+    }
+    if (!elm)
+        throw NotFound(element);
+    circuit->removeElement(elm);
+}
+
 void Controller::listNodes() const {
     string s;
     cout<<"Available nodes:"<<endl;
@@ -135,6 +146,6 @@ const char * ExistExp::what() const noexcept {
 }
 
 const char * NotFound::what() const noexcept {
-    return (thing+"not found in circuit").c_str();
+    return ("Error: Cannot delete "+thing+"; not found in circuit").c_str();
 }
 

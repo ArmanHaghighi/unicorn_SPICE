@@ -18,7 +18,7 @@ public:
     void restart();
     void parse(string line);
     void addElement(string type,string name,string n1,string n2 , double value,string model="",bool sin=false,double offset =0, double freq=0);
-    void deleteElement();
+    void deleteElement(string name,string element);
     void renameNode();
     void listNodes() const;
     void listElements() const;

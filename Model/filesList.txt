@@ -1,3 +1,6 @@
 C:/Users/Arman/Desktop/testSC.txt
 ../files/autosave/20_autosave.txt
 ../files/autosave/21_autosave.txt
+../files/autosave/22_autosave.txt
+../files/autosave/23_autosave.txt
+../files/autosave/24_autosave.txt

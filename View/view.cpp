@@ -46,6 +46,9 @@ void CLI::prompt(string line) {
         fout << name << ' ' << node1 << ' ' << node2 << ' ' << value <<endl;
         controller->addElement("resistor",name,node1,node2,value);
     } else if (regex_match(line, matches, Cli_regexes::RESISTOR_DELETE)) {
+        if (matches[1].str()[0] != 'R')
+            throw ParsingException(2);
+        controller->deleteElement(matches[1],"resistor");
     } else if (regex_match(line, matches, Cli_regexes::CAPACITOR_ADD)) {
         string name = matches[1].str();
         if (name[0] != 'C')
@@ -58,6 +61,9 @@ void CLI::prompt(string line) {
         fout << name << ' ' << node1 << ' ' << node2 << ' ' << value << endl;
         controller->addElement("capacitor",name,node1,node2,value);
     } else if (regex_match(line, matches, Cli_regexes::CAPACITOR_DELETE)) {
+        if (matches[1].str()[0] != 'C')
+            throw ParsingException(2);
+        controller->deleteElement(matches[1],"capacitor");
     } else if (regex_match(line, matches, Cli_regexes::INDUCTOR_ADD)) {
         string name = matches[1].str();
         if (name[0] != 'L')
@@ -70,6 +76,9 @@ void CLI::prompt(string line) {
         fout << name << ' ' << node1 << ' ' << node2 << ' ' << value << endl;
         controller->addElement("inductor",name,node1,node2,value);
     } else if (regex_match(line, matches, Cli_regexes::INDUCTOR_DELETE)) {
+        if (matches[1].str()[0] != 'L')
+            throw ParsingException(2);
+        controller->deleteElement(matches[1],"inductor");
     } else if (regex_match(line, matches, Cli_regexes::DIODE_ADD)) {
         string name = matches[1].str();
         if (name[0] != 'D')
@@ -80,14 +89,15 @@ void CLI::prompt(string line) {
         fout<< name << ' ' << node1 << ' ' << node2 << ' ' << model << endl;
         controller->addElement("diode",name,node1,node2,0,model);
     } else if (regex_match(line, matches, Cli_regexes::DIODE_DELETE)) {
+        if (matches[1].str()[0] != 'D')
+            throw ParsingException(2);
+        controller->deleteElement(matches[1],"diode");
     } else if (regex_match(line, matches, Cli_regexes::GROUND_ADD)) {
         if (matches[1].str() != "GND")
             throw ParsingException(2, matches[1].str());
         string node = matches[2].str();
         //Controller::addGND
     } else if (regex_match(line, matches, Cli_regexes::GROUND_DELETE)) {
-        string node = matches[2].str();
-        //Controller::addGND
     } else if (regex_match(line, matches, Cli_regexes::VOLTAGE_SOURCE_ADD)) {
         string name = matches[1].str();
         string node1 = matches[2].str();
