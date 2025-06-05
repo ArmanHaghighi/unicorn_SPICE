@@ -139,4 +139,71 @@ public:
     double getCurrent() override;;
 };
 
+class CCVS : public Element {
+    Element* controllingElement;
+    double gain; //Ohms
+public:
+    CCVS(string name, Node* n1, Node* n2, Element* ctrlElem, double gain);
+    void addToMatrix(MatrixXd &matrix) override;
+    double getCurrent() override;
+    Element* getControllingElement() const {
+        return controllingElement;
+    }
+    double getGain() const {
+        return gain;
+    }
+};
+
+class CCCS : public Element {
+    Element* controllingElement;
+    double gain; //no unit
+public:
+    CCCS(string name, Node* n1, Node* n2, Element* ctrlElem, double gain);
+    void addToMatrix(MatrixXd &matrix) override;
+    double getCurrent() override;
+    Element* getControllingElement() const {
+        return controllingElement;
+    }
+    double getGain() const {
+        return gain;
+    }
+};
+
+class VCCS : public Element {
+    Node* controlNode1; //positive
+    Node* controlNode2; //negative
+    double gain; //siemens
+public:
+    VCCS(string name, Node* n1, Node* n2, Node* ctrlN1, Node* ctrlN2, double gain);
+    void addToMatrix(MatrixXd &matrix) override;
+    double getCurrent() override;
+    Node* getControlNode1() const {
+        return controlNode1;
+    }
+    Node* getControlNode2() const {
+        return controlNode2;
+    }
+    double getGain() const {
+        return gain;
+    }
+};
+
+class VCVS : public Element {
+    Node* controlNode1; //positive
+    Node* controlNode2; //negative
+    double gain; //no unit
+public:
+    VCVS(string name, Node* n1, Node* n2, Node* ctrlN1, Node* ctrlN2, double gain);
+    void addToMatrix(MatrixXd &matrix) override;
+    double getCurrent() override;
+    Node* getControlNode1() const {
+        return controlNode1;
+    }
+    Node* getControlNode2() const {
+        return controlNode2;
+    }
+    double getGain() const {
+        return gain;
+    }
+};
 #endif //MODEL_H
