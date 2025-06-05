@@ -96,9 +96,13 @@ void CLI::prompt(string line) {
         if (matches[1].str() != "GND")
             throw ParsingException(2, matches[1].str());
         string node = matches[2].str();
-        //Controller::addGND
+        controller->addGnd(node);
+        fout <<matches[1].str() << ' ' << node << endl;
     } else if (regex_match(line, matches, Cli_regexes::GROUND_DELETE)) {
-
+        if (matches[1].str() != "GND")
+            throw ParsingException(2, matches[1].str());
+        string node = matches[2].str();
+        controller->deleteGnd(node);
     } else if (regex_match(line, matches, Cli_regexes::VOLTAGE_SOURCE_ADD)) {
         string name = matches[1].str();
         string node1 = matches[2].str();

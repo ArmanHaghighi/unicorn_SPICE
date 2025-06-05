@@ -147,13 +147,69 @@ void Controller::listElementsByType(string type) const {
     }
 }
 
+void Controller::addGnd(string nodeName) {
+     Node* node=nullptr;
+    for (const auto &n:circuit->getNodes()) {
+        string name = n->getName();
+        if (name == nodeName)
+            node=n;
+        if (name.length()>5&& name.substr(name.size()-5) == "(gnd)")
+            throw ExistExp("a ground as ",name);
 
-ParsingException::ParsingException(int code, string parameterName):code(code){
+    }
+    if (!node)
+        throw NodeNotFound(nodeName);
+    node->makeGround();
+}
+
+void Controller::deleteGnd(string nodeName) {
+    Node *node = nullptr;
+    for (const auto &n:circuit->getNodes()) {
+        string name = n->getName();
+        if (name == nodeName+"(gnd)")
+            node=n;
+        // if (name.length()>5&& name.substr(name.size()-5) == "(gnd)")
+        //     throw NodeNotFound("ground as " +nodeName);
+
+    }
+    if (!node)
+        throw NodeNotFound("a ground as" +nodeName);
+    try {
+        Ground* gnd=dynamic_cast<Ground*>(node);
+        if (!gnd)
+            throw 0;
+        gnd->makeNode();
+    }
+    catch (...) {
+        cout<<"Node is not a ground\n";
+        throw NotFound(nodeName);
+    }
+}
+
+
+ParsingException::ParsingException(int code, string parameterName):code(code) {
     this->parameterName=parameterName;
+    switch (code){
+        case 0:
+            error="Syntax error";
+            break;
+        case 1:
+            error= parameterName+" cannot be zero or negative";
+            break;
+        case 2:
+            error="Element "+parameterName+" not found in library";
+            break;
+        case 3:
+            error=" Invalid syntax - correct format:\n.rename node <old_name> <new_name>";
+            break;
+        default:
+            error="Unknown error";
+
+    }
 }
 
 const char *ParsingException::what() const noexcept {
-    return ("Error: "+errors[code]).c_str();
+    return ("Error: "+error).c_str();
 }
 
 const char * FileExp::what() const noexcept {

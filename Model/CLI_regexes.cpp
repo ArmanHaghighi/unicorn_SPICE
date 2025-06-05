@@ -30,8 +30,8 @@ const std::regex Cli_regexes::DIODE_ADD(R"(^\s*add\s+(D[\w\d]+)\s+(\w+)\s+(\w+)\
 const std::regex Cli_regexes::DIODE_DELETE(R"(^\s*delete\s+(D[\w\d]+)\s*$)", std::regex::icase);
 
 // Ground commands
-const std::regex Cli_regexes::GROUND_ADD(R"(^\s*add\s+GND\s*(\w+)\s*$)", std::regex::icase);
-const std::regex Cli_regexes::GROUND_DELETE(R"(^\s*delete\s+GND\s*(\w+)\s*$)", std::regex::icase);
+const std::regex Cli_regexes::GROUND_ADD(R"(^\s*add\s+(\w+)\s*(\w+)\s*$)", std::regex::icase);
+const std::regex Cli_regexes::GROUND_DELETE(R"(^\s*delete\s+(GND)\s*(\w+)\s*$)", std::regex::icase);
 
 // Source commands
 const std::regex Cli_regexes::VOLTAGE_SOURCE_ADD(R"(^\s*add\s+(?:VoltageSource\s+)?(V[\w\d]+)\s+(\w+)\s+(\w+)\s+()" + NUM_PATTERN + R"()\s*$)",

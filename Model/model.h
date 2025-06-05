@@ -38,7 +38,7 @@ private:
 protected:
     double voltage;
 public:
-    string getName();
+    virtual string getName() ;
     explicit Node(const string &name):name(name){}
     void connectElement(Element* element);
     bool removeElement(Element* element);
@@ -49,6 +49,7 @@ public:
     }
     void renameNode(string name);
     map<Element*, double> returnConnectedElements();
+    void makeGround();
 };
 
 class Element {
@@ -66,9 +67,11 @@ public:
     virtual double getCurrent()=0;
 };
 
-class ground : public Node {
+class Ground : public Node {
 public:
-    explicit ground(const string &id) : Node(id) {
+    void makeNode();
+    string getName() override;
+    explicit Ground(const string &id) : Node(id) {
         setVoltage(0.0);
     }
 };

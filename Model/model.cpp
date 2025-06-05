@@ -99,8 +99,24 @@ map<Element *, double> Node::returnConnectedElements() {
     return connectedElements;
 }
 
+void Node::makeGround() {
+    const string n = getName();
+    this->~Node();
+    new(this) Ground(n);
+}
+
 string Element::getName() {
     return name;
+}
+
+void Ground::makeNode() {
+    const string n = getName().erase(getName().size()-5);
+    this->~Ground();
+    new(this) Node(n);
+}
+
+string Ground::getName() {
+    return Node::getName()+"(gnd)";
 }
 
 void Resistor::addToMatrix(MatrixXd &matrix) {

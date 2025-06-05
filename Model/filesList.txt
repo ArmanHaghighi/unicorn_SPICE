@@ -1,14 +1,1 @@
-C:/Users/Arman/Desktop/testSC.txt
-../files/autosave/20_autosave.txt
-../files/autosave/21_autosave.txt
-../files/autosave/22_autosave.txt
-../files/autosave/23_autosave.txt
-../files/autosave/24_autosave.txt
-../files/autosave/25_autosave.txt
-../files/autosave/26_autosave.txt
-../files/autosave/27_autosave.txt
-../files/autosave/28_autosave.txt
-../files/autosave/29_autosave.txt
-../files/autosave/30_autosave.txt
-../files/autosave/31_autosave.txt
-../files/autosave/32_autosave.txt
+../files/d.txt
