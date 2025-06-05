@@ -130,3 +130,48 @@ void Zener::addToMatrix(MatrixXd &matrix) {
 double Zener::getCurrent() {
 }
 
+CCVS::CCVS(string name, Node* n1, Node* n2, Element* ctrlElem, double gain)
+    : Element(name, n1, n2, gain), controllingElement(ctrlElem), gain(gain) {}
+
+void CCVS::addToMatrix(MatrixXd &matrix) {
+    // TODO: Implement MNA for CCVS
+}
+
+double CCVS::getCurrent() {
+    return node1->KCL_CurrentCalc(this);
+}
+
+CCCS::CCCS(string name, Node* n1, Node* n2, Element* ctrlElem, double gain)
+    : Element(name, n1, n2, gain), controllingElement(ctrlElem), gain(gain) {}
+
+void CCCS::addToMatrix(MatrixXd &matrix) {
+    // TODO: Implement MNA for CCCS
+}
+
+double CCCS::getCurrent() {
+    return gain * controllingElement->getCurrent();
+}
+
+VCCS::VCCS(string name, Node* n1, Node* n2, Node* ctrlN1, Node* ctrlN2, double gain)
+    : Element(name, n1, n2, gain), controlNode1(ctrlN1), controlNode2(ctrlN2), gain(gain) {}
+
+void VCCS::addToMatrix(MatrixXd &matrix) {
+    // TODO: Implement MNA for VCCS
+}
+
+double VCCS::getCurrent() {
+    return gain * (controlNode1->getVoltage() - controlNode2->getVoltage());
+}
+
+VCVS::VCVS(string name, Node* n1, Node* n2, Node* ctrlN1, Node* ctrlN2, double gain)
+    : Element(name, n1, n2, gain), controlNode1(ctrlN1), controlNode2(ctrlN2), gain(gain) {}
+
+void VCVS::addToMatrix(MatrixXd &matrix) {
+    // TODO: Implement MNA for VCVS
+}
+
+double VCVS::getCurrent() {
+    return node1->KCL_CurrentCalc(this);
+}
+
+
