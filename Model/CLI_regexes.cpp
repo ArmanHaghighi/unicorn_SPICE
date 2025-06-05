@@ -55,7 +55,7 @@ const std::regex Cli_regexes::CCCS_ADD(R"(^\s*add\s+(F[\w\d]+)\s+(\w+)\s+(\w+)\s
 
 // Node operations
 const std::regex Cli_regexes::NODES_LIST(R"(^\s*\.nodes\s*$)", std::regex::icase);
-const std::regex Cli_regexes::NODE_RENAME(R"(^\s*\.rename\s+node\s+(\w+)\s+(\w+)\s*$)", std::regex::icase);
+const std::regex Cli_regexes::NODE_RENAME(R"(^\s*\.rename\s+(node)\s+(\w+)\s+(\w+)\s*$)", std::regex::icase);
 const std::regex Cli_regexes::ELEMENTS_LIST(R"(^\s*\.list(?:\s+(\w+))?\s*$)", std::regex::icase);
 
 // Print commands

@@ -98,6 +98,7 @@ void CLI::prompt(string line) {
         string node = matches[2].str();
         //Controller::addGND
     } else if (regex_match(line, matches, Cli_regexes::GROUND_DELETE)) {
+
     } else if (regex_match(line, matches, Cli_regexes::VOLTAGE_SOURCE_ADD)) {
         string name = matches[1].str();
         string node1 = matches[2].str();
@@ -135,8 +136,8 @@ void CLI::prompt(string line) {
     } else if (regex_match(line, matches, Cli_regexes::NODE_RENAME)) {
         if (matches[1].str() != "node" && !matches[2].str().empty() && !matches[3].str().empty())
             throw ParsingException(4);
-        //Controller::renameNode
-        cout << "SUCCESS: Node renamed from " << matches[2].str() << " to " << matches[3].str() << endl;
+        controller->renameNode(matches[2].str(),matches[3].str());
+        fout<<matches[0].str()<<endl;
     } else if (regex_match(line, matches, Cli_regexes::ELEMENTS_LIST)) {
         if (matches[1].length() > 0) {
             controller->listElementsByType(matches[1].str());

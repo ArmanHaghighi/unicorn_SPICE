@@ -124,3 +124,9 @@ void Diode::addToMatrix(MatrixXd &matrix) {}
 
 double Diode::getCurrent() {}
 
+void Zener::addToMatrix(MatrixXd &matrix) {
+}
+
+double Zener::getCurrent() {
+}
+

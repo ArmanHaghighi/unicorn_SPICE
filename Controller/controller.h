@@ -19,7 +19,7 @@ public:
     void parse(string line);
     void addElement(string type,string name,string n1,string n2 , double value,string model="",bool sin=false,double offset =0, double freq=0);
     void deleteElement(string name,string element);
-    void renameNode();
+    void renameNode(string old,string name);
     void listNodes() const;
     void listElements() const;
     void listElementsByType(string type) const;
@@ -54,6 +54,12 @@ class ExistExp:public CircuitException {
 };
 class NotFound:public CircuitException {
     using CircuitException::CircuitException;
+    public:
+    const char* what() const noexcept override ;
+};
+class NodeNotFound:public CircuitException {
+    using CircuitException::CircuitException;
+
     public:
     const char* what() const noexcept override ;
 };

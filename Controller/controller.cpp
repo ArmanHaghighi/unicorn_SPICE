@@ -97,6 +97,20 @@ void Controller::deleteElement(string name,string element) {
     circuit->removeElement(elm);
 }
 
+void Controller::renameNode(string old, string name) {
+    Node* oldNode=nullptr;
+    for (auto n:circuit->getNodes()) {
+        if (n->getName() == old)
+            oldNode=n;
+        if (n->getName() == name)
+            throw ExistExp("Node",name);
+    }
+    if (!oldNode)
+        throw NodeNotFound(old);
+    oldNode->renameNode(name );
+    cout<<"SUCCESS: Node renamed from "<<old<<" to "<<name<<endl;
+}
+
 void Controller::listNodes() const {
     string s;
     cout<<"Available nodes:"<<endl;
@@ -152,5 +166,9 @@ const char * ExistExp::what() const noexcept {
 
 const char * NotFound::what() const noexcept {
     return ("Error: Cannot delete "+thing+"; not found in circuit").c_str();
+}
+
+const char * NodeNotFound::what() const noexcept {
+    return ("ERROR: Node "+thing+" does not exist in the circuit").c_str();
 }
 

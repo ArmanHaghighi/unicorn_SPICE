@@ -61,7 +61,7 @@ public:
     Node* node1;
     Node* node2;
     virtual ~Element() = default;
-    Element(string name,Node* node1,Node* node2, const double value):name(std::move(name)),node1(node1),node2(node2),value(value){}
+    Element(string name,Node* node1,Node* node2, double value):name(std::move(name)),node1(node1),node2(node2),value(value){}
     virtual void addToMatrix (MatrixXd& matrix)=0;
     virtual double getCurrent()=0;
 };
@@ -130,13 +130,13 @@ public:
     void addToMatrix(MatrixXd &matrix) override;;
     double getCurrent() override;;
 };
-class Zener : public Element {
-public:
 
+
+class Zener  : public Element {
+public:
     using Element::Element;
     void addToMatrix(MatrixXd &matrix) override;;
     double getCurrent() override;;
 };
-
 
 #endif //MODEL_H
