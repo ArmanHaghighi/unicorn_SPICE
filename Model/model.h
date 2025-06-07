@@ -1,6 +1,7 @@
 #pragma once
 #include  <bits/stdc++.h>
 #include <Eigen/Eigen>
+#include "solver.h"
 
 //#include "model.h"
 #ifndef MODEL_H
@@ -16,7 +17,12 @@ private:
     set<Element*> elements;
     set<Node*> nodes;
     MatrixXd conductanceMatrix;
+    Solver* solver{nullptr};
+    std::vector<std::pair<double,Eigen::VectorXd>> results;
 public:
+    const auto& getResults() const { return results; }
+    void analyseTRAN(double step,double stop,double start=0);
+    Eigen::VectorXd analyseDC();
     bool checkElementNameExistence(const string &name) const;
 
     Node* checkNodeNameExistence(const string &name) const;
@@ -65,12 +71,18 @@ public:
     Node* node2;
     virtual ~Element() = default;
     Element(string name,Node* node1,Node* node2, double value):name(std::move(name)),node1(node1),node2(node2),value(value){}
+    virtual bool usesBranchCurrent() const { return false; }
+    // stamping API (DC & Transient)
+    virtual void stampDC(Eigen::MatrixXd&, Eigen::VectorXd&) = 0;
+    virtual void stampTransient(Eigen::MatrixXd&, Eigen::VectorXd&, double dt, double t, bool first) = 0;
+    virtual void postStepUpdate(double /*dt*/) {} //for capacitors and inductors
+    virtual void setSourceValue(double /*v*/) {}
     virtual void addToMatrix (MatrixXd& matrix)=0;
     virtual double getCurrent()=0;
-    virtual void stampDC (MatrixXd& G, VectorXd& I) = 0; //for DC sweep
-    virtual void stampTransient(MatrixXd& G, VectorXd& I, double dt, double t, bool first) = 0; //for transient analysis
-    virtual void setSourceValue(double v) {} //for voltage or current sources
-    virtual bool usesBranchCurrent() const { return false; }
+    //virtual void addToMatrix(Eigen::MatrixXd& m) final { stampDC(m, m.col(0)); }
+    //virtual double getCurrent() override { return cachedCurrent; }
+
+    mutable double cachedCurrent{};   // last solved current (for getCurrent)
 };
 
 class Ground : public Node {
@@ -105,6 +117,7 @@ public:
         //using kcl in one of the nodes
         return node1->KCL_CurrentCalc(this);
     };
+    bool usesBranchCurrent() const override { return true; }
 };
 
 class VoltageSin : public Element {
@@ -123,7 +136,9 @@ class Inductor : public Element {
 public:
     using Element::Element;
     void addToMatrix(MatrixXd &matrix) override;;//add resistor to circuit matrix
-    double getCurrent() override;;// caclulate the currnt passing through rsistor
+    double getCurrent() override;;// calculate the current passing through resistor
+    bool usesBranchCurrent() const override { return true; }
+    double prevCurrent{}; double lastDt{1};
 };
 class CurrentSource : public Element {
 public:
@@ -161,6 +176,7 @@ public:
     double getGain() const {
         return gain;
     }
+    bool usesBranchCurrent() const override { return true; }
 };
 
 class CCCS : public Element {
@@ -176,6 +192,7 @@ public:
     double getGain() const {
         return gain;
     }
+    bool usesBranchCurrent() const override { return true; }
 };
 
 class VCCS : public Element {
@@ -214,5 +231,6 @@ public:
     double getGain() const {
         return gain;
     }
+    bool usesBranchCurrent() const override { return true; }
 };
 #endif //MODEL_H
