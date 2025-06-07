@@ -17,7 +17,7 @@ private:
     set<Node*> nodes;
     MatrixXd conductanceMatrix;
 public:
-    bool checkElementNameExistence(const string &name) const;
+    Element* checkElementNameExistence(const string &name) const;
 
     Node* checkNodeNameExistence(const string &name) const;
 

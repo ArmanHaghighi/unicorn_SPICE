@@ -17,7 +17,7 @@ public:
     ~Controller();
     void restart();
     void parse(string line);
-    void addElement(string type,string name,string n1,string n2 , double value,string model="",bool sin=false,double offset =0, double freq=0);
+    void addElement(string type,string name,string n1,string n2 , double value,string model="",bool sin=false,double offset =0, double freq=0,const string& cN1="",const string& cN2="");
     void deleteElement(string name,string element);
     void renameNode(string old,string name);
     void listNodes() const;
@@ -65,6 +65,12 @@ class NodeNotFound:public CircuitException {
     public:
     const char* what() const noexcept override ;
 };
+class ControlException:public CircuitException {
+    using CircuitException::CircuitException;
+    public:
+    const char* what() const noexcept override ;
+};
+
 class AnalysisException : public SPICE_Exception {
 
 };

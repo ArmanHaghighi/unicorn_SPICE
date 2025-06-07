@@ -41,7 +41,7 @@ const std::regex Cli_regexes::CURRENT_SOURCE_ADD(R"(^\s*add\s+(?:CurrentSource\s
 const std::regex Cli_regexes::SIN_SOURCE_ADD(
     R"(^\s*add\s+(V[\w\d]+)\s+(\w+)\s+(\w+)\s+SINE?\(\s*()" + NUM_PATTERN + R"()\s+()" + NUM_PATTERN + R"()\s+()" + NUM_PATTERN + R"()\s*\)\s*$)", std::regex::icase);
 const std::regex Cli_regexes::PULSE_SOURCE_ADD(
-    R"(^\s*add\s+V\s*([\w\d]+)\s+(\w+)\s+(\w+)\s+PULSE\s+(\w+)\s+()" + NUM_PATTERN + R"()\s*$)", std::regex::icase);
+    R"(^\s*add\s+(V[\w\d]+)\s+(\w+)\s+(\w+)\s+PULSE\s+(\w+)\s+()" + NUM_PATTERN + R"()\s*$)", std::regex::icase);
 
 // Dependent source commands
 const std::regex Cli_regexes::VCVS_ADD(R"(^\s*add\s+(E[\w\d]+)\s+(\w+)\s+(\w+)\s+(\w+)\s+(\w+)\s+()" + NUM_PATTERN + R"()\s*$)",

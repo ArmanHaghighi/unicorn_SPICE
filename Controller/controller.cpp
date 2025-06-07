@@ -32,14 +32,17 @@ void Controller::parse(string line) {
     cout<<">>";
 }
 
-void Controller::addElement( string type ,string name, string n1, string n2, double value, string model ,bool sin,double offset , double freq) {
+void Controller::addElement( string type ,string name, string n1, string n2, double value, string model , const bool sin, const double offset , double freq,const string& cN1,const string& cN2) {
     if (circuit->checkElementNameExistence(name))
         throw ExistExp(type,name);
-    Node* node1,*node2;
+    Node* node1,*node2,*ctrlNode1,*ctrlNode2;
     if (!((node1= circuit->checkNodeNameExistence(n1))))
         node1 =new Node(n1);
     if (!((node2= circuit->checkNodeNameExistence(n2))))
         node2 =new Node(n2);
+    ctrlNode1=circuit->checkNodeNameExistence(cN1);
+    ctrlNode2=circuit->checkNodeNameExistence(cN2);
+    Element* ctrlElement=circuit->checkElementNameExistence(cN1);
     Element*e = nullptr;
     switch (name[0]) {
         case 'R':
@@ -72,7 +75,36 @@ void Controller::addElement( string type ,string name, string n1, string n2, dou
         case 'I':
             e=new CurrentSource(name,node1,node2,value);
             break;
-
+        case 'E':
+            if (!ctrlNode1) {
+                throw ControlException(cN1);
+            }
+            if (!ctrlNode2) {
+                throw ControlException(cN2);
+            }
+             e=new VCVS(name,node1,node2,ctrlNode1,ctrlNode2,value);
+            break;
+        case 'F':
+            if (!ctrlNode1) {
+                throw ControlException(cN1);
+            }
+            e=new CCCS(name,node1,node2,ctrlElement,value);
+            break;
+        case 'G':
+            if (!ctrlNode1) {
+                throw ControlException(cN1);
+            }
+            if (!ctrlNode2) {
+                throw ControlException(cN2);
+            }
+            e=new VCCS(name,node1,node2,ctrlNode1,ctrlNode2,value);
+            break;
+        case 'H':
+            if (!ctrlNode1) {
+                throw ControlException(cN1);
+            }
+            e=new CCVS(name,node1,node2,ctrlElement,value);
+            break;
         default:
             break;
     }
@@ -226,5 +258,10 @@ const char * NotFound::what() const noexcept {
 
 const char * NodeNotFound::what() const noexcept {
     return ("ERROR: Node "+thing+" does not exist in the circuit").c_str();
+}
+
+const char * ControlException::what() const noexcept {
+    return ("Error: Dependent source( "+thing+" )has an undefined control parameter.").c_str();
+
 }
 
