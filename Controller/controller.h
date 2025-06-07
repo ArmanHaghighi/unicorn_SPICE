@@ -18,6 +18,7 @@ public:
     void restart();
     void parse(string line);
     void addElement(string type,string name,string n1,string n2 , double value,string model="",bool sin=false,double offset =0, double freq=0);
+    void runTRAN(double step,double stop,double start,const std::vector<std::pair<char,std::string>>& probes);
     void deleteElement(string name,string element);
     void renameNode(string old,string name);
     void listNodes() const;

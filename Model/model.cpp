@@ -152,11 +152,27 @@ void Capacitor::postStepUpdate(double dt){ lastDt=dt; prevVoltage=node1->getVolt
 
 void VoltageSource::addToMatrix(MatrixXd &matrix) {}
 
+void VoltageSource::stampDC(MatrixXd& G, VectorXd& I) {
+    int n1=node1->idx,n2=node2->idx,k=currentIdx;
+    G(k,n1)=1; G(k,n2)=-1; G(n1,k)=1; G(n2,k)=-1;
+    I(k)=value;
+}
+void VoltageSource::stampTransient(MatrixXd& G, VectorXd& I,double,double,bool f){ stampDC(G,I); }
+
 void VoltageSin::addToMatrix(MatrixXd &matrix) {}
 
 void Inductor::addToMatrix(MatrixXd &matrix) {}
 
 double Inductor::getCurrent() {}
+
+void Inductor::stampDC(MatrixXd& G, VectorXd& I){ /* short in DC */ }
+void Inductor::stampTransient(MatrixXd& G, VectorXd& I,double dt,double, bool) {
+    double R=dt/value;
+    int n1=node1->idx,n2=node2->idx,k=currentIdx;
+    G(k,n1)=1; G(k,n2)=-1; G(n1,k)=1; G(n2,k)=-1; G(k,k)=-R;
+    I(k) = -R*prevCurrent;
+}
+void Inductor::postStepUpdate(double dt){ lastDt=dt; prevCurrent=cachedCurrent; }
 
 void CurrentSource::addToMatrix(MatrixXd &matrix) {}
 
