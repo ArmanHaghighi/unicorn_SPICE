@@ -1,8 +1,9 @@
 #pragma once
 #include  <bits/stdc++.h>
 #include <Eigen/Eigen>
+#include "solver.h"
 
-#include "model.h"
+//#include "model.h"
 #ifndef MODEL_H
 #define MODEL_H
 
@@ -16,8 +17,14 @@ private:
     set<Element*> elements;
     set<Node*> nodes;
     MatrixXd conductanceMatrix;
+    Solver* solver{nullptr};
+    std::vector<std::pair<double,Eigen::VectorXd>> results;
 public:
     Element* checkElementNameExistence(const string &name) const;
+    const auto& getResults() const { return results; }
+    void analyseTRAN(double step,double stop,double start=0);
+    Eigen::VectorXd analyseDC();
+    bool checkElementNameExistence(const string &name) const;
 
     Node* checkNodeNameExistence(const string &name) const;
 
@@ -38,6 +45,7 @@ private:
 protected:
     double voltage;
 public:
+    int idx{-1};
     virtual string getName() ;
     explicit Node(const string &name):name(name){}
     void connectElement(Element* element);
@@ -58,13 +66,29 @@ private:
 protected:
     double value;
 public:
+    int currentIdx{-1};
     string getName();
     Node* node1;
     Node* node2;
     virtual ~Element() = default;
     Element(string name,Node* node1,Node* node2, double value):name(std::move(name)),node1(node1),node2(node2),value(value){}
-    virtual void addToMatrix (MatrixXd& matrix)=0;
-    virtual double getCurrent()=0;
+    virtual bool usesBranchCurrent() const { return false; }
+    // stamping API (DC & Transient)
+    virtual void stampDC(Eigen::MatrixXd&, Eigen::VectorXd&) = 0;
+    virtual void stampTransient(Eigen::MatrixXd&, Eigen::VectorXd&, double dt, double t, bool first) = 0;
+    virtual void postStepUpdate(double /*dt*/) {} //for capacitors and inductors
+    virtual void setSourceValue(double /*v*/) {}
+    //virtual void addToMatrix (MatrixXd& matrix)=0;
+    //virtual double getCurrent()=0;
+    virtual void addToMatrix(Eigen::MatrixXd& G)  {
+        static Eigen::VectorXd dummy;               // resized on demand
+        if (dummy.size() != G.rows()) dummy = Eigen::VectorXd::Zero(G.rows());
+        else dummy.setZero();
+        stampDC(G, dummy);
+        }
+    virtual double getCurrent() { return cachedCurrent; }
+
+    mutable double cachedCurrent{};
 };
 
 class Ground : public Node {
@@ -83,12 +107,23 @@ public:
     double getCurrent() override {
         return (node1->getVoltage()-node2->getVoltage())/value;
     };// calculate the current passing through resistor
+    void stampDC(Eigen::MatrixXd& G, Eigen::VectorXd& I) override;
+    void stampTransient(Eigen::MatrixXd& G, Eigen::VectorXd& I,
+        double dt, double t, bool first) override;
+
 };
 class Capacitor : public Element {
+    double prevVoltage {0.0};
+    double lastDt {1.0};
 public:
     using Element::Element;
     void addToMatrix(MatrixXd &matrix) override;;//add resistor to circuit matrix
-    double getCurrent() override;;// calculate the current passing through resistor
+    double getCurrent() override;;// calculate the current passing through
+    void stampDC(Eigen::MatrixXd& G, Eigen::VectorXd& I) override;
+    void stampTransient(Eigen::MatrixXd& G, Eigen::VectorXd& I,
+                        double dt, double t, bool first) override;
+    void postStepUpdate(double dt) override;
+
 };
 
 class VoltageSource : public Element {
@@ -99,6 +134,10 @@ public:
         //using kcl in one of the nodes
         return node1->KCL_CurrentCalc(this);
     };
+    bool usesBranchCurrent() const override { return true; }
+    void stampDC(Eigen::MatrixXd& G, Eigen::VectorXd& I) override;
+    void stampTransient(Eigen::MatrixXd& G, Eigen::VectorXd& I,
+                        double dt, double t, bool first) override;
 };
 
 class VoltageSin : public Element {
@@ -112,12 +151,19 @@ public:
         //using kcl in one of the nodes
         return node1->KCL_CurrentCalc(this);
     };
+
 };
 class Inductor : public Element {
 public:
     using Element::Element;
     void addToMatrix(MatrixXd &matrix) override;;//add resistor to circuit matrix
-    double getCurrent() override;;// caclulate the currnt passing through rsistor
+    double getCurrent() override;;// calculate the current passing through resistor
+    bool usesBranchCurrent() const override { return true; }
+    double prevCurrent{}; double lastDt{1};
+    void stampDC(Eigen::MatrixXd& G, Eigen::VectorXd& I) override;
+    void stampTransient(Eigen::MatrixXd& G, Eigen::VectorXd& I,
+                        double dt, double t, bool first) override;
+    void postStepUpdate(double dt) override;
 };
 class CurrentSource : public Element {
 public:
@@ -126,6 +172,9 @@ public:
     double getCurrent() override {
         return value;
     };
+    void stampDC(Eigen::MatrixXd& G, Eigen::VectorXd& I) override;
+    void stampTransient(Eigen::MatrixXd& G, Eigen::VectorXd& I,
+                        double dt, double t, bool first) override;
 };
 class Diode : public Element {
 public:
@@ -155,6 +204,10 @@ public:
     double getGain() const {
         return gain;
     }
+    bool usesBranchCurrent() const override { return true; }
+    void stampDC(Eigen::MatrixXd& G, Eigen::VectorXd& I) override;
+    void stampTransient(Eigen::MatrixXd& G, Eigen::VectorXd& I,
+                        double dt, double t, bool first) override;
 };
 
 class CCCS : public Element {
@@ -170,6 +223,10 @@ public:
     double getGain() const {
         return gain;
     }
+    bool usesBranchCurrent() const override { return true; }
+    void stampDC(Eigen::MatrixXd& G, Eigen::VectorXd& I) override;
+    void stampTransient(Eigen::MatrixXd& G, Eigen::VectorXd& I,
+                        double dt, double t, bool first) override;
 };
 
 class VCCS : public Element {
@@ -189,6 +246,7 @@ public:
     double getGain() const {
         return gain;
     }
+
 };
 
 class VCVS : public Element {
@@ -208,5 +266,9 @@ public:
     double getGain() const {
         return gain;
     }
+    bool usesBranchCurrent() const override { return true; }
+    void stampDC(Eigen::MatrixXd& G, Eigen::VectorXd& I) override;
+    void stampTransient(Eigen::MatrixXd& G, Eigen::VectorXd& I,
+                        double dt, double t, bool first) override;
 };
 #endif //MODEL_H

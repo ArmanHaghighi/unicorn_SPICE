@@ -3,6 +3,7 @@
 //
 
 #include "model.h"
+#include "solver.h"
 
 Element* Circuit::checkElementNameExistence(const string& name) const {
     for (auto el:elements) {
@@ -73,8 +74,11 @@ bool Node::removeElement(Element *element) {
     return elements.empty();
 }
 
-double Node::KCL_CurrentCalc(Element *element) {
-    return 0;//just to build successfully
+double Node::KCL_CurrentCalc(Element* except) {
+    double sum = 0;
+    for (auto &[e, _] : elements)
+        if (e != except) sum += (this == e->node1 ? +1 : -1) * e->getCurrent();
+    return sum;
 }
 
 double Node::getVoltage() {
@@ -122,17 +126,53 @@ string Ground::getName() {
 void Resistor::addToMatrix(MatrixXd &matrix) {
 }
 
+void Resistor::stampDC(MatrixXd& G, VectorXd& I) {
+    double g = 1.0 / value;
+    int n1 = node1->idx, n2 = node2->idx;
+    G(n1,n1) += g; G(n2,n2) += g; G(n1,n2) -= g; G(n2,n1) -= g;
+}
+void Resistor::stampTransient(MatrixXd& G, VectorXd& I,double, double, bool) {
+    stampDC(G,I);
+}
+
 void Capacitor::addToMatrix(MatrixXd &matrix) {}
 
 double Capacitor::getCurrent() {}
 
+void Capacitor::stampDC(MatrixXd&, VectorXd&) { /* open in DC */ }
+void Capacitor::stampTransient(MatrixXd& G, VectorXd& I,double dt,double, bool first) {
+    double GC = value/dt;
+    int n1=node1->idx, n2=node2->idx;
+    G(n1,n1)+=GC; G(n2,n2)+=GC; G(n1,n2)-=GC; G(n2,n1)-=GC;
+    double Ieq = GC * prevVoltage;
+    I(n1)-=Ieq; I(n2)+=Ieq;
+    cachedCurrent = value*(node1->getVoltage()-node2->getVoltage()-prevVoltage)/dt;
+}
+void Capacitor::postStepUpdate(double dt){ lastDt=dt; prevVoltage=node1->getVoltage()-node2->getVoltage(); }
+
 void VoltageSource::addToMatrix(MatrixXd &matrix) {}
+
+void VoltageSource::stampDC(MatrixXd& G, VectorXd& I) {
+    int n1=node1->idx,n2=node2->idx,k=currentIdx;
+    G(k,n1)=1; G(k,n2)=-1; G(n1,k)=1; G(n2,k)=-1;
+    I(k)=value;
+}
+void VoltageSource::stampTransient(MatrixXd& G, VectorXd& I,double,double,bool f){ stampDC(G,I); }
 
 void VoltageSin::addToMatrix(MatrixXd &matrix) {}
 
 void Inductor::addToMatrix(MatrixXd &matrix) {}
 
 double Inductor::getCurrent() {}
+
+void Inductor::stampDC(MatrixXd& G, VectorXd& I){ /* short in DC */ }
+void Inductor::stampTransient(MatrixXd& G, VectorXd& I,double dt,double, bool) {
+    double R=dt/value;
+    int n1=node1->idx,n2=node2->idx,k=currentIdx;
+    G(k,n1)=1; G(k,n2)=-1; G(n1,k)=1; G(n2,k)=-1; G(k,k)=-R;
+    I(k) = -R*prevCurrent;
+}
+void Inductor::postStepUpdate(double dt){ lastDt=dt; prevCurrent=cachedCurrent; }
 
 void CurrentSource::addToMatrix(MatrixXd &matrix) {}
 
@@ -188,6 +228,22 @@ void VCVS::addToMatrix(MatrixXd &matrix) {
 
 double VCVS::getCurrent() {
     return node1->KCL_CurrentCalc(this);
+}
+
+void Circuit::analyseTRAN(double dt,double tStop,double tStart){
+    if(!solver){ solver=new Solver(this); solver->freeze(); }
+    Solver::Opt o{Solver::Mode::TRAN,dt,tStart};
+    for(double t=tStart; t<=tStop; t+=dt){
+        o.t=t;
+        const auto& x = solver->solveOnce(o);
+        results.emplace_back(t,x);
+        for(auto *e:getElements()) e->postStepUpdate(dt);
+    }
+}
+VectorXd Circuit::analyseDC(){
+    if(!solver){ solver=new Solver(this); solver->freeze(); }
+    const auto& x = solver->solveOnce({Solver::Mode::DC});
+    return x;
 }
 
 

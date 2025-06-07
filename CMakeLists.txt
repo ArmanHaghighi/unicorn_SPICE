@@ -14,5 +14,7 @@ add_executable(OOP_Project
         Controller/controller.h
         main.cpp
         Model/CLI_regexes.cpp
-        Model/CLI_regexes.h)
+        Model/CLI_regexes.h
+        Model/solver.cpp
+        Model/solver.h)
 target_link_libraries(OOP_Project Eigen3::Eigen)
