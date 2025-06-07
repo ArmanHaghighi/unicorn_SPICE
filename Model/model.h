@@ -2,7 +2,7 @@
 #include  <bits/stdc++.h>
 #include <Eigen/Eigen>
 
-#include "model.h"
+//#include "model.h"
 #ifndef MODEL_H
 #define MODEL_H
 
@@ -37,6 +37,7 @@ private:
 //so that we can change the voltage for a ground
 protected:
     double voltage;
+    int idx{-1};
 public:
     virtual string getName() ;
     explicit Node(const string &name):name(name){}
@@ -57,6 +58,7 @@ private:
     string name;
 protected:
     double value;
+    int currentIdx{-1};
 public:
     string getName();
     Node* node1;
@@ -65,6 +67,10 @@ public:
     Element(string name,Node* node1,Node* node2, double value):name(std::move(name)),node1(node1),node2(node2),value(value){}
     virtual void addToMatrix (MatrixXd& matrix)=0;
     virtual double getCurrent()=0;
+    virtual void stampDC (MatrixXd& G, VectorXd& I) = 0; //for DC sweep
+    virtual void stampTransient(MatrixXd& G, VectorXd& I, double dt, double t, bool first) = 0; //for transient analysis
+    virtual void setSourceValue(double v) {} //for voltage or current sources
+    virtual bool usesBranchCurrent() const { return false; }
 };
 
 class Ground : public Node {
