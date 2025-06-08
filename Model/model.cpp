@@ -179,7 +179,13 @@ void VoltageSource::stampDC(MatrixXd& G, VectorXd& I) {
     I(k)=value;
 }
 
-void VoltageSource::stampTransient(MatrixXd& G, VectorXd& I,double,double,bool f){ stampDC(G,I); }
+void VoltageSource::stampTransient(MatrixXd& G, VectorXd& I, double, double, bool) {
+    int n1 = node1->getIdx(), n2 = node2->getIdx(), k = currentIdx;
+    G(k,n1) = 1; G(k,n2) = -1;
+    G(n1,k) = 1; G(n2,k) = -1;
+    I(k) = value;
+}
+
 
 // sinusoidal voltage source
 void VoltageSin::addToMatrix(MatrixXd &matrix) {}
@@ -362,8 +368,8 @@ double VCVS::getCurrent() {
 void VCVS::stampTransient(MatrixXd& G, VectorXd& I, double dt, double t, bool first) {
     int n1 = node1->getIdx();
     int n2 = node2->getIdx();
-    int c1 = controlNode1->idx;
-    int c2 = controlNode2->idx;
+    int c1 = controlNode1->getIdx();
+    int c2 = controlNode2->getIdx();
     int k = currentIdx;
 
     G(k, n1) = 1;

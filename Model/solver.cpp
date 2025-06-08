@@ -6,7 +6,7 @@
 #include "model.h"
 using namespace Eigen;
 void Solver::freeze() {
-    int next = 0;
+    int next = 1;
     for (auto *n : ckt->getNodes())
         if (!dynamic_cast<Ground*>(n)) n->idx = next++;
     for (auto *e : ckt->getElements())
