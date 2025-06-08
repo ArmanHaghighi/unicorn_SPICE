@@ -10,6 +10,7 @@ CLI::CLI(Controller* controller):controller(controller) {
     fstream filesList("../Model/filesList.txt",ios::ate|ios::in|ios::out);
     int n=1;
     set<filesystem::path> ffiles;
+    filesystem::create_directories("..\\files\\autosave\\");
     for (auto d: filesystem::directory_iterator("..\\files\\autosave\\")) {
      ffiles.emplace(d.path().stem());
 
@@ -154,20 +155,18 @@ void CLI::prompt(string line) {
         if (analysis == "TRAN") {
             double step = parseNumber(matches[2].str());
             double stop = parseNumber(matches[3].str());
-            double start = 0, maxStep = 0;
-            if (matches[4].matched) {
-                start = parseNumber(matches[4].str());
-            }
-            if (matches[5].matched) {
-                maxStep = parseNumber(matches[5].str());
-            }
-            vector<pair<string, string> > names_params;
+            double start = 0;
+            if (matches[4].matched) start = parseNumber(matches[4].str());
+
+            vector<pair<char, string>> probes;
             string variables = matches[6].str();
             regex var_regex(R"(([VI])\(([\w\d]+)\))");
             auto vars_begin = sregex_iterator(variables.begin(), variables.end(), var_regex);
             for (auto it = vars_begin; it != std::sregex_iterator(); ++it) {
-                names_params.emplace_back((*it)[1].str(), (*it)[2].str());
+                probes.emplace_back((*it)[1].str()[0], (*it)[2].str());
             }
+
+            controller->runTRAN(step, stop, start, probes);
             //Controller::analyse
         } else if (analysis == "DC") {
             string SourceName = matches[2].str();

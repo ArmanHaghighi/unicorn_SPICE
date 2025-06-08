@@ -39,13 +39,16 @@ public:
 class Node {
 private:
     string name;
-    map<Element*,optional<double>> elements; //elemets connected to node (and their currents?)
+    map<Element*,optional<double>> elements; //elements connected to node (and their currents?)
 //so that we can change the voltage for a ground
 protected:
     double voltage;
 public:
     int idx{-1};
     virtual string getName() ;
+    virtual int getIdx() const {
+        return idx;
+    }
     explicit Node(const string &name):name(name){}
     void connectElement(Element* element);
     bool removeElement(Element* element);
@@ -92,6 +95,9 @@ public:
 
 class Ground : public Node {
 public:
+    int getIdx() const override {
+        return 0;
+    }
     void makeNode();
     string getName() override;
     explicit Ground(const string &id) : Node(id) {
@@ -145,13 +151,16 @@ class VoltageSin : public Element {
     double freq;
 public:
     VoltageSin(string name,Node* n1,Node* n2,double vOffset,double vAmp,double freq):Element(name,n1,n2,vAmp/sqrt(2)),vAmp(vAmp),vOffset(vOffset),freq(freq){}
-    void addToMatrix(MatrixXd &matrix) override;;//add resistor to circuit matrix
+    void addToMatrix(MatrixXd &matrix) override;
     double getCurrent() override{//calculate current passing through voltage source
         //using kcl in one of the nodes
         return node1->KCL_CurrentCalc(this);
-    };
-
+    }
+    void stampDC(Eigen::MatrixXd& G, Eigen::VectorXd& I) override;
+    void stampTransient(Eigen::MatrixXd& G, Eigen::VectorXd& I,
+                    double dt, double t, bool first) override;
 };
+
 class Inductor : public Element {
 public:
     using Element::Element;
@@ -164,6 +173,7 @@ public:
                         double dt, double t, bool first) override;
     void postStepUpdate(double dt) override;
 };
+
 class CurrentSource : public Element {
 public:
     using Element::Element;
@@ -175,19 +185,25 @@ public:
     void stampTransient(Eigen::MatrixXd& G, Eigen::VectorXd& I,
                         double dt, double t, bool first) override;
 };
+
 class Diode : public Element {
 public:
     using Element::Element;
-    void addToMatrix(MatrixXd &matrix) override;;
-    double getCurrent() override;;
+    void addToMatrix(MatrixXd &matrix) override;
+    double getCurrent() override;
+    void stampDC(Eigen::MatrixXd& G, Eigen::VectorXd& I) override;
+    void stampTransient(Eigen::MatrixXd& G, Eigen::VectorXd& I,
+                        double dt, double t, bool first) override;
 };
 
-
-class Zener  : public Element {
+class Zener : public Element {
 public:
     using Element::Element;
-    void addToMatrix(MatrixXd &matrix) override;;
-    double getCurrent() override;;
+    void addToMatrix(MatrixXd &matrix) override;
+    double getCurrent() override;
+    void stampDC(Eigen::MatrixXd& G, Eigen::VectorXd& I) override;
+    void stampTransient(Eigen::MatrixXd& G, Eigen::VectorXd& I,
+                        double dt, double t, bool first) override;
 };
 
 class CCVS : public Element {
@@ -245,6 +261,8 @@ public:
     double getGain() const {
         return gain;
     }
+    void stampTransient(Eigen::MatrixXd& G, Eigen::VectorXd& I,
+                        double dt, double t, bool first) override;
 
 };
 

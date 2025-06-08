@@ -1,1 +1,6 @@
 ../files/d.txt
+../files/autosave/1_autosave.txt
+../files/autosave/2_autosave.txt
+../files/autosave/3_autosave.txt
+../files/autosave/4_autosave.txt
+../files/autosave/5_autosave.txt
