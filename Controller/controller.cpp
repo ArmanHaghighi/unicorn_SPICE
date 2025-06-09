@@ -30,6 +30,12 @@ void Controller::parse(string line) {
     catch(SPICE_Exception &e) {
         cout << e.what() << endl;
     }
+    catch (exception &e) {
+        cout << e.what() << endl;
+    }
+    catch (...) {
+        cout << "unknown exception" << endl;
+    }
     cout<<">>";
 }
 void Controller::addElement( string type ,string name, string n1, string n2, double value, string model , const bool sin, const double offset , double freq,const string& cN1,const string& cN2) {

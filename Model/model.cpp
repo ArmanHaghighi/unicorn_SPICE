@@ -634,6 +634,7 @@ void Circuit::analyseTRAN(double step, double stop, double start) {
 
     for (double t = start; t < stop; t += step) {
         for (auto* e : elements) {
+
             e->stampTransient(conductanceMatrix, currentVector, step, t, true); // First pass
         }
 
