@@ -129,13 +129,44 @@ void CLI::prompt(string line) {
         fout<<name<<' '<<node1<<' '<<node2<<" SINE("<<vOffset<<' '<<vAmp<<' '<<freq<<')'<<endl;
         controller->addElement("sine voltage source",name,node1,node2,vAmp,"",true,vOffset,freq);
     }
-    // else   if (regex_match(line,matches,Cli_regexes::PULSE_SOURCE_ADD)) {
-    //
-    // }
-    // else if (regex_match(line, matches, Cli_regexes::VCCS_ADD)) {
-    // } else if (regex_match(line, matches, Cli_regexes::VCVS_ADD)) {
-    // } else if (regex_match(line, matches, Cli_regexes::CCCS_ADD)) {
-    // } else if (regex_match(line, matches, Cli_regexes::CCVS_ADD)) {}
+    else   if (regex_match(line,matches,Cli_regexes::PULSE_SOURCE_ADD)) {
+
+    }
+    else if (regex_match(line, matches, Cli_regexes::VCCS_ADD)) {
+        string name = matches[1].str();
+        string node1 = matches[2].str();
+        string node2 = matches[3].str();
+        string ctrlNode1 = matches[4].str();
+        string ctrlNode2 = matches[5].str();
+        double value = parseNumber(matches[6].str());
+        controller->addElement("VCCS",name,node1,node2,value,"",false,0,0,ctrlNode1,ctrlNode2);
+        fout<<name<<' '<<node1<<' '<<node2<<' '<<ctrlNode1<<' '<<ctrlNode2<<' '<<value<<endl;
+    } else if (regex_match(line, matches, Cli_regexes::VCVS_ADD)) {
+        string name = matches[1].str();
+        string node1 = matches[2].str();
+        string node2 = matches[3].str();
+        string ctrlNode1 = matches[4].str();
+        string ctrlNode2 = matches[5].str();
+        double value = parseNumber(matches[6].str());
+        controller->addElement("VCVS",name,node1,node2,value,"",false,0,0,ctrlNode1,ctrlNode2);
+        fout<<name<<' '<<node1<<' '<<node2<<' '<<ctrlNode1<<' '<<ctrlNode2<<' '<<value<<endl;
+    } else if (regex_match(line, matches, Cli_regexes::CCCS_ADD)) {
+        string name = matches[1].str();
+        string node1 = matches[2].str();
+        string node2 = matches[3].str();
+        string ctrlNode1 = matches[4].str();
+        double value = parseNumber(matches[5].str());
+        controller->addElement("CCCS",name,node1,node2,value,"",false,0,0,ctrlNode1);
+        fout<<name<<' '<<node1<<' '<<node2<<' '<<ctrlNode1<<' '<<value<<endl;
+    } else if (regex_match(line, matches, Cli_regexes::CCVS_ADD)) {
+        string name = matches[1].str();
+        string node1 = matches[2].str();
+        string node2 = matches[3].str();
+        string ctrlNode1 = matches[4].str();
+        double value = parseNumber(matches[5].str());
+        controller->addElement("CCCS",name,node1,node2,value,"",false,0,0,ctrlNode1);
+        fout<<name<<' '<<node1<<' '<<node2<<' '<<ctrlNode1<<' '<<value<<endl;
+    }
     else if (regex_match(line, matches, Cli_regexes::NODES_LIST)) {
         controller->listNodes();
     } else if (regex_match(line, matches, Cli_regexes::NODE_RENAME)) {
