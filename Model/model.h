@@ -89,6 +89,7 @@ public:
         else dummy.setZero();
         stampDC(G, dummy);
         }
+
     virtual double getCurrent() { return cachedCurrent; }
 
     mutable double cachedCurrent{};
@@ -184,8 +185,9 @@ public:
         return value;
     };
     void stampDC(Eigen::MatrixXd& G, Eigen::VectorXd& I) override;
-    void stampTransient(Eigen::MatrixXd& G, Eigen::VectorXd& I,
-                        double dt, double t, bool first) override;
+
+    void stampTransient(Eigen::MatrixXd &G, Eigen::VectorXd &I,double dt, double t, bool first) override {
+    }
 };
 
 class Diode : public Element {
