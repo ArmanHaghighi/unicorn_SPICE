@@ -4,9 +4,12 @@
 
 #include "solver.h"
 #include "model.h"
+
 using namespace Eigen;
+using namespace std;
+
 void Solver::freeze() {
-    int next = 0;
+    int next = 1;
     for (auto *n : ckt->getNodes())
         if (!dynamic_cast<Ground*>(n)) n->idx = next++;
     for (auto *e : ckt->getElements())

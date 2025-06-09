@@ -8,7 +8,6 @@
 #ifndef CONTROLLER_H
 #define CONTROLLER_H
 class Controller{
-private:
     string type;
     CLI* cli;
     Circuit* circuit;

@@ -7,21 +7,24 @@
 
 #pragma once
 #include <Eigen/Eigen>
+
+using namespace Eigen;
+
 class Circuit;
 class Solver {
     Circuit* ckt;
-    Eigen::MatrixXd G;
-    Eigen::VectorXd RHS, sol;
+    MatrixXd G;
+    VectorXd RHS, sol;
 public:
     enum class Mode { DC, TRAN };
     struct Opt {
         Mode mode{Mode::DC};
-        double dt{0};   // for TRAN
-        double t{0};    // for TRAN
+        double dt{0};// for transient analysis
+        double t{0};// for transient analysis
     };
     explicit Solver(Circuit* c) : ckt(c) {}
     void freeze();// assign indices & size G/RHS
-    const Eigen::VectorXd& solveOnce(const Opt&);
+    const VectorXd& solveOnce(const Opt&);
 };
 
 #endif //SOLVER_H
