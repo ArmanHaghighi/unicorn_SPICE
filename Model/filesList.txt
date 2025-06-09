@@ -40,3 +40,5 @@
 ../files/autosave/13_autosave.txt
 ../files/autosave/14_autosave.txt
 ../files/autosave/15_autosave.txt
+../files/autosave/16_autosave.txt
+../files/autosave/17_autosave.txt

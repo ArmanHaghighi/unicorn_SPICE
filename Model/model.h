@@ -22,7 +22,9 @@ private:
     VectorXd currentVector;
 public:
     virtual ~Circuit() = default;
-
+    Circuit() {
+        solver =new Solver(this);
+    }
     Element* checkElementNameExistence(const string &name) const;
     const auto& getResults() const { return results; }
     virtual void initializeCurrentVector();
