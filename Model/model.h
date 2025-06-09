@@ -67,9 +67,9 @@ public:
 
 class Element {
 private:
-    string name;
 protected:
     double value;
+    string name;
 public:
     int currentIdx{-1};
     string getName();

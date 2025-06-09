@@ -11,11 +11,12 @@
 using namespace Eigen;
 
 class Circuit;
+
 class Solver {
+public:
     Circuit* ckt;
     MatrixXd G;
     VectorXd RHS, sol;
-public:
     enum class Mode { DC, TRAN };
     struct Opt {
         Mode mode{Mode::DC};
@@ -23,8 +24,9 @@ public:
         double t{0};// for transient analysis
     };
     explicit Solver(Circuit* c) : ckt(c) {}
-    void freeze();// assign indices & size G/RHS
+    void freeze();
     const VectorXd& solveOnce(const Opt&);
+    void resizeMatrix();
 };
 
 #endif //SOLVER_H

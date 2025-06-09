@@ -4,16 +4,17 @@
 
 #include "model.h"
 #include "solver.h"
+#include "../Controller/controller.h"
 
 //circuit
 void Circuit::initializeCurrentVector() {
-    currentVector = Eigen::VectorXd(nodes.size());
+    currentVector = VectorXd(nodes.size());
     currentVector.setZero();  // Initialize current vector to zero
 }
 
 void Circuit::initializeConductanceMatrix() {
-    conductanceMatrix = Eigen::MatrixXd(nodes.size(), nodes.size());
-    conductanceMatrix.setZero();  // Initialize conductance matrix to zero
+    conductanceMatrix = MatrixXd(nodes.size(), nodes.size());
+    conductanceMatrix.setZero();
 }
 
 bool Circuit::checkElementNameExistence(const string& name) const {
@@ -36,14 +37,35 @@ Node* Circuit::checkNodeNameExistence(const string& name) const {
 
 void Circuit::addElement(Element *element) {
     elements.emplace(element);
-    if (!nodes.contains(element->node1))
-        nodes.emplace(element->node1);
-    if (!nodes.contains(element->node2))
-        nodes.emplace(element->node2);
+    Node* n1 = element->node1;
+    Node* n2 = element->node2;
+
+
+    if (n1 == nullptr || n2 == nullptr) {
+        cerr << "Error: One of the nodes is uninitialized!" << endl;
+        return;
+    }
+    if (n1->idx == -1) {
+        n1->idx = Controller::next++;
+    }
+    if (n2->idx == -1) {
+        n2->idx = Controller::next++;
+    }
+
+    // Add the nodes if not already present
+    if (!nodes.contains(n1)) {
+        nodes.emplace(n1);
+    }
+    if (!nodes.contains(n2)) {
+        nodes.emplace(n2);
+    }
+
+    solver->resizeMatrix();  // update matrix size after node addition
+
     element->node1->connectElement(element);
     element->node2->connectElement(element);
-
 }
+
 
 void Circuit::removeElement(Element *element) {
     if (element->node1->removeElement(element))
@@ -136,7 +158,23 @@ string Ground::getName() {
 }
 
 //resistors
-void Resistor::addToMatrix(MatrixXd &matrix) {}
+void Resistor::addToMatrix(MatrixXd &G) {
+    int n1 = node1->getIdx();
+    int n2 = node2->getIdx();
+
+    if (n1 < 0 || n2 < 0) {
+        cerr << "Invalid node indices for Resistor: " << n1 << ", " << n2 << endl;
+        throw out_of_range("Node index out of range");
+    }
+
+    double g = 1.0 / value;
+
+    G(n1, n1) += g;
+    G(n2, n2) += g;
+    G(n1, n2) -= g;
+    G(n2, n1) -= g;
+}
+
 
 void Resistor::stampDC(MatrixXd& G, VectorXd& I) {
     double g = 1.0 / value;
@@ -144,13 +182,38 @@ void Resistor::stampDC(MatrixXd& G, VectorXd& I) {
     G(n1,n1) += g; G(n2,n2) += g; G(n1,n2) -= g; G(n2,n1) -= g;
 }
 
-void Resistor::stampTransient(MatrixXd& G, VectorXd& I,double, double, bool) {
-    stampDC(G,I);
+void Resistor::stampTransient(MatrixXd& G, VectorXd& I, double dt, double t, bool first) {
+    double g = 1.0 / value;
+    int n1 = node1->getIdx(), n2 = node2->getIdx();
+
+    if (n1 < 0 || n2 < 0) {
+        cerr << "Invalid node indices for Resistor: " << n1 << ", " << n2 << endl;
+        throw std::out_of_range("Node index out of range");
+    }
+
+    G(n1, n1) += g;
+    G(n2, n2) += g;
+    G(n1, n2) -= g;
+    G(n2, n1) -= g;
 }
 
-
 //capacitors
-void Capacitor::addToMatrix(MatrixXd &matrix) {}
+void Capacitor::addToMatrix(MatrixXd &G) {
+    int n1 = node1->getIdx();
+    int n2 = node2->getIdx();
+
+    if (n1 < 0 || n2 < 0) {
+        cerr << "Invalid node indices for Capacitor: " << n1 << ", " << n2 << endl;
+        throw out_of_range("Node index out of range");
+    }
+
+    double gc = value / lastDt;
+
+    G(n1, n1) += gc;
+    G(n2, n2) += gc;
+    G(n1, n2) -= gc;
+    G(n2, n1) -= gc;
+}
 
 double Capacitor::getCurrent() {
     double dV = node1->getVoltage() - node2->getVoltage() - prevVoltage;
@@ -199,29 +262,35 @@ void Capacitor::stampDC(MatrixXd&, VectorXd&) {} //for dc
         RHS(n1) -= currentSource;
     }
 }*/
-void Capacitor::stampTransient(Eigen::MatrixXd& G, Eigen::VectorXd& I, double dt, double t, bool first) {
+void Capacitor::stampTransient(MatrixXd& G, VectorXd& I, double dt, double t, bool first) {
     if (first) {
-        prevVoltage = node1->getVoltage() - node2->getVoltage();  // Initialize the previous voltage
-        lastDt = dt;  // Store the time step
+        prevVoltage = node1->getVoltage() - node2->getVoltage();
+        lastDt = dt;
     }
 
-    // Calculate the change in voltage (dV)
     double dV = node1->getVoltage() - node2->getVoltage() - prevVoltage;
-    prevVoltage = node1->getVoltage() - node2->getVoltage();  // Update the previous voltage
+    prevVoltage = node1->getVoltage() - node2->getVoltage();
 
-    // The current through the capacitor is I(t) = C * dV/dt
-    double current = (dV / lastDt) * value; // I(t) = C * dV/dt
+    double current = (dV / lastDt) * value;
 
-    // Stamp the capacitor into the system (conductance matrix and current vector)
-    G(node1->getIdx(), node1->getIdx()) += value / lastDt;
-    G(node2->getIdx(), node2->getIdx()) += value / lastDt;
-    G(node1->getIdx(), node2->getIdx()) -= value / lastDt;
-    G(node2->getIdx(), node1->getIdx()) -= value / lastDt;
+    int idx1 = node1->getIdx();
+    int idx2 = node2->getIdx();
 
-    // Update the current vector for the capacitor's current contribution
-    I(node1->getIdx()) += current;  // Current source contribution at node1
-    I(node2->getIdx()) -= current;  // Opposite current source contribution at node2
+    if (idx1 < 0 || idx1 >= G.rows() || idx2 < 0 || idx2 >= G.cols()) {
+        std::cerr << "Invalid node indices: " << idx1 << ", " << idx2 << std::endl;
+        throw std::out_of_range("Node index out of range");
+    }
+
+    G(idx1, idx1) += value / lastDt;
+    G(idx2, idx2) += value / lastDt;
+    G(idx1, idx2) -= value / lastDt;
+    G(idx2, idx1) -= value / lastDt;
+
+    I(idx1) += current;
+    I(idx2) -= current;
 }
+
+
 
 void Capacitor::postStepUpdate(double dt) {
     lastDt = dt; //temp
@@ -235,18 +304,42 @@ void Capacitor::postStepUpdate(double dt) {
 }
 
 // DC voltage source
-void VoltageSource::addToMatrix(MatrixXd &matrix) {}
+void VoltageSource::addToMatrix(MatrixXd &G) {
+    int n1 = node1->getIdx();
+    int n2 = node2->getIdx();
+    int k = currentIdx;
 
-void VoltageSource::stampDC(MatrixXd& G, VectorXd& I) {
-    int n1=node1->getIdx(),n2=node2->getIdx(),k=currentIdx;
-    G(k,n1)=1; G(k,n2)=-1; G(n1,k)=1; G(n2,k)=-1;
-    I(k)=value;
+    if (n1 < 0 || n2 < 0 || k < 0) {
+        cerr << "Invalid node indices for VoltageSource: " << n1 << ", " << n2 << ", " << k << endl;
+        throw out_of_range("Node index out of range");
+    }
+
+    G(k, n1) = 1;
+    G(k, n2) = -1;
+    G(n1, k) = 1;
+    G(n2, k) = -1;
 }
 
-void VoltageSource::stampTransient(MatrixXd& G, VectorXd& I, double, double, bool) {
-    int n1 = node1->getIdx(), n2 = node2->getIdx(), k = currentIdx;
-    G(k,n1) = 1; G(k,n2) = -1;
-    G(n1,k) = 1; G(n2,k) = -1;
+void VoltageSource::stampDC(MatrixXd& G, VectorXd& I) {
+    //int n1=node1->getIdx(),n2=node2->getIdx(),k=currentIdx;
+    //G(k,n1)=1; G(k,n2)=-1; G(n1,k)=1; G(n2,k)=-1;
+    //I(k)=value;
+}
+
+void VoltageSource::stampTransient(MatrixXd& G, VectorXd& I, double dt, double t, bool first) {
+    int n1 = node1->getIdx(), n2 = node2->getIdx();
+    int k = currentIdx;
+
+    if (n1 < 0 || n2 < 0 || k < 0) {
+        cerr << "Invalid node indices for VoltageSource: " << n1 << ", " << n2 << ", " << k << endl;
+        throw out_of_range("Node index out of range");
+    }
+
+    G(k, n1) = 1;
+    G(k, n2) = -1;
+    G(n1, k) = 1;
+    G(n2, k) = -1;
+
     I(k) = value;
 }
 
@@ -269,7 +362,25 @@ void VoltageSin::stampDC(MatrixXd& G, VectorXd& I) {
 }
 
 // inductors
-void Inductor::addToMatrix(MatrixXd &matrix) {}
+void Inductor::addToMatrix(MatrixXd &G) {
+    int n1 = node1->getIdx();
+    int n2 = node2->getIdx();
+    int k = currentIdx;
+
+    if (n1 < 0 || n2 < 0 || k < 0) {
+        cerr << "Invalid node indices for Inductor: " << n1 << ", " << n2 << ", " << k << endl;
+        throw out_of_range("Node index out of range");
+    }
+
+    double inductance = value;
+    double R = 1.0 / inductance;
+
+    G(k, n1) = 1;
+    G(k, n2) = -1;
+    G(n1, k) = 1;
+    G(n2, k) = -1;
+    G(k, k) = -R;
+}
 
 double Inductor::getCurrent() {
     return cachedCurrent;
@@ -277,30 +388,69 @@ double Inductor::getCurrent() {
 
 void Inductor::stampDC(MatrixXd& G, VectorXd& I){ /* short in DC */ }
 
-void Inductor::stampTransient(MatrixXd& G, VectorXd& I,double dt,double, bool) {
-    double R=dt/value;
-    int n1=node1->getIdx(),n2=node2->getIdx(),k=currentIdx;
-    G(k,n1)=1; G(k,n2)=-1; G(n1,k)=1; G(n2,k)=-1; G(k,k)=-R;
-    I(k) = -R*prevCurrent;
+void Inductor::stampTransient(MatrixXd& G, VectorXd& I, double dt, double t, bool first) {
+    double R = dt / value;  // inductor's resistance for transient analysis: L * di/dt
+    int n1 = node1->getIdx(), n2 = node2->getIdx(), k = currentIdx;
+
+    if (n1 < 0 || n2 < 0 || k < 0) {
+        cerr << "Invalid node indices for Inductor: " << n1 << ", " << n2 << ", " << k << endl;
+        throw out_of_range("Node index out of range");
+    }
+
+    G(k, n1) = 1;
+    G(k, n2) = -1;
+    G(n1, k) = 1;
+    G(n2, k) = -1;
+    G(k, k) = -R;
+
+    I(k) = -R * prevCurrent;
+
+    prevCurrent = cachedCurrent;
 }
+
 
 void Inductor::postStepUpdate(double dt){ lastDt=dt; prevCurrent=cachedCurrent; }
 
 // dc current source
-void CurrentSource::addToMatrix(MatrixXd &matrix) {}
+void CurrentSource::addToMatrix(MatrixXd &G) {
+    int n1 = node1->getIdx();
+    int n2 = node2->getIdx();
+
+    if (n1 < 0 || n2 < 0) {
+        cerr << "Invalid node indices for CurrentSource: " << n1 << ", " << n2 << endl;
+        throw out_of_range("Node index out of range");
+    }
+}
 
 void CurrentSource::stampDC(MatrixXd& G, VectorXd& I) {
+    //int n1 = node1->getIdx(), n2 = node2->getIdx();
+    //I(n1) -= value;
+    //I(n2) += value;
+}
+
+void CurrentSource::stampTransient(MatrixXd& G, VectorXd& I, double dt, double t, bool first) {
     int n1 = node1->getIdx(), n2 = node2->getIdx();
+
+    if (n1 < 0 || n2 < 0) {
+        cerr << "Invalid node indices for CurrentSource: " << n1 << ", " << n2 << endl;
+        throw out_of_range("Node index out of range");
+    }
+
     I(n1) -= value;
     I(n2) += value;
 }
 
-void CurrentSource::stampTransient(MatrixXd& G, VectorXd& I, double dt, double t, bool first) {
-    stampDC(G, I);
-}
 
 // diodes
-void Diode::addToMatrix(MatrixXd &matrix) {}
+void Diode::addToMatrix(MatrixXd &G) {
+    int n1 = node1->getIdx();
+    int n2 = node2->getIdx();
+
+    if (n1 < 0 || n2 < 0) {
+        cerr << "Invalid node indices for Diode: " << n1 << ", " << n2 << endl;
+        throw out_of_range("Node index out of range");
+    }
+}
 
 double Diode::getCurrent() {
     return cachedCurrent;
@@ -308,7 +458,23 @@ double Diode::getCurrent() {
 
 void Diode::stampDC(MatrixXd&, VectorXd&) {}
 
-void Diode::stampTransient(MatrixXd&, VectorXd&, double, double, bool) {}
+void Diode::stampTransient(MatrixXd& G, VectorXd& I, double dt, double t, bool first) {
+    double voltage = node1->getVoltage() - node2->getVoltage();
+    double diodeCurrent = 0;
+
+    int n1 = node1->getIdx(), n2 = node2->getIdx();
+
+    if (n1 < 0 || n2 < 0) {
+        cerr << "Invalid node indices for Diode: " << n1 << ", " << n2 << endl;
+        throw out_of_range("Node index out of range");
+    }
+
+    diodeCurrent = voltage > 0 ? exp(voltage) - 1 : 0;
+
+    I(n1) -= diodeCurrent;
+    I(n2) += diodeCurrent;
+}
+
 
 // diode: zener
 void Zener::addToMatrix(MatrixXd &matrix) {}
@@ -456,40 +622,39 @@ void VCVS::stampDC(MatrixXd& G, VectorXd& I) {
 }
 
 void Circuit::analyseTRAN(double step, double stop, double start) {
-    results.clear();
+    results.clear(); // Clear previous results
+    initializeCurrentVector(); // Reset current vector
 
-    // Initialize the current vector once
-    initializeCurrentVector();
-
-    // Perform stamping of all elements (e.g., capacitors, resistors) into the conductance matrix and current vector
     for (double t = start; t < stop; t += step) {
-        // Stamp each element into the system at this time step
         for (auto* e : elements) {
-            e->stampTransient(conductanceMatrix, currentVector, step, t, true);  // First pass
+            e->stampTransient(conductanceMatrix, currentVector, step, t, true); // First pass
         }
 
-        // Solve the system: conductanceMatrix * voltageVector = currentVector
-        Eigen::VectorXd voltages = conductanceMatrix.fullPivLu().solve(currentVector);
+        VectorXd voltages = conductanceMatrix.fullPivLu().solve(currentVector);  // Solve the system
 
-        // Store the result for this time step
-        results.push_back({t, voltages});
+        results.push_back({t, voltages});  // Save results at each time step
 
-        // Update the node voltages with the solution
         int idx = 0;
         for (auto* node : nodes) {
-            node->setVoltage(voltages(idx));  // Set the voltage at each node
+            node->setVoltage(voltages(idx));  // Update node voltages with the solution
             ++idx;
         }
 
-        // Prepare for the next iteration: reset currentVector
-        currentVector.setZero();  // Zero the current vector for the next step
+        currentVector.setZero(); // Reset the current vector
 
-        // Stamp the elements again if necessary (e.g., for current sources)
         for (auto* e : elements) {
-            e->stampTransient(conductanceMatrix, currentVector, step, t, false);  // Subsequent passes (false)
+            e->stampTransient(conductanceMatrix, currentVector, step, t, false);  // Second pass
         }
     }
+
+    // Check if results were produced
+    if (results.empty()) {
+        std::cout << "No results were produced. Check your time step or circuit configuration." << std::endl;
+    } else {
+        std::cout << "Transient analysis completed. Results are available." << std::endl;
+    }
 }
+
 
 
 

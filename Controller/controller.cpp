@@ -3,6 +3,7 @@
 //
 
 #include "controller.h"
+int Controller::next = 1;
 
 Controller::Controller(string type) {
     this->type = type;
@@ -36,10 +37,26 @@ void Controller::addElement( string type ,string name, string n1, string n2, dou
     if (circuit->checkElementNameExistence(name))
         throw ExistExp(type,name);
     Node* node1,*node2;
-    if (!((node1= circuit->checkNodeNameExistence(n1))))
-        node1 =new Node(n1);
-    if (!((node2= circuit->checkNodeNameExistence(n2))))
-        node2 =new Node(n2);
+    if (!(node1 = circuit->checkNodeNameExistence(n1))) {
+        node1 = new Node(n1);
+        circuit->getNodes().emplace(node1);
+    }
+    if (!(node2 = circuit->checkNodeNameExistence(n2))) {
+        node2 = new Node(n2);
+        circuit->getNodes().emplace(node2);
+    }
+
+
+    if (node1->idx == -1) {
+        node1->idx = next;
+        next++;
+    }
+
+    if (node2->idx == -1) {
+        node2->idx = next;
+        next++;
+    }
+
     Element*e = nullptr;
     switch (name[0]) {
         case 'R':
