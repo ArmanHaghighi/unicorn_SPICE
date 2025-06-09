@@ -17,13 +17,13 @@ void Circuit::initializeConductanceMatrix() {
     conductanceMatrix.setZero();
 }
 
-bool Circuit::checkElementNameExistence(const string& name) {
+Element* Circuit::checkElementNameExistence(const string& name) const {
     for (auto el:elements) {
         if (el->getName()==name) {
-            return true;
+            return el;
         }
     }
-    return false;
+    return nullptr;
 }
 
 Node* Circuit::checkNodeNameExistence(const string& name) const {
@@ -584,6 +584,9 @@ void VCCS::stampTransient(MatrixXd& G, VectorXd& I, double dt, double t, bool fi
     G(n2, c2) += gain;
 }
 
+void VCCS::stampDC(Eigen::MatrixXd &G, Eigen::VectorXd &I) {
+}
+
 // voltage controlled voltage source
 VCVS::VCVS(string name, Node* n1, Node* n2, Node* ctrlN1, Node* ctrlN2, double gain)
     : Element(name, n1, n2, gain), controlNode1(ctrlN1), controlNode2(ctrlN2), gain(gain) {}
@@ -624,6 +627,10 @@ void VCVS::stampDC(MatrixXd& G, VectorXd& I) {
 void Circuit::analyseTRAN(double step, double stop, double start) {
     results.clear(); // Clear previous results
     initializeCurrentVector(); // Reset current vector
+    if(!solver) {
+        solver=new Solver(this); solver->freeze();
+    }
+    // Solver::Opt o{Solver::Mode::TRAN,dt,tStart};
 
     for (double t = start; t < stop; t += step) {
         for (auto* e : elements) {
