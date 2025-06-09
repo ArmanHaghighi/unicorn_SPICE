@@ -23,7 +23,7 @@ public:
     const auto& getResults() const { return results; }
     void analyseTRAN(double step,double stop,double start=0);
     Eigen::VectorXd analyseDC();
-    bool checkElementNameExistence(const string &name) const;
+    Element* checkElementNameExistence(const string &name) const;
 
     Node* checkNodeNameExistence(const string &name) const;
 

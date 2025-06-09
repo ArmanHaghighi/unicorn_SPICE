@@ -6,13 +6,13 @@
 #include "solver.h"
 
 //circuit
-bool Circuit::checkElementNameExistence(const string& name) const {
+Element* Circuit::checkElementNameExistence(const string& name) const {
     for (auto el:elements) {
         if (el->getName()==name) {
-            return true;
+            return el;
         }
     }
-    return false;
+    return nullptr;
 }
 
 Node* Circuit::checkNodeNameExistence(const string& name) const {
@@ -138,7 +138,6 @@ void Resistor::stampTransient(MatrixXd& G, VectorXd& I,double, double, bool) {
     stampDC(G,I);
 }
 
-
 //capacitors
 void Capacitor::addToMatrix(MatrixXd &matrix) {}
 
@@ -187,7 +186,6 @@ void VoltageSource::stampTransient(MatrixXd& G, VectorXd& I, double, double, boo
     G(n1,k) = 1; G(n2,k) = -1;
     I(k) = value;
 }
-
 
 // sinusoidal voltage source
 void VoltageSin::addToMatrix(MatrixXd &matrix) {}
