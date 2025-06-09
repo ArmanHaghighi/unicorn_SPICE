@@ -9,27 +9,72 @@ using namespace Eigen;
 using namespace std;
 
 void Solver::freeze() {
-    int next = 1;
-    for (auto *n : ckt->getNodes())
-        if (!dynamic_cast<Ground*>(n)) n->idx = next++;
-    for (auto *e : ckt->getElements())
-        if (e->usesBranchCurrent())   e->currentIdx = next++;
-    G.resize(next, next);
-    RHS.resize(next);
+    int next = 0;
+    for (auto *n : ckt->getNodes()) {
+        if (n->idx == -1) {
+            n->idx = next++;
+        }
+    }
+
+    resizeMatrix();
 }
+
 const VectorXd& Solver::solveOnce(const Opt& o) {
-    G.setZero(); RHS.setZero();
+    G.setZero();
+    RHS.setZero();
+
     for (auto *el : ckt->getElements()) {
         if (o.mode == Mode::DC)
             el->stampDC(G, RHS);
         else
-            el->stampTransient(G, RHS, o.dt, o.t, o.t==0);
+            el->stampTransient(G, RHS, o.dt, o.t, o.t == 0);
     }
-    sol = G.fullPivLu().solve(RHS);
-    // copy back
-    for (auto *n : ckt->getNodes())
-        if (n->idx >= 0) n->setVoltage(sol(n->idx));
-    for (auto *e : ckt->getElements())
-        if (e->usesBranchCurrent()) e->cachedCurrent = sol(e->currentIdx);
+
+    try {
+        sol = G.fullPivLu().solve(RHS);
+    } catch (const std::exception& e) {
+        std::cerr << "Matrix solve failed: " << e.what() << std::endl;
+        throw std::runtime_error("Matrix solve failed");
+    }
+
+    int nVars = sol.size();
+    for (auto *n : ckt->getNodes()) {
+        int idx = n->getIdx();
+        if (idx >= 0 && idx < nVars)
+            n->setVoltage(sol(idx));
+    }
+
+    for (auto *e : ckt->getElements()) {
+        if (e->usesBranchCurrent()) {
+            int idx = e->currentIdx;
+            if (idx >= 0 && idx < nVars)
+                e->cachedCurrent = sol(idx);
+        }
+    }
+
     return sol;
 }
+
+
+void Solver::resizeMatrix() {
+    int max_idx = 0;
+    if (!ckt) {
+        cerr << "Error: Circuit (ckt) is not initialized!" << endl;
+        return;
+    }
+    for (auto* n : ckt->getNodes()) {
+        if (n == nullptr) {
+            std::cerr << "Error: Found nullptr in the node set!" << std::endl;
+            continue;
+        }
+
+        max_idx = std::max(max_idx, n->getIdx());
+    }
+
+    G.resize(max_idx + 1, max_idx + 1);
+    RHS.resize(max_idx + 1);
+
+    cout << "Resized G to " << G.rows() << "x" << G.cols() << endl;
+}
+
+

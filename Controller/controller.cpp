@@ -3,6 +3,7 @@
 //
 
 #include "controller.h"
+int Controller::next = 1;
 
 Controller::Controller(string type) {
     this->type = type;
@@ -32,17 +33,30 @@ void Controller::parse(string line) {
     cout<<">>";
 }
 
-void Controller::addElement( string type ,string name, string n1, string n2, double value, string model , const bool sin, const double offset , double freq,const string& cN1,const string& cN2) {
+void Controller::addElement( string type ,string name, string n1, string n2, double value, string model ,bool sin,double offset , double freq) {
     if (circuit->checkElementNameExistence(name))
         throw ExistExp(type,name);
-    Node* node1,*node2,*ctrlNode1,*ctrlNode2;
-    if (!((node1= circuit->checkNodeNameExistence(n1))))
-        node1 =new Node(n1);
-    if (!((node2= circuit->checkNodeNameExistence(n2))))
-        node2 =new Node(n2);
-    ctrlNode1=circuit->checkNodeNameExistence(cN1);
-    ctrlNode2=circuit->checkNodeNameExistence(cN2);
-    Element* ctrlElement=circuit->checkElementNameExistence(cN1);
+    Node* node1,*node2;
+    if (!(node1 = circuit->checkNodeNameExistence(n1))) {
+        node1 = new Node(n1);
+        circuit->getNodes().emplace(node1);
+    }
+    if (!(node2 = circuit->checkNodeNameExistence(n2))) {
+        node2 = new Node(n2);
+        circuit->getNodes().emplace(node2);
+    }
+
+
+    if (node1->idx == -1) {
+        node1->idx = next;
+        next++;
+    }
+
+    if (node2->idx == -1) {
+        node2->idx = next;
+        next++;
+    }
+
     Element*e = nullptr;
     switch (name[0]) {
         case 'R':
@@ -75,36 +89,7 @@ void Controller::addElement( string type ,string name, string n1, string n2, dou
         case 'I':
             e=new CurrentSource(name,node1,node2,value);
             break;
-        case 'E':
-            if (!ctrlNode1) {
-                throw ControlException(cN1);
-            }
-            if (!ctrlNode2) {
-                throw ControlException(cN2);
-            }
-             e=new VCVS(name,node1,node2,ctrlNode1,ctrlNode2,value);
-            break;
-        case 'F':
-            if (!ctrlNode1) {
-                throw ControlException(cN1);
-            }
-            e=new CCCS(name,node1,node2,ctrlElement,value);
-            break;
-        case 'G':
-            if (!ctrlNode1) {
-                throw ControlException(cN1);
-            }
-            if (!ctrlNode2) {
-                throw ControlException(cN2);
-            }
-            e=new VCCS(name,node1,node2,ctrlNode1,ctrlNode2,value);
-            break;
-        case 'H':
-            if (!ctrlNode1) {
-                throw ControlException(cN1);
-            }
-            e=new CCVS(name,node1,node2,ctrlElement,value);
-            break;
+
         default:
             break;
     }
@@ -236,21 +221,41 @@ void Controller::checkGnd() {
         throw GNDNotFound();
 }
 
-void Controller::runTRAN(double step,double stop,double start,const vector<pair<char,string>>& probes){
-    circuit->analyseTRAN(step,stop,start);
+void Controller::runTRAN(double step, double stop, double start, const vector<pair<char, string>>& probes) {
+    circuit->analyseTRAN(step, stop, start);
+
     const auto& res = circuit->getResults();
-    for(const auto& [t,x] : res){
-        cout<<t;
-        for(const auto& p:probes){
-            if(p.first=='V'){
-                for(auto *n:circuit->getNodes()) if(n->getName()==p.second) cout<<","<<n->getVoltage();
-            }else if(p.first=='I'){
-                for(auto *e:circuit->getElements()) if(e->getName()==p.second) cout<<","<<e->getCurrent();
+    for (const auto& [t, x] : res) {
+        cout << "Time: " << t << " ";  // Time for this data point
+
+        for (const auto& p : probes) {
+            if (p.first == 'V') {  // Handle voltage probes
+                if (p.second == "in") {
+                    for (auto* node : circuit->getNodes()) {
+                        if (node->getName() == "in") {
+                            cout << "V(in): " << node->getVoltage() << " ";
+                        }
+                    }
+                } else if (p.second == "out") {
+                    for (auto* node : circuit->getNodes()) {
+                        if (node->getName() == "out") {
+                            cout << "V(out): " << node->getVoltage() << " ";
+                        }
+                    }
+                }
+            }
+            else if (p.first == 'I') {  // Handle current probes
+                for (auto* e : circuit->getElements()) {
+                    if (e->getName() == p.second) {
+                        cout << "I(" << p.second << "): " << e->getCurrent() << " ";
+                    }
+                }
             }
         }
-        cout<<"\n";
+        cout << endl;  // Newline for each time step
     }
 }
+
 
 
 ParsingException::ParsingException(int code, string parameterName):code(code) {
