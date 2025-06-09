@@ -301,7 +301,12 @@ CCCS::CCCS(string name, Node* n1, Node* n2, Element* ctrlElem, double gain)
     : Element(name, n1, n2, gain), controllingElement(ctrlElem), gain(gain) {}
 
 void CCCS::addToMatrix(MatrixXd &matrix) {
-    // TODO: Implement MNA for CCCS
+    int size = matrix.rows();
+    if (currentIdx >= size) {
+        matrix.conservativeResize(currentIdx + 1, currentIdx + 1);
+        matrix.row(currentIdx).setZero();
+        matrix.col(currentIdx).setZero();
+    }
 }
 
 double CCCS::getCurrent() {
@@ -358,7 +363,12 @@ VCVS::VCVS(string name, Node* n1, Node* n2, Node* ctrlN1, Node* ctrlN2, double g
     : Element(name, n1, n2, gain), controlNode1(ctrlN1), controlNode2(ctrlN2), gain(gain) {}
 
 void VCVS::addToMatrix(MatrixXd &matrix) {
-    // TODO: Implement MNA for VCVS
+    int size = matrix.rows();
+    if (currentIdx >= size) {
+        matrix.conservativeResize(currentIdx + 1, currentIdx + 1);
+        matrix.row(currentIdx).setZero();
+        matrix.col(currentIdx).setZero();
+    }
 }
 
 double VCVS::getCurrent() {
