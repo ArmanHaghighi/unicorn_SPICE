@@ -59,17 +59,17 @@ void Controller::addElement( string type ,string name, string n1, string n2, dou
                 throw ParsingException(2, "Diode model: " + model);
             }
             if (model == "D") {
-                // e=new Diode(name,node1,node2,0);
+                e=new Diode(name,node1,node2,0);
             }
             else if (model == "Z") {
-                // e=new Zener(name,node1,node2,0.7);
+                e=new Zener(name,node1,node2,0.7);
             }
             break;
         case'V':
             if (!sin)
                 e=new VoltageSource(name,node1,node2,value);
             else
-                // e=new VoltageSin(name,node1,node2,offset,value,freq);
+                e=new VoltageSin(name,node1,node2,offset,value,freq);
 
             break;
         case 'I':
@@ -97,7 +97,7 @@ void Controller::addElement( string type ,string name, string n1, string n2, dou
             if (!ctrlNode2) {
                 throw ControlException(cN2);
             }
-            // e=new VCCS(name,node1,node2,ctrlNode1,ctrlNode2,value);
+            e=new VCCS(name,node1,node2,ctrlNode1,ctrlNode2,value);
             break;
         case 'H':
             if (!ctrlNode1) {

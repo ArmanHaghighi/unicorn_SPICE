@@ -24,7 +24,6 @@ public:
     const auto& getResults() const { return results; }
     void analyseTRAN(double step,double stop,double start=0);
     Eigen::VectorXd analyseDC();
-    Element* checkElementNameExistence(const string &name) const;
 
     Node* checkNodeNameExistence(const string &name) const;
 
@@ -186,8 +185,7 @@ public:
     };
     void stampDC(Eigen::MatrixXd& G, Eigen::VectorXd& I) override;
 
-    void stampTransient(Eigen::MatrixXd &G, Eigen::VectorXd &I,double dt, double t, bool first) override {
-    }
+    void stampTransient(Eigen::MatrixXd &G, Eigen::VectorXd &I,double dt, double t, bool first) override ;
 };
 
 class Diode : public Element {
@@ -267,7 +265,7 @@ public:
     }
     void stampTransient(Eigen::MatrixXd& G, Eigen::VectorXd& I,
                         double dt, double t, bool first) override;
-
+    void stampDC(Eigen::MatrixXd& G, Eigen::VectorXd& I) override;
 };
 
 class VCVS : public Element {

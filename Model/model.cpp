@@ -352,6 +352,10 @@ void VCCS::stampTransient(MatrixXd& G, VectorXd& I, double dt, double t, bool fi
     G(n2, c2) += gain;
 }
 
+void VCCS::stampDC(Eigen::MatrixXd &G, Eigen::VectorXd &I) {
+    //TODO:
+}
+
 // voltage controlled voltage source
 VCVS::VCVS(string name, Node* n1, Node* n2, Node* ctrlN1, Node* ctrlN2, double gain)
     : Element(name, n1, n2, gain), controlNode1(ctrlN1), controlNode2(ctrlN2), gain(gain) {}
