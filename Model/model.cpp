@@ -17,7 +17,7 @@ void Circuit::initializeConductanceMatrix() {
     conductanceMatrix.setZero();
 }
 
-bool Circuit::checkElementNameExistence(const string& name) const {
+bool Circuit::checkElementNameExistence(const string& name) {
     for (auto el:elements) {
         if (el->getName()==name) {
             return true;

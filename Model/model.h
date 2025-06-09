@@ -21,13 +21,13 @@ private:
     vector<pair<double,VectorXd>> results;
     VectorXd currentVector;
 public:
-    Element* checkElementNameExistence(const string &name) const;
+    //Element* checkElementNameExistence(const string &name) const;
     const auto& getResults() const { return results; }
     virtual void initializeCurrentVector();
     virtual void initializeConductanceMatrix();
     void analyseTRAN(double step,double stop,double start=0);
-    Eigen::VectorXd analyseDC();
-
+    VectorXd analyseDC();
+    virtual bool checkElementNameExistence(const string& name);
     Node* checkNodeNameExistence(const string &name) const;
 
     void addElement(Element* element);
