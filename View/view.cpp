@@ -183,6 +183,7 @@ void CLI::prompt(string line) {
     } else if (regex_match(line, matches, Cli_regexes::PRINT_COMMAND)) {
         //costume syntax error command not implemented
         string analysis = matches[1].str();
+        controller->checkGnd();
         if (analysis == "TRAN") {
             double step = parseNumber(matches[2].str());
             double stop = parseNumber(matches[3].str());

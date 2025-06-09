@@ -25,6 +25,7 @@ public:
     void listElementsByType(string type) const;
     void addGnd(string nodeName);
     void deleteGnd(string nodeName);
+    void checkGnd();
 };
 
 
@@ -71,6 +72,12 @@ class ControlException:public CircuitException {
     const char* what() const noexcept override ;
 };
 
+class GNDNotFound:public CircuitException {
+    public:
+        GNDNotFound(): CircuitException("") {
+    };
+    const char* what() const noexcept override ;
+};
 class AnalysisException : public SPICE_Exception {
 
 };

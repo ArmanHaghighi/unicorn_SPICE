@@ -145,6 +145,8 @@ void Controller::renameNode(string old, string name) {
 
 void Controller::listNodes() const {
     string s;
+    if (circuit->getNodes().empty())
+        throw NodeNotFound("");
     cout<<"Available nodes:"<<endl;
     for (Node* n:circuit->getNodes()) {
         s.append(n->getName()+", ");
@@ -156,6 +158,8 @@ void Controller::listNodes() const {
 
 void Controller::listElements() const {
     string s;
+    if (circuit->getElements().empty())
+        throw ParsingException(2,"");
     for (Element* e:circuit->getElements()) {
         s.append(e->getName()+", ");
     }
@@ -165,6 +169,8 @@ void Controller::listElements() const {
 
 void Controller::listElementsByType(string type) const {
     string s;
+    if (circuit->getElements().empty())
+        throw ParsingException(2, type);
     for (Element* e:circuit->getElements()) {
         if (tolower(e->getName()[0])==tolower(type[0]))
             s.append(e->getName()+", ");
@@ -216,6 +222,18 @@ void Controller::deleteGnd(string nodeName) {
         cout<<"Node is not a ground\n";
         throw NotFound(nodeName);
     }
+}
+
+void Controller::checkGnd() {
+    bool gnd=false;
+
+    for (const auto &n:circuit->getNodes()) {
+        string name = n->getName();
+        if (name.length()>5&& name.substr(name.size()-5) == "(gnd)")
+            gnd=true;
+    }
+    if (!gnd)
+        throw GNDNotFound();
 }
 
 void Controller::runTRAN(double step,double stop,double start,const vector<pair<char,string>>& probes){
@@ -279,5 +297,9 @@ const char * NodeNotFound::what() const noexcept {
 const char * ControlException::what() const noexcept {
     return ("Error: Dependent source( "+thing+" )has an undefined control parameter.").c_str();
 
+}
+
+const char * GNDNotFound::what() const noexcept {
+    return "Error: No ground node detected in the circuit.";
 }
 
