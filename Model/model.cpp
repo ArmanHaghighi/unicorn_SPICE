@@ -168,6 +168,8 @@ void Capacitor::postStepUpdate(double dt) {
     double V = v1 - v2;
     cachedCurrent = value * (V - prevVoltage) / dt;
     prevVoltage = V;
+
+    cout << "t=" << dt << ", V=" << node1->getVoltage() - node2->getVoltage() << ", Icap=" << cachedCurrent << endl; //temporary
 }
 
 // DC voltage source

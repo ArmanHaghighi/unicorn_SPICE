@@ -10,7 +10,7 @@ CLI::CLI(Controller* controller):controller(controller) {
     fstream filesList("../Model/filesList.txt",ios::ate|ios::in|ios::out);
     int n=1;
     set<filesystem::path> ffiles;
-    filesystem::create_directories("..\\files\\autosave\\");
+    filesystem::create_directories("..\\files\\autosave\\"); // if it doesn't exist in the first place
     for (auto d: filesystem::directory_iterator("..\\files\\autosave\\")) {
      ffiles.emplace(d.path().stem());
 

@@ -6,3 +6,4 @@
 ../files/autosave/5_autosave.txt
 ../files/autosave/6_autosave.txt
 ../files/autosave/7_autosave.txt
+../files/autosave/8_autosave.txt

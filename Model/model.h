@@ -105,6 +105,7 @@ public:
     }
 };
 
+
 class Resistor : public Element {
 public:
     using Element::Element;//----Inheriting the constructor from Element.

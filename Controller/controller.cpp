@@ -239,7 +239,7 @@ const char * ExistExp::what() const noexcept {
 const char * NotFound::what() const noexcept {
     return ("Error: Cannot delete "+thing+"; not found in circuit").c_str();
 }
-
+//
 const char * NodeNotFound::what() const noexcept {
     return ("ERROR: Node "+thing+" does not exist in the circuit").c_str();
 }
