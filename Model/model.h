@@ -18,9 +18,12 @@ private:
     set<Node*> nodes;
     MatrixXd conductanceMatrix;
     Solver* solver{nullptr};
-    std::vector<std::pair<double,Eigen::VectorXd>> results;
+    vector<pair<double,VectorXd>> results;
+    VectorXd currentVector;
 public:
     const auto& getResults() const { return results; }
+    virtual void initializeCurrentVector();
+    virtual void initializeConductanceMatrix();
     void analyseTRAN(double step,double stop,double start=0);
     Eigen::VectorXd analyseDC();
     bool checkElementNameExistence(const string &name) const;
@@ -119,10 +122,10 @@ public:
 
 };
 class Capacitor : public Element {
-    double prevVoltage {0.0};
-    double lastDt {1.0};
 public:
     using Element::Element;
+    double prevVoltage {0.0};
+    double lastDt {1.0};
     void addToMatrix(MatrixXd &matrix) override;;//add resistor to circuit matrix
     double getCurrent() override;;// calculate the current passing through
     void stampDC(Eigen::MatrixXd& G, Eigen::VectorXd& I) override;

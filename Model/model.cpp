@@ -6,6 +6,16 @@
 #include "solver.h"
 
 //circuit
+void Circuit::initializeCurrentVector() {
+    currentVector = Eigen::VectorXd(nodes.size());
+    currentVector.setZero();  // Initialize current vector to zero
+}
+
+void Circuit::initializeConductanceMatrix() {
+    conductanceMatrix = Eigen::MatrixXd(nodes.size(), nodes.size());
+    conductanceMatrix.setZero();  // Initialize conductance matrix to zero
+}
+
 bool Circuit::checkElementNameExistence(const string& name) const {
     for (auto el:elements) {
         if (el->getName()==name) {
@@ -143,12 +153,15 @@ void Resistor::stampTransient(MatrixXd& G, VectorXd& I,double, double, bool) {
 void Capacitor::addToMatrix(MatrixXd &matrix) {}
 
 double Capacitor::getCurrent() {
-    return cachedCurrent;
+    double dV = node1->getVoltage() - node2->getVoltage() - prevVoltage;
+    prevVoltage = node1->getVoltage() - node2->getVoltage();
+    return (dV / lastDt) * value; // i(t) = C * dV/dt
 }
+
 
 void Capacitor::stampDC(MatrixXd&, VectorXd&) {} //for dc
 
-void Capacitor::stampTransient(MatrixXd& G, VectorXd& I, double dt, double, bool first) {
+/*void Capacitor::stampTransient(MatrixXd& G, VectorXd& I, double dt, double, bool first) {
     double GC = value / dt;
     int n1 = node1->getIdx(), n2 = node2->getIdx();
     G(n1,n1) += GC;
@@ -159,17 +172,66 @@ void Capacitor::stampTransient(MatrixXd& G, VectorXd& I, double dt, double, bool
     double Ieq = GC * prevVoltage;
     I(n1) -= Ieq;
     I(n2) += Ieq;
+}*/
+
+/*void Capacitor::stampTransient(MatrixXd& G, VectorXd& RHS, double dt, double t, bool initial) {
+    if (initial) {
+        prevVoltage = 0.0;
+    }
+
+    double conductance = value / dt;
+    double currentSource = conductance * prevVoltage;
+
+    int n1 = node1->getIdx(), n2 = node2->getIdx();
+
+    if (n1 >= 0) {
+        G(n1, n1) += conductance;
+        RHS(n1) += currentSource;
+    }
+    if (n2 >= 0) {
+        G(n2, n2) += conductance;
+        RHS(n2) += currentSource;
+    }
+    if (n1 >= 0 && n2 >= 0) {
+        G(n1, n2) -= conductance;
+        G(n2, n1) -= conductance;
+        RHS(n1) -= currentSource;
+        RHS(n1) -= currentSource;
+    }
+}*/
+void Capacitor::stampTransient(Eigen::MatrixXd& G, Eigen::VectorXd& I, double dt, double t, bool first) {
+    if (first) {
+        prevVoltage = node1->getVoltage() - node2->getVoltage();  // Initialize the previous voltage
+        lastDt = dt;  // Store the time step
+    }
+
+    // Calculate the change in voltage (dV)
+    double dV = node1->getVoltage() - node2->getVoltage() - prevVoltage;
+    prevVoltage = node1->getVoltage() - node2->getVoltage();  // Update the previous voltage
+
+    // The current through the capacitor is I(t) = C * dV/dt
+    double current = (dV / lastDt) * value; // I(t) = C * dV/dt
+
+    // Stamp the capacitor into the system (conductance matrix and current vector)
+    G(node1->getIdx(), node1->getIdx()) += value / lastDt;
+    G(node2->getIdx(), node2->getIdx()) += value / lastDt;
+    G(node1->getIdx(), node2->getIdx()) -= value / lastDt;
+    G(node2->getIdx(), node1->getIdx()) -= value / lastDt;
+
+    // Update the current vector for the capacitor's current contribution
+    I(node1->getIdx()) += current;  // Current source contribution at node1
+    I(node2->getIdx()) -= current;  // Opposite current source contribution at node2
 }
 
 void Capacitor::postStepUpdate(double dt) {
-    lastDt = dt;
+    lastDt = dt; //temp
     double v1 = node1->getVoltage();
     double v2 = node2->getVoltage();
     double V = v1 - v2;
-    cachedCurrent = value * (V - prevVoltage) / dt;
+    cachedCurrent = value * (V - prevVoltage) / dt; //temp
     prevVoltage = V;
 
-    cout << "t=" << dt << ", V=" << node1->getVoltage() - node2->getVoltage() << ", Icap=" << cachedCurrent << endl; //temporary
+    //cout << "dt=" << dt << ", V=" << node1->getVoltage() - node2->getVoltage() << ", Icap=" << cachedCurrent << endl; //temporary
 }
 
 // DC voltage source
@@ -195,7 +257,8 @@ void VoltageSin::addToMatrix(MatrixXd &matrix) {}
 void VoltageSin::stampTransient(MatrixXd& G, VectorXd& I, double dt, double t, bool first) {
     int n1 = node1->getIdx(), n2 = node2->getIdx(), k = currentIdx;
     double v = vOffset + vAmp * sin(2 * M_PI * freq * t);
-    G(k,n1) = 1; G(k,n2) = -1; G(n1,k) = 1; G(n2,k) = -1;
+    G(k,n1) = 1; G(k,n2) = -1;
+    G(n1,k) = 1; G(n2,k) = -1;
     I(k) = v;
 }
 
@@ -392,16 +455,44 @@ void VCVS::stampDC(MatrixXd& G, VectorXd& I) {
     G(k, c2) += gain;
 }
 
-void Circuit::analyseTRAN(double dt,double tStop,double tStart){
-    if(!solver){ solver=new Solver(this); solver->freeze(); }
-    Solver::Opt o{Solver::Mode::TRAN,dt,tStart};
-    for(double t=tStart; t<=tStop; t+=dt){
-        o.t=t;
-        const auto& x = solver->solveOnce(o);
-        results.emplace_back(t,x);
-        for(auto *e:getElements()) e->postStepUpdate(dt);
+void Circuit::analyseTRAN(double step, double stop, double start) {
+    results.clear();
+
+    // Initialize the current vector once
+    initializeCurrentVector();
+
+    // Perform stamping of all elements (e.g., capacitors, resistors) into the conductance matrix and current vector
+    for (double t = start; t < stop; t += step) {
+        // Stamp each element into the system at this time step
+        for (auto* e : elements) {
+            e->stampTransient(conductanceMatrix, currentVector, step, t, true);  // First pass
+        }
+
+        // Solve the system: conductanceMatrix * voltageVector = currentVector
+        Eigen::VectorXd voltages = conductanceMatrix.fullPivLu().solve(currentVector);
+
+        // Store the result for this time step
+        results.push_back({t, voltages});
+
+        // Update the node voltages with the solution
+        int idx = 0;
+        for (auto* node : nodes) {
+            node->setVoltage(voltages(idx));  // Set the voltage at each node
+            ++idx;
+        }
+
+        // Prepare for the next iteration: reset currentVector
+        currentVector.setZero();  // Zero the current vector for the next step
+
+        // Stamp the elements again if necessary (e.g., for current sources)
+        for (auto* e : elements) {
+            e->stampTransient(conductanceMatrix, currentVector, step, t, false);  // Subsequent passes (false)
+        }
     }
 }
+
+
+
 VectorXd Circuit::analyseDC(){
     if(!solver){ solver=new Solver(this); solver->freeze(); }
     const auto& x = solver->solveOnce({Solver::Mode::DC});

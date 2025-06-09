@@ -186,21 +186,41 @@ void Controller::deleteGnd(string nodeName) {
     }
 }
 
-void Controller::runTRAN(double step,double stop,double start,const vector<pair<char,string>>& probes){
-    circuit->analyseTRAN(step,stop,start);
+void Controller::runTRAN(double step, double stop, double start, const vector<pair<char, string>>& probes) {
+    circuit->analyseTRAN(step, stop, start);
+
     const auto& res = circuit->getResults();
-    for(const auto& [t,x] : res){
-        cout<<t;
-        for(const auto& p:probes){
-            if(p.first=='V'){
-                for(auto *n:circuit->getNodes()) if(n->getName()==p.second) cout<<","<<n->getVoltage();
-            }else if(p.first=='I'){
-                for(auto *e:circuit->getElements()) if(e->getName()==p.second) cout<<","<<e->getCurrent();
+    for (const auto& [t, x] : res) {
+        cout << "Time: " << t << " ";  // Time for this data point
+
+        for (const auto& p : probes) {
+            if (p.first == 'V') {  // Handle voltage probes
+                if (p.second == "in") {
+                    for (auto* node : circuit->getNodes()) {
+                        if (node->getName() == "in") {
+                            cout << "V(in): " << node->getVoltage() << " ";
+                        }
+                    }
+                } else if (p.second == "out") {
+                    for (auto* node : circuit->getNodes()) {
+                        if (node->getName() == "out") {
+                            cout << "V(out): " << node->getVoltage() << " ";
+                        }
+                    }
+                }
+            }
+            else if (p.first == 'I') {  // Handle current probes
+                for (auto* e : circuit->getElements()) {
+                    if (e->getName() == p.second) {
+                        cout << "I(" << p.second << "): " << e->getCurrent() << " ";
+                    }
+                }
             }
         }
-        cout<<"\n";
+        cout << endl;  // Newline for each time step
     }
 }
+
 
 
 ParsingException::ParsingException(int code, string parameterName):code(code) {
