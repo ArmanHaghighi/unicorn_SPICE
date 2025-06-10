@@ -1,4 +1,3 @@
-R1 a b 2
-V1 a c 1
-R2 c b 3
-GND b
+V1 in 0 5
+R1 0 in 2000
+GND 0

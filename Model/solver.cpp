@@ -34,17 +34,12 @@ const VectorXd& Solver::solveOnce(const Opt& o) {
     G.setZero();
     RHS.setZero();
 
-    std::cout << "\n--- solveOnce t=" << o.t
-              << " mode=" << (o.mode==Mode::DC?"DC":"TRAN") << " ---\n"; // temp
-
     for (auto *el : ckt->getElements()) {
         if (o.mode == Mode::DC)
             el->stampDC(G, RHS);
         else
             el->stampTransient(G, RHS, o.dt, o.t, o.t == 0);
     }
-
-    std::cout << "G =\n" << G << "\nRHS = " << RHS.transpose() << "\n\n"; // temp
 
     try {
         sol = G.fullPivLu().solve(RHS);
@@ -66,11 +61,6 @@ const VectorXd& Solver::solveOnce(const Opt& o) {
             if (idx >= 0 && idx < nVars)
                 e->cachedCurrent = sol(idx);
         }
-    }
-
-    if (o.mode == Mode::TRAN) {
-        for (auto *e : ckt->getElements())
-            e->postStepUpdate(o.dt);
     }
 
     return sol;
@@ -95,7 +85,6 @@ void Solver::resizeMatrix() {
     G.resize(max_idx + 1, max_idx + 1);
     RHS.resize(max_idx + 1);
 
-    cout << "Resized G to " << G.rows() << "x" << G.cols() << endl;
+    //cout << "Resized G to " << G.rows() << "x" << G.cols() << endl;
 }
-
 
