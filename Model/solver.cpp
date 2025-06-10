@@ -21,7 +21,7 @@ void Solver::freeze() {
     }
     for (auto *e : ckt->getElements()) {
         if (e->usesBranchCurrent()) {
-            std::cout << "Assigning currentIdx to element " << e->getName() << std::endl;
+            //std::cout << "Assigning currentIdx to element " << e->getName() << std::endl;
             e->currentIdx = next++;
         }
     }

@@ -27,6 +27,7 @@ public:
     }
     Element* checkElementNameExistence(const string &name) const;
     const auto& getResults() const { return results; }
+    const auto& getCurrentVector() const { return currentVector; }
     virtual void initializeCurrentVector();
     virtual void initializeConductanceMatrix();
     void analyseTRAN(double step,double stop,double start=0);
@@ -97,6 +98,7 @@ public:
         }
 
     virtual double getCurrent() { return cachedCurrent; }
+    int getCurrentIdx() const { return currentIdx; }
 
     mutable double cachedCurrent{};
 };

@@ -363,12 +363,20 @@ void VoltageSource::stampTransient(MatrixXd& G, VectorXd& I, double dt, double t
 void VoltageSin::addToMatrix(MatrixXd &matrix) {}
 
 void VoltageSin::stampTransient(MatrixXd& G, VectorXd& I, double dt, double t, bool first) {
-    int n1 = node1->getIdx(), n2 = node2->getIdx(), k = currentIdx;
+    int n1 = node1->getIdx();
+    int n2 = node2->getIdx();
+    int k = currentIdx;
+
     double v = vOffset + vAmp * sin(2 * M_PI * freq * t);
-    G(k,n1) = 1; G(k,n2) = -1;
-    G(n1,k) = 1; G(n2,k) = -1;
+
+    G(k, n1) = 1;
+    G(k, n2) = -1;
+    G(n1, k) = 1;
+    G(n2, k) = -1;
+
     I(k) = v;
 }
+
 
 void VoltageSin::stampDC(MatrixXd& G, VectorXd& I) {
     int n1 = node1->getIdx(), n2 = node2->getIdx(), k = currentIdx;
@@ -466,7 +474,22 @@ void Diode::addToMatrix(MatrixXd &G) {
         cerr << "Invalid node indices for Diode: " << n1 << ", " << n2 << endl;
         throw out_of_range("Node index out of range");
     }
+
+    double voltage = node1->getVoltage() - node2->getVoltage();
+    double current = 0.0;
+
+    if (voltage > 0) {
+        current = exp(voltage) - 1;
+    }
+
+    double diodeConductance = current > 0 ? exp(voltage) : 0;
+
+    G(n1, n1) += diodeConductance;
+    G(n2, n2) += diodeConductance;
+    G(n1, n2) -= diodeConductance;
+    G(n2, n1) -= diodeConductance;
 }
+
 
 double Diode::getCurrent() {
     return cachedCurrent;
@@ -674,9 +697,13 @@ void Circuit::analyseTRAN(double step, double stop, double start) {
     }
 
     for (double t = start; t < stop; t += step) {
+        conductanceMatrix.setZero();
+        currentVector.setZero();
+
         for (auto* e : elements) {
             e->stampTransient(conductanceMatrix, currentVector, step, t, true); // First pass
         }
+
 
         VectorXd voltages = conductanceMatrix.fullPivLu().solve(currentVector);  // Solve the system
 

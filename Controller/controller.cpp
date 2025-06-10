@@ -262,22 +262,26 @@ void Controller::checkGnd() {
 void Controller::runTRAN(double step,double stop,double start,const vector<pair<char,string>>& probes){
     circuit->analyseTRAN(step,stop,start);
     const auto& res = circuit->getResults();
+    const auto& currentVec = circuit->getCurrentVector();
     for(const auto& [t,x] : res){
-        cout<<t;
+        cout<<t << ": " ;
         for(const auto& p:probes){
             if(p.first=='V'){
-                for(auto *n:circuit->getNodes()) if(n->getName()==p.second) cout<<","<<x(n->getIdx());
+                for(auto *n:circuit->getNodes())
+                    if(n->getName()==p.second)
+                        cout<<"V(" << p.second << ")= "<<x(n->getIdx()) << endl;
             }else if(p.first=='I'){
-                for(auto *e:circuit->getElements()) if(e->getName()==p.second) cout<<","<<e->getCurrent();
+                for(auto *e:circuit->getElements()) {
+                    int currentIdx = e->getCurrentIdx();
+                    if(e->getName()==p.second) {
+                        cout << "I(" << p.second << ")=" << currentVec(currentIdx) << endl;
+                    }
+                }
             }
         }
         cout<<"\n";
     }
 }
-
-
-
-
 
 ParsingException::ParsingException(int code, string parameterName):code(code) {
     this->parameterName=parameterName;
