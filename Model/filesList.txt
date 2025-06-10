@@ -89,3 +89,4 @@
 ../files/autosave/36_autosave.txt
 ../files/autosave/37_autosave.txt
 ../files/autosave/38_autosave.txt
+../files/autosave/28_autosave.txt

@@ -1,0 +1,2 @@
+V1 out b SINE(1 1 2)
+GND b
