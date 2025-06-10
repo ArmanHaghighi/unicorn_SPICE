@@ -1,0 +1,6 @@
+V1 in 0 5
+R1 0 out 1000
+R2 in out 2000
+R3 in 0 1
+R4 kooft zahremar 1
+R48 m l 1
