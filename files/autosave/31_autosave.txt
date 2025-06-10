@@ -1,0 +1,4 @@
+V1 in 0 5
+R1 in out 1000
+L1 out 0 0.002
+GND 0

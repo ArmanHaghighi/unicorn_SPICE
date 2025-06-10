@@ -1,0 +1,4 @@
+V1 in 0 6
+R1 in out 4000
+C1 0 out 4e-05
+GND 0

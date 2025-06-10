@@ -1,0 +1,5 @@
+V1 in 0 5
+R1 0 out 1000
+R2 out in 2000
+R3 out in 3000
+GND 0
