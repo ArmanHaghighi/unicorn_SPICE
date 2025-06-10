@@ -257,31 +257,25 @@ void Controller::checkGnd() {
         throw GNDNotFound();
 }
 
-void Controller::runTRAN(double step, double stop, double start, const vector<pair<char, string>>& probes) {
-    circuit->analyseTRAN(step, stop, start);
 
+
+void Controller::runTRAN(double step,double stop,double start,const vector<pair<char,string>>& probes){
+    circuit->analyseTRAN(step,stop,start);
     const auto& res = circuit->getResults();
-    for (const auto& [t, x] : res) {
-        cout << "Time: " << t << " ";  // Time for this data point
-
-        for (const auto& p : probes) {
-            if (p.first == 'V') {  // Handle voltage probes
-                for (auto *n:circuit->getNodes()) {
-                    if (n->getName()==p.second)
-                        cout << "V(" << p.second << "): " << x(n->getIdx());
-                }
-            }
-            else if (p.first == 'I') {  // Handle current probes
-                for (auto* e : circuit->getElements()) {
-                    if (e->getName() == p.second) {
-                        cout << "I(" << p.second << "): " << e->getCurrent() << " ";
-                    }
-                }
+    for(const auto& [t,x] : res){
+        cout<<t;
+        for(const auto& p:probes){
+            if(p.first=='V'){
+                for(auto *n:circuit->getNodes()) if(n->getName()==p.second) cout<<","<<x(n->getIdx());
+            }else if(p.first=='I'){
+                for(auto *e:circuit->getElements()) if(e->getName()==p.second) cout<<","<<e->getCurrent();
             }
         }
-        cout << endl;  // Newline for each time step
+        cout<<"\n";
     }
 }
+
+
 
 
 
