@@ -1,0 +1,5 @@
+R1 a b 1
+R2d cv h 6
+R11 a v 6
+R3 n m 3
+GND n
