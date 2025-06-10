@@ -11,12 +11,23 @@ using namespace std;
 void Solver::freeze() {
     int next = 0;
     for (auto *n : ckt->getNodes()) {
+        if (dynamic_cast<Ground*>(n))
+            n->idx=0;
+    }
+    for (auto *n : ckt->getNodes()) {
         if (n->idx == -1) {
             n->idx = next++;
         }
     }
-
+    for (auto *e : ckt->getElements()) {
+        if (e->usesBranchCurrent()) {
+            std::cout << "Assigning currentIdx to element " << e->getName() << std::endl;
+            e->currentIdx = next++;
+        }
+    }
     resizeMatrix();
+    G.setZero();
+    RHS.setZero();
 }
 
 const VectorXd& Solver::solveOnce(const Opt& o) {

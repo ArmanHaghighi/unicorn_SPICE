@@ -143,7 +143,7 @@ public:
 class VoltageSource : public Element {
 public:
     using Element::Element;
-    void addToMatrix(MatrixXd &matrix) override;;//add resistor to circuit matrix
+    void addToMatrix(MatrixXd &matrix) override;
     double getCurrent() override{//calculate current passing through voltage source
         //using kcl in one of the nodes
         return node1->KCL_CurrentCalc(this);

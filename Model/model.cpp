@@ -650,15 +650,17 @@ void VCVS::stampDC(MatrixXd& G, VectorXd& I) {
 
 void Circuit::analyseTRAN(double step, double stop, double start) {
     results.clear(); // Clear previous results
-    initializeCurrentVector(); // Reset current vector
+    //solver->freeze();
+    initializeCurrentVector();  // Initialize current vector
+    initializeConductanceMatrix();  // Initialize conductance matrix
+
     if(!solver) {
-        solver=new Solver(this); solver->freeze();
+        solver=new Solver(this);
+        solver->freeze();
     }
-    // Solver::Opt o{Solver::Mode::TRAN,dt,tStart};
 
     for (double t = start; t < stop; t += step) {
         for (auto* e : elements) {
-
             e->stampTransient(conductanceMatrix, currentVector, step, t, true); // First pass
         }
 
