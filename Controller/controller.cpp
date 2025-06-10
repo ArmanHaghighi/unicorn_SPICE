@@ -266,18 +266,9 @@ void Controller::runTRAN(double step, double stop, double start, const vector<pa
 
         for (const auto& p : probes) {
             if (p.first == 'V') {  // Handle voltage probes
-                if (p.second == "in") {
-                    for (auto* node : circuit->getNodes()) {
-                        if (node->getName() == "in") {
-                            cout << "V(in): " << node->getVoltage() << " ";
-                        }
-                    }
-                } else if (p.second == "out") {
-                    for (auto* node : circuit->getNodes()) {
-                        if (node->getName() == "out") {
-                            cout << "V(out): " << node->getVoltage() << " ";
-                        }
-                    }
+                for (auto *n:circuit->getNodes()) {
+                    if (n->getName()==p.second)
+                        cout << "V(" << p.second << "): " << x(n->getIdx());
                 }
             }
             else if (p.first == 'I') {  // Handle current probes
