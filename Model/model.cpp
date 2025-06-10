@@ -594,8 +594,30 @@ VCVS::VCVS(string name, Node* n1, Node* n2, Node* ctrlN1, Node* ctrlN2, double g
     : Element(name, n1, n2, gain), controlNode1(ctrlN1), controlNode2(ctrlN2), gain(gain) {}
 
 void VCVS::addToMatrix(MatrixXd &matrix) {
-    // TODO: Implement MNA for VCVS
+    int size = matrix.rows();
+    if (currentIdx >= size) {
+        matrix.conservativeResize(currentIdx + 1, currentIdx + 1);
+        matrix.row(currentIdx).setZero();
+        matrix.col(currentIdx).setZero();
+    }
+    double voltageGain = gain;
+
+    int n1 = node1->getIdx();
+    int n2 = node2->getIdx();
+    int c1 = controlNode1->getIdx();
+    int c2 = controlNode2->getIdx();
+
+    matrix(n1, c1) -= voltageGain;
+    matrix(n1, c2) += voltageGain;
+    matrix(n2, c1) += voltageGain;
+    matrix(n2, c2) -= voltageGain;
+
+    matrix(currentIdx, n1) = 1;
+    matrix(currentIdx, n2) = -1;
+    matrix(n1, currentIdx) = 1;
+    matrix(n2, currentIdx) = -1;
 }
+
 
 double VCVS::getCurrent() {
     return node1->KCL_CurrentCalc(this);
@@ -628,16 +650,17 @@ void VCVS::stampDC(MatrixXd& G, VectorXd& I) {
 
 void Circuit::analyseTRAN(double step, double stop, double start) {
     results.clear(); // Clear previous results
-    initializeCurrentVector(); // Reset current vector
-    initializeConductanceMatrix();
+    //solver->freeze();
+    initializeCurrentVector();  // Initialize current vector
+    initializeConductanceMatrix();  // Initialize conductance matrix
+
     if(!solver) {
-        solver=new Solver(this); solver->freeze();
+        solver=new Solver(this);
+        solver->freeze();
     }
-    // Solver::Opt o{Solver::Mode::TRAN,dt,tStart};
 
     for (double t = start; t < stop; t += step) {
         for (auto* e : elements) {
-
             e->stampTransient(conductanceMatrix, currentVector, step, t, true); // First pass
         }
 

@@ -3,7 +3,7 @@
 //
 
 #include "controller.h"
-int Controller::next = 1;
+int Controller::next = 0;
 
 Controller::Controller(string type) {
     this->type = type;
