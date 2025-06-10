@@ -75,7 +75,8 @@ protected:
     double value;
     string name;
 public:
-    int currentIdx{-1};
+    int currentIdx{0
+    };
     string getName();
     Node* node1;
     Node* node2;

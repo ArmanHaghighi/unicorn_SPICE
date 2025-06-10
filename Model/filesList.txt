@@ -77,3 +77,10 @@
 ../files/autosave/24_autosave.txt
 ../files/autosave/25_autosave.txt
 ../files/autosave/26_autosave.txt
+../files/autosave/21_autosave.txt
+../files/autosave/22_autosave.txt
+../files/autosave/23_autosave.txt
+../files/autosave/24_autosave.txt
+../files/autosave/25_autosave.txt
+../files/autosave/26_autosave.txt
+../files/autosave/27_autosave.txt

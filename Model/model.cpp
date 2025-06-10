@@ -650,7 +650,7 @@ void VCVS::stampDC(MatrixXd& G, VectorXd& I) {
 
 void Circuit::analyseTRAN(double step, double stop, double start) {
     results.clear(); // Clear previous results
-    //solver->freeze();
+    solver->freeze();
     initializeCurrentVector();  // Initialize current vector
     initializeConductanceMatrix();  // Initialize conductance matrix
 

@@ -1,0 +1,4 @@
+R1 a b 2
+V1 a c 1
+R2 c b 3
+GND b
