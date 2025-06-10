@@ -184,7 +184,8 @@ void Resistor::stampDC(MatrixXd& G, VectorXd& I) {
     G(n1,n1) += g; G(n2,n2) += g; G(n1,n2) -= g; G(n2,n1) -= g;
 }
 
-void Resistor::stampTransient(MatrixXd& G, VectorXd& I, double dt, double t, bool first) {
+void Resistor::
+stampTransient(MatrixXd& G, VectorXd& I, double dt, double t, bool first) {
     double g = 1.0 / value;
     int n1 = node1->getIdx(), n2 = node2->getIdx();
 
