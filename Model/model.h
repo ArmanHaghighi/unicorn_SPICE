@@ -51,12 +51,12 @@ private:
 protected:
     double voltage;
 public:
-    int idx{-1};
+    int idx;
     virtual string getName() ;
     virtual int getIdx() const {
         return idx;
     }
-    explicit Node(const string &name):name(name){}
+    explicit Node(const string &name,int idx=-1):name(name),idx(idx){}
     void connectElement(Element* element);
     bool removeElement(Element* element);
     double KCL_CurrentCalc(Element* element);
@@ -108,7 +108,7 @@ public:
     }
     void makeNode();
     string getName() override;
-    explicit Ground(const string &id) : Node(id) {
+    explicit Ground(const string &id,int idx) : Node(id,idx) {
         setVoltage(0.0);
     }
 };

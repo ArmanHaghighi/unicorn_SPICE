@@ -137,8 +137,9 @@ map<Element *, double> Node::returnConnectedElements() {
 
 void Node::makeGround() {
     const string n = getName();
+    int i =idx;
     this->~Node();
-    new(this) Ground(n);
+    new(this) Ground(n,i);
 }
 
 //elements in general
@@ -149,8 +150,9 @@ string Element::getName() {
 //ground
 void Ground::makeNode() {
     const string n = getName().erase(getName().size()-5);
+    int i =idx;
     this->~Ground();
-    new(this) Node(n);
+    new(this) Node(n,i);
 }
 
 string Ground::getName() {
