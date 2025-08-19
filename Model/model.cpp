@@ -266,45 +266,38 @@ void Capacitor::stampDC(MatrixXd&, VectorXd&) {} //for dc
     }
 }*/
 
-void Capacitor::stampTransient(MatrixXd& G, VectorXd& I, double dt, double t, bool first) {
+void Capacitor::stampTransient(MatrixXd& G, VectorXd& I, double dt, double /*t*/, bool first) {
     if (first) {
-        prevVoltage = node1->getVoltage() - node2->getVoltage();
-        lastDt = dt;
+        lastDt = dt; // initialize step
+        // prevVoltage remains as-in (defaults to 0) to allow initial conditions if needed
     }
 
-    double dV = node1->getVoltage() - node2->getVoltage() - prevVoltage;
-    prevVoltage = node1->getVoltage() - node2->getVoltage();
+    double GC = value / dt;
+    int n1 = node1->getIdx(), n2 = node2->getIdx();
 
-    double current = (dV / lastDt) * value;
-
-    int idx1 = node1->getIdx();
-    int idx2 = node2->getIdx();
-
-    if (idx1 < 0 || idx1 >= G.rows() || idx2 < 0 || idx2 >= G.cols()) {
-        std::cerr << "Invalid node indices: " << idx1 << ", " << idx2 << std::endl;
+    if (n1 < 0 || n2 < 0) {
+        std::cerr << "Invalid node indices for Capacitor: " << n1 << ", " << n2 << std::endl;
         throw std::out_of_range("Node index out of range");
     }
 
-    G(idx1, idx1) += value / lastDt;
-    G(idx2, idx2) += value / lastDt;
-    G(idx1, idx2) -= value / lastDt;
-    G(idx2, idx1) -= value / lastDt;
+    // Companion conductance
+    G(n1, n1) += GC;
+    G(n2, n2) += GC;
+    G(n1, n2) -= GC;
+    G(n2, n1) -= GC;
 
-    I(idx1) += current;
-    I(idx2) -= current;
+    // Companion current source using last voltage (from previous step)
+    double Ieq = GC * prevVoltage; // current from n1 to n2
+    I(n1) -= Ieq;
+    I(n2) += Ieq;
 }
 
-
-
 void Capacitor::postStepUpdate(double dt) {
-    lastDt = dt; //temp
-    double v1 = node1->getVoltage();
-    double v2 = node2->getVoltage();
-    double V = v1 - v2;
-    cachedCurrent = value * (V - prevVoltage) / dt; //temp
+    double V = node1->getVoltage() - node2->getVoltage(); // voltage across C (n1 - n2)
+    // cachedCurrent = C * (V - prevVoltage) / dt using old prevVoltage
+    cachedCurrent = value * (V - prevVoltage) / dt;
     prevVoltage = V;
-
-    //cout << "dt=" << dt << ", V=" << node1->getVoltage() - node2->getVoltage() << ", Icap=" << cachedCurrent << endl; //temporary
+    lastDt = dt;
 }
 
 /*void Capacitor::postStepUpdate(double dt) {
@@ -685,50 +678,42 @@ void VCVS::stampDC(MatrixXd& G, VectorXd& I) {
     G(k, c2) += gain;
 }
 
+// model.cpp (Circuit::analyseTRAN)
+
 void Circuit::analyseTRAN(double step, double stop, double start) {
-    results.clear(); // Clear previous results
+    results.clear();
+
+    if (!solver) {
+        solver = new Solver(this);
+    }
     solver->freeze();
-    initializeCurrentVector();  // Initialize current vector
-    initializeConductanceMatrix();  // Initialize conductance matrix
 
-    if(!solver) {
-        solver=new Solver(this);
-        solver->freeze();
-    }
+    bool firstStep = true;
 
-    for (double t = start; t < stop; t += step) {
-        conductanceMatrix.setZero();
-        currentVector.setZero();
+    for (double t = start; t <= stop + 1e-15; t += step) {
+        Solver::Opt opt;
+        opt.mode  = Solver::Mode::TRAN;
+        opt.dt    = step;
+        opt.t     = t;
+        opt.first = firstStep;
 
+        const auto& x = solver->solveOnce(opt);
+
+        // Save the solution vector for time t (node voltages and branch currents)
+        results.emplace_back(t, x);
+        currentVector = x; // used by Controller::runTRAN for I-probes
+
+        // Update device state for the next step
         for (auto* e : elements) {
-            e->stampTransient(conductanceMatrix, currentVector, step, t, true); // First pass
+            e->postStepUpdate(step);
         }
 
-
-        VectorXd voltages = conductanceMatrix.fullPivLu().solve(currentVector);  // Solve the system
-
-        results.push_back({t, voltages});  // Save results at each time step
-
-        int idx = 0;
-        for (auto* node : nodes) {
-            node->setVoltage(voltages(idx));  // Update node voltages with the solution
-            ++idx;
-        }
-
-        currentVector.setZero(); // Reset the current vector
-
-        for (auto* e : elements) {
-            e->stampTransient(conductanceMatrix, currentVector, step, t, false);  // Second pass
-        }
+        firstStep = false;
     }
 
-    // Check if results were produced
-    if (results.empty()) {
-        std::cout << "No results were produced. Check your time step or circuit configuration." << std::endl;
-    } else {
-        std::cout << "Transient analysis completed. Results are available." << std::endl;
-    }
+    std::cout << "Transient analysis completed. Results are available." << std::endl;
 }
+
 
 
 VectorXd Circuit::analyseDC(){
