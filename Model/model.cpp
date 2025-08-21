@@ -17,7 +17,7 @@ void Circuit::initializeConductanceMatrix() {
     conductanceMatrix.setZero();
 }
 
-Element* Circuit::checkElementNameExistence(const string& name) const {
+Element_back* Circuit::checkElementNameExistence(const string& name) const {
     for (auto el:elements) {
         if (el->getName()==name) {
             return el;
@@ -35,7 +35,7 @@ Node* Circuit::checkNodeNameExistence(const string& name) const {
     return nullptr;
 }
 
-void Circuit::addElement(Element *element) {
+void Circuit::addElement(Element_back *element) {
     elements.emplace(element);
     Node* n1 = element->node1;
     Node* n2 = element->node2;
@@ -53,10 +53,10 @@ void Circuit::addElement(Element *element) {
     }
 
     // Add the nodes if not already present
-    if (!nodes.contains(n1)) {
+    if (!nodes.count(n1)>0) {
         nodes.emplace(n1);
     }
-    if (!nodes.contains(n2)) {
+    if (!nodes.count(n2)>0) {
         nodes.emplace(n2);
     }
 
@@ -67,7 +67,7 @@ void Circuit::addElement(Element *element) {
 }
 
 
-void Circuit::removeElement(Element *element) {
+void Circuit::removeElement(Element_back *element) {
     if (element->node1->removeElement(element))
         removeNode(element->node1);
     if (element->node2->removeElement(element))
@@ -88,7 +88,7 @@ set<Node*> Circuit::getNodes() {
     return nodes;
 }
 
-set<Element*> Circuit::getElements() {
+set<Element_back*> Circuit::getElements() {
     return elements;
 }
 
@@ -97,16 +97,16 @@ string Node::getName() {
     return name;
 }
 
-void Node::connectElement(Element *element) {
+void Node::connectElement(Element_back *element) {
     elements.emplace(element,nullopt);
 }
 
-bool Node::removeElement(Element *element) {
+bool Node::removeElement(Element_back *element) {
     elements.erase(element);
     return elements.empty();
 }
 
-double Node::KCL_CurrentCalc(Element* except) {
+double Node::KCL_CurrentCalc(Element_back* except) {
     double sum = 0;
     for (auto &[e, _] : elements)
         if (e != except) sum += (this == e->node1 ? +1 : -1) * e->getCurrent();
@@ -121,10 +121,10 @@ void Node::renameNode(string name) {
     this->name = name;
 }
 
-map<Element *, double> Node::returnConnectedElements() {
-    map<Element *, double> connectedElements;
+map<Element_back *, double> Node::returnConnectedElements() {
+    map<Element_back *, double> connectedElements;
     for (auto it = elements.begin(); it != elements.end(); ++it) {
-        pair<Element*,double>p;
+        pair<Element_back*,double>p;
         p.first = it->first;
         if (it->second == nullopt)
             p.second = NAN;
@@ -143,7 +143,7 @@ void Node::makeGround() {
 }
 
 //elements in general
-string Element::getName() {
+string Element_back::getName() {
     return name;
 }
 
@@ -489,8 +489,8 @@ void Zener::stampTransient(MatrixXd&, VectorXd&, double, double, bool) {}
 
 // DEPENDENT SOURCES
 // current controlled voltage source
-CCVS::CCVS(string name, Node* n1, Node* n2, Element* ctrlElem, double gain)
-    : Element(name, n1, n2, gain), controllingElement(ctrlElem), gain(gain) {}
+CCVS::CCVS(string name, Node* n1, Node* n2, Element_back* ctrlElem, double gain)
+    : Element_back(name, n1, n2, gain), controllingElement(ctrlElem), gain(gain) {}
 
 void CCVS::addToMatrix(MatrixXd &matrix) {
     int size = matrix.rows();
@@ -528,8 +528,8 @@ void CCVS::stampDC(MatrixXd& G, VectorXd& I) {
 }
 
 // current controlled current source
-CCCS::CCCS(string name, Node* n1, Node* n2, Element* ctrlElem, double gain)
-    : Element(name, n1, n2, gain), controllingElement(ctrlElem), gain(gain) {}
+CCCS::CCCS(string name, Node* n1, Node* n2, Element_back* ctrlElem, double gain)
+    : Element_back(name, n1, n2, gain), controllingElement(ctrlElem), gain(gain) {}
 
 void CCCS::addToMatrix(MatrixXd &matrix) {
     // TODO: Implement MNA for CCCS
@@ -557,7 +557,7 @@ void CCCS::stampDC(MatrixXd& G, VectorXd& I) {
 
 // voltage controlled current source
 VCCS::VCCS(string name, Node* n1, Node* n2, Node* ctrlN1, Node* ctrlN2, double gain)
-    : Element(name, n1, n2, gain), controlNode1(ctrlN1), controlNode2(ctrlN2), gain(gain) {}
+    : Element_back(name, n1, n2, gain), controlNode1(ctrlN1), controlNode2(ctrlN2), gain(gain) {}
 
 void VCCS::addToMatrix(MatrixXd &matrix) {
     int size = matrix.rows();
@@ -589,7 +589,7 @@ void VCCS::stampDC(Eigen::MatrixXd &G, Eigen::VectorXd &I) {
 
 // voltage controlled voltage source
 VCVS::VCVS(string name, Node* n1, Node* n2, Node* ctrlN1, Node* ctrlN2, double gain)
-    : Element(name, n1, n2, gain), controlNode1(ctrlN1), controlNode2(ctrlN2), gain(gain) {}
+    : Element_back(name, n1, n2, gain), controlNode1(ctrlN1), controlNode2(ctrlN2), gain(gain) {}
 
 void VCVS::addToMatrix(MatrixXd &matrix) {
     int size = matrix.rows();

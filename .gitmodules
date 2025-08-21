@@ -1,0 +1,3 @@
+[submodule "view/spice"]
+	path = view/spice
+	url = https://github.com/ArmanHaghighi/Spice.git

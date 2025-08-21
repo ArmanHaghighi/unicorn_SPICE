@@ -47,117 +47,169 @@ cmake_ninja_workdir = C$:/Users/Arman/Documents/GitHub/OOP_Project/cmake-build-d
 #############################################
 # Order-only phony target for OOP_Project
 
-build cmake_object_order_depends_target_OOP_Project: phony || .
+build cmake_object_order_depends_target_OOP_Project: phony || OOP_Project_autogen OOP_Project_autogen/QNVEOS2RTE/qrc_resources.cpp OOP_Project_autogen/mocs_compilation.cpp OOP_Project_autogen/timestamp OOP_Project_autogen_timestamp_deps
 
-build CMakeFiles/OOP_Project.dir/Model/model.cpp.obj.ddi: CXX_SCAN__OOP_Project_Debug C$:/Users/Arman/Documents/GitHub/OOP_Project/Model/model.cpp || cmake_object_order_depends_target_OOP_Project
-  DEP_FILE = CMakeFiles\OOP_Project.dir\Model\model.cpp.obj.ddi.d
-  DYNDEP_INTERMEDIATE_FILE = CMakeFiles\OOP_Project.dir\Model\model.cpp.obj.ddi
-  FLAGS = -g -std=gnu++26 -fdiagnostics-color=always
-  INCLUDES = -isystem C:/msys64/ucrt64/include/eigen3
-  OBJ_FILE = CMakeFiles\OOP_Project.dir\Model\model.cpp.obj
-  PREPROCESSED_OUTPUT_FILE = CMakeFiles\OOP_Project.dir\Model\model.cpp.obj.ddi.i
-
-build CMakeFiles/OOP_Project.dir/Model/model.cpp.obj: CXX_COMPILER__OOP_Project_scanned_Debug C$:/Users/Arman/Documents/GitHub/OOP_Project/Model/model.cpp | CMakeFiles/OOP_Project.dir/Model/model.cpp.obj.modmap || cmake_object_order_depends_target_OOP_Project CMakeFiles/OOP_Project.dir/CXX.dd
+build CMakeFiles/OOP_Project.dir/OOP_Project_autogen/mocs_compilation.cpp.obj: CXX_COMPILER__OOP_Project_unscanned_Debug C$:/Users/Arman/Documents/GitHub/OOP_Project/cmake-build-debug-mingw-1/OOP_Project_autogen/mocs_compilation.cpp || cmake_object_order_depends_target_OOP_Project
   CONFIG = Debug
+  DEFINES = -DQT_CORE_LIB -DQT_GUI_LIB -DQT_WIDGETS_LIB
+  DEP_FILE = CMakeFiles\OOP_Project.dir\OOP_Project_autogen\mocs_compilation.cpp.obj.d
+  FLAGS = -g -std=gnu++17 -fdiagnostics-color=always
+  INCLUDES = -IC:/Users/Arman/Documents/GitHub/OOP_Project/cmake-build-debug-mingw-1 -IC:/Users/Arman/Documents/GitHub/OOP_Project -IC:/Users/Arman/Documents/GitHub/OOP_Project/View/spice -IC:/Users/Arman/Documents/GitHub/OOP_Project/View/spice/cereal/include -isystem C:/Users/Arman/Documents/GitHub/OOP_Project/cmake-build-debug-mingw-1/OOP_Project_autogen/include -isystem C:/msys64/ucrt64/include/eigen3 -isystem C:/msys64/ucrt64/include/QtWidgets -isystem C:/msys64/ucrt64/include/QtGui -isystem C:/msys64/ucrt64/include/QtCore -isystem C:/msys64/ucrt64/share/qt5/mkspecs/win32-g++
+  OBJECT_DIR = CMakeFiles\OOP_Project.dir
+  OBJECT_FILE_DIR = CMakeFiles\OOP_Project.dir\OOP_Project_autogen
+
+build CMakeFiles/OOP_Project.dir/Model/model.cpp.obj: CXX_COMPILER__OOP_Project_unscanned_Debug C$:/Users/Arman/Documents/GitHub/OOP_Project/Model/model.cpp || cmake_object_order_depends_target_OOP_Project
+  CONFIG = Debug
+  DEFINES = -DQT_CORE_LIB -DQT_GUI_LIB -DQT_WIDGETS_LIB
   DEP_FILE = CMakeFiles\OOP_Project.dir\Model\model.cpp.obj.d
-  DYNDEP_MODULE_MAP_FILE = CMakeFiles\OOP_Project.dir\Model\model.cpp.obj.modmap
-  FLAGS = -g -std=gnu++26 -fdiagnostics-color=always
-  INCLUDES = -isystem C:/msys64/ucrt64/include/eigen3
+  FLAGS = -g -std=gnu++17 -fdiagnostics-color=always
+  INCLUDES = -IC:/Users/Arman/Documents/GitHub/OOP_Project/cmake-build-debug-mingw-1 -IC:/Users/Arman/Documents/GitHub/OOP_Project -IC:/Users/Arman/Documents/GitHub/OOP_Project/View/spice -IC:/Users/Arman/Documents/GitHub/OOP_Project/View/spice/cereal/include -isystem C:/Users/Arman/Documents/GitHub/OOP_Project/cmake-build-debug-mingw-1/OOP_Project_autogen/include -isystem C:/msys64/ucrt64/include/eigen3 -isystem C:/msys64/ucrt64/include/QtWidgets -isystem C:/msys64/ucrt64/include/QtGui -isystem C:/msys64/ucrt64/include/QtCore -isystem C:/msys64/ucrt64/share/qt5/mkspecs/win32-g++
   OBJECT_DIR = CMakeFiles\OOP_Project.dir
   OBJECT_FILE_DIR = CMakeFiles\OOP_Project.dir\Model
-  dyndep = CMakeFiles/OOP_Project.dir/CXX.dd
 
-build CMakeFiles/OOP_Project.dir/View/view.cpp.obj.ddi: CXX_SCAN__OOP_Project_Debug C$:/Users/Arman/Documents/GitHub/OOP_Project/View/view.cpp || cmake_object_order_depends_target_OOP_Project
-  DEP_FILE = CMakeFiles\OOP_Project.dir\View\view.cpp.obj.ddi.d
-  DYNDEP_INTERMEDIATE_FILE = CMakeFiles\OOP_Project.dir\View\view.cpp.obj.ddi
-  FLAGS = -g -std=gnu++26 -fdiagnostics-color=always
-  INCLUDES = -isystem C:/msys64/ucrt64/include/eigen3
-  OBJ_FILE = CMakeFiles\OOP_Project.dir\View\view.cpp.obj
-  PREPROCESSED_OUTPUT_FILE = CMakeFiles\OOP_Project.dir\View\view.cpp.obj.ddi.i
-
-build CMakeFiles/OOP_Project.dir/View/view.cpp.obj: CXX_COMPILER__OOP_Project_scanned_Debug C$:/Users/Arman/Documents/GitHub/OOP_Project/View/view.cpp | CMakeFiles/OOP_Project.dir/View/view.cpp.obj.modmap || cmake_object_order_depends_target_OOP_Project CMakeFiles/OOP_Project.dir/CXX.dd
+build CMakeFiles/OOP_Project.dir/View/view.cpp.obj: CXX_COMPILER__OOP_Project_unscanned_Debug C$:/Users/Arman/Documents/GitHub/OOP_Project/View/view.cpp || cmake_object_order_depends_target_OOP_Project
   CONFIG = Debug
+  DEFINES = -DQT_CORE_LIB -DQT_GUI_LIB -DQT_WIDGETS_LIB
   DEP_FILE = CMakeFiles\OOP_Project.dir\View\view.cpp.obj.d
-  DYNDEP_MODULE_MAP_FILE = CMakeFiles\OOP_Project.dir\View\view.cpp.obj.modmap
-  FLAGS = -g -std=gnu++26 -fdiagnostics-color=always
-  INCLUDES = -isystem C:/msys64/ucrt64/include/eigen3
+  FLAGS = -g -std=gnu++17 -fdiagnostics-color=always
+  INCLUDES = -IC:/Users/Arman/Documents/GitHub/OOP_Project/cmake-build-debug-mingw-1 -IC:/Users/Arman/Documents/GitHub/OOP_Project -IC:/Users/Arman/Documents/GitHub/OOP_Project/View/spice -IC:/Users/Arman/Documents/GitHub/OOP_Project/View/spice/cereal/include -isystem C:/Users/Arman/Documents/GitHub/OOP_Project/cmake-build-debug-mingw-1/OOP_Project_autogen/include -isystem C:/msys64/ucrt64/include/eigen3 -isystem C:/msys64/ucrt64/include/QtWidgets -isystem C:/msys64/ucrt64/include/QtGui -isystem C:/msys64/ucrt64/include/QtCore -isystem C:/msys64/ucrt64/share/qt5/mkspecs/win32-g++
   OBJECT_DIR = CMakeFiles\OOP_Project.dir
   OBJECT_FILE_DIR = CMakeFiles\OOP_Project.dir\View
-  dyndep = CMakeFiles/OOP_Project.dir/CXX.dd
 
-build CMakeFiles/OOP_Project.dir/Controller/controller.cpp.obj.ddi: CXX_SCAN__OOP_Project_Debug C$:/Users/Arman/Documents/GitHub/OOP_Project/Controller/controller.cpp || cmake_object_order_depends_target_OOP_Project
-  DEP_FILE = CMakeFiles\OOP_Project.dir\Controller\controller.cpp.obj.ddi.d
-  DYNDEP_INTERMEDIATE_FILE = CMakeFiles\OOP_Project.dir\Controller\controller.cpp.obj.ddi
-  FLAGS = -g -std=gnu++26 -fdiagnostics-color=always
-  INCLUDES = -isystem C:/msys64/ucrt64/include/eigen3
-  OBJ_FILE = CMakeFiles\OOP_Project.dir\Controller\controller.cpp.obj
-  PREPROCESSED_OUTPUT_FILE = CMakeFiles\OOP_Project.dir\Controller\controller.cpp.obj.ddi.i
-
-build CMakeFiles/OOP_Project.dir/Controller/controller.cpp.obj: CXX_COMPILER__OOP_Project_scanned_Debug C$:/Users/Arman/Documents/GitHub/OOP_Project/Controller/controller.cpp | CMakeFiles/OOP_Project.dir/Controller/controller.cpp.obj.modmap || cmake_object_order_depends_target_OOP_Project CMakeFiles/OOP_Project.dir/CXX.dd
+build CMakeFiles/OOP_Project.dir/Controller/controller.cpp.obj: CXX_COMPILER__OOP_Project_unscanned_Debug C$:/Users/Arman/Documents/GitHub/OOP_Project/Controller/controller.cpp || cmake_object_order_depends_target_OOP_Project
   CONFIG = Debug
+  DEFINES = -DQT_CORE_LIB -DQT_GUI_LIB -DQT_WIDGETS_LIB
   DEP_FILE = CMakeFiles\OOP_Project.dir\Controller\controller.cpp.obj.d
-  DYNDEP_MODULE_MAP_FILE = CMakeFiles\OOP_Project.dir\Controller\controller.cpp.obj.modmap
-  FLAGS = -g -std=gnu++26 -fdiagnostics-color=always
-  INCLUDES = -isystem C:/msys64/ucrt64/include/eigen3
+  FLAGS = -g -std=gnu++17 -fdiagnostics-color=always
+  INCLUDES = -IC:/Users/Arman/Documents/GitHub/OOP_Project/cmake-build-debug-mingw-1 -IC:/Users/Arman/Documents/GitHub/OOP_Project -IC:/Users/Arman/Documents/GitHub/OOP_Project/View/spice -IC:/Users/Arman/Documents/GitHub/OOP_Project/View/spice/cereal/include -isystem C:/Users/Arman/Documents/GitHub/OOP_Project/cmake-build-debug-mingw-1/OOP_Project_autogen/include -isystem C:/msys64/ucrt64/include/eigen3 -isystem C:/msys64/ucrt64/include/QtWidgets -isystem C:/msys64/ucrt64/include/QtGui -isystem C:/msys64/ucrt64/include/QtCore -isystem C:/msys64/ucrt64/share/qt5/mkspecs/win32-g++
   OBJECT_DIR = CMakeFiles\OOP_Project.dir
   OBJECT_FILE_DIR = CMakeFiles\OOP_Project.dir\Controller
-  dyndep = CMakeFiles/OOP_Project.dir/CXX.dd
 
-build CMakeFiles/OOP_Project.dir/main.cpp.obj.ddi: CXX_SCAN__OOP_Project_Debug C$:/Users/Arman/Documents/GitHub/OOP_Project/main.cpp || cmake_object_order_depends_target_OOP_Project
-  DEP_FILE = CMakeFiles\OOP_Project.dir\main.cpp.obj.ddi.d
-  DYNDEP_INTERMEDIATE_FILE = CMakeFiles\OOP_Project.dir\main.cpp.obj.ddi
-  FLAGS = -g -std=gnu++26 -fdiagnostics-color=always
-  INCLUDES = -isystem C:/msys64/ucrt64/include/eigen3
-  OBJ_FILE = CMakeFiles\OOP_Project.dir\main.cpp.obj
-  PREPROCESSED_OUTPUT_FILE = CMakeFiles\OOP_Project.dir\main.cpp.obj.ddi.i
-
-build CMakeFiles/OOP_Project.dir/main.cpp.obj: CXX_COMPILER__OOP_Project_scanned_Debug C$:/Users/Arman/Documents/GitHub/OOP_Project/main.cpp | CMakeFiles/OOP_Project.dir/main.cpp.obj.modmap || cmake_object_order_depends_target_OOP_Project CMakeFiles/OOP_Project.dir/CXX.dd
+build CMakeFiles/OOP_Project.dir/main.cpp.obj: CXX_COMPILER__OOP_Project_unscanned_Debug C$:/Users/Arman/Documents/GitHub/OOP_Project/main.cpp || cmake_object_order_depends_target_OOP_Project
   CONFIG = Debug
+  DEFINES = -DQT_CORE_LIB -DQT_GUI_LIB -DQT_WIDGETS_LIB
   DEP_FILE = CMakeFiles\OOP_Project.dir\main.cpp.obj.d
-  DYNDEP_MODULE_MAP_FILE = CMakeFiles\OOP_Project.dir\main.cpp.obj.modmap
-  FLAGS = -g -std=gnu++26 -fdiagnostics-color=always
-  INCLUDES = -isystem C:/msys64/ucrt64/include/eigen3
+  FLAGS = -g -std=gnu++17 -fdiagnostics-color=always
+  INCLUDES = -IC:/Users/Arman/Documents/GitHub/OOP_Project/cmake-build-debug-mingw-1 -IC:/Users/Arman/Documents/GitHub/OOP_Project -IC:/Users/Arman/Documents/GitHub/OOP_Project/View/spice -IC:/Users/Arman/Documents/GitHub/OOP_Project/View/spice/cereal/include -isystem C:/Users/Arman/Documents/GitHub/OOP_Project/cmake-build-debug-mingw-1/OOP_Project_autogen/include -isystem C:/msys64/ucrt64/include/eigen3 -isystem C:/msys64/ucrt64/include/QtWidgets -isystem C:/msys64/ucrt64/include/QtGui -isystem C:/msys64/ucrt64/include/QtCore -isystem C:/msys64/ucrt64/share/qt5/mkspecs/win32-g++
   OBJECT_DIR = CMakeFiles\OOP_Project.dir
   OBJECT_FILE_DIR = CMakeFiles\OOP_Project.dir
-  dyndep = CMakeFiles/OOP_Project.dir/CXX.dd
 
-build CMakeFiles/OOP_Project.dir/Model/CLI_regexes.cpp.obj.ddi: CXX_SCAN__OOP_Project_Debug C$:/Users/Arman/Documents/GitHub/OOP_Project/Model/CLI_regexes.cpp || cmake_object_order_depends_target_OOP_Project
-  DEP_FILE = CMakeFiles\OOP_Project.dir\Model\CLI_regexes.cpp.obj.ddi.d
-  DYNDEP_INTERMEDIATE_FILE = CMakeFiles\OOP_Project.dir\Model\CLI_regexes.cpp.obj.ddi
-  FLAGS = -g -std=gnu++26 -fdiagnostics-color=always
-  INCLUDES = -isystem C:/msys64/ucrt64/include/eigen3
-  OBJ_FILE = CMakeFiles\OOP_Project.dir\Model\CLI_regexes.cpp.obj
-  PREPROCESSED_OUTPUT_FILE = CMakeFiles\OOP_Project.dir\Model\CLI_regexes.cpp.obj.ddi.i
-
-build CMakeFiles/OOP_Project.dir/Model/CLI_regexes.cpp.obj: CXX_COMPILER__OOP_Project_scanned_Debug C$:/Users/Arman/Documents/GitHub/OOP_Project/Model/CLI_regexes.cpp | CMakeFiles/OOP_Project.dir/Model/CLI_regexes.cpp.obj.modmap || cmake_object_order_depends_target_OOP_Project CMakeFiles/OOP_Project.dir/CXX.dd
+build CMakeFiles/OOP_Project.dir/Model/CLI_regexes.cpp.obj: CXX_COMPILER__OOP_Project_unscanned_Debug C$:/Users/Arman/Documents/GitHub/OOP_Project/Model/CLI_regexes.cpp || cmake_object_order_depends_target_OOP_Project
   CONFIG = Debug
+  DEFINES = -DQT_CORE_LIB -DQT_GUI_LIB -DQT_WIDGETS_LIB
   DEP_FILE = CMakeFiles\OOP_Project.dir\Model\CLI_regexes.cpp.obj.d
-  DYNDEP_MODULE_MAP_FILE = CMakeFiles\OOP_Project.dir\Model\CLI_regexes.cpp.obj.modmap
-  FLAGS = -g -std=gnu++26 -fdiagnostics-color=always
-  INCLUDES = -isystem C:/msys64/ucrt64/include/eigen3
+  FLAGS = -g -std=gnu++17 -fdiagnostics-color=always
+  INCLUDES = -IC:/Users/Arman/Documents/GitHub/OOP_Project/cmake-build-debug-mingw-1 -IC:/Users/Arman/Documents/GitHub/OOP_Project -IC:/Users/Arman/Documents/GitHub/OOP_Project/View/spice -IC:/Users/Arman/Documents/GitHub/OOP_Project/View/spice/cereal/include -isystem C:/Users/Arman/Documents/GitHub/OOP_Project/cmake-build-debug-mingw-1/OOP_Project_autogen/include -isystem C:/msys64/ucrt64/include/eigen3 -isystem C:/msys64/ucrt64/include/QtWidgets -isystem C:/msys64/ucrt64/include/QtGui -isystem C:/msys64/ucrt64/include/QtCore -isystem C:/msys64/ucrt64/share/qt5/mkspecs/win32-g++
   OBJECT_DIR = CMakeFiles\OOP_Project.dir
   OBJECT_FILE_DIR = CMakeFiles\OOP_Project.dir\Model
-  dyndep = CMakeFiles/OOP_Project.dir/CXX.dd
 
-build CMakeFiles/OOP_Project.dir/Model/solver.cpp.obj.ddi: CXX_SCAN__OOP_Project_Debug C$:/Users/Arman/Documents/GitHub/OOP_Project/Model/solver.cpp || cmake_object_order_depends_target_OOP_Project
-  DEP_FILE = CMakeFiles\OOP_Project.dir\Model\solver.cpp.obj.ddi.d
-  DYNDEP_INTERMEDIATE_FILE = CMakeFiles\OOP_Project.dir\Model\solver.cpp.obj.ddi
-  FLAGS = -g -std=gnu++26 -fdiagnostics-color=always
-  INCLUDES = -isystem C:/msys64/ucrt64/include/eigen3
-  OBJ_FILE = CMakeFiles\OOP_Project.dir\Model\solver.cpp.obj
-  PREPROCESSED_OUTPUT_FILE = CMakeFiles\OOP_Project.dir\Model\solver.cpp.obj.ddi.i
-
-build CMakeFiles/OOP_Project.dir/Model/solver.cpp.obj: CXX_COMPILER__OOP_Project_scanned_Debug C$:/Users/Arman/Documents/GitHub/OOP_Project/Model/solver.cpp | CMakeFiles/OOP_Project.dir/Model/solver.cpp.obj.modmap || cmake_object_order_depends_target_OOP_Project CMakeFiles/OOP_Project.dir/CXX.dd
+build CMakeFiles/OOP_Project.dir/Model/solver.cpp.obj: CXX_COMPILER__OOP_Project_unscanned_Debug C$:/Users/Arman/Documents/GitHub/OOP_Project/Model/solver.cpp || cmake_object_order_depends_target_OOP_Project
   CONFIG = Debug
+  DEFINES = -DQT_CORE_LIB -DQT_GUI_LIB -DQT_WIDGETS_LIB
   DEP_FILE = CMakeFiles\OOP_Project.dir\Model\solver.cpp.obj.d
-  DYNDEP_MODULE_MAP_FILE = CMakeFiles\OOP_Project.dir\Model\solver.cpp.obj.modmap
-  FLAGS = -g -std=gnu++26 -fdiagnostics-color=always
-  INCLUDES = -isystem C:/msys64/ucrt64/include/eigen3
+  FLAGS = -g -std=gnu++17 -fdiagnostics-color=always
+  INCLUDES = -IC:/Users/Arman/Documents/GitHub/OOP_Project/cmake-build-debug-mingw-1 -IC:/Users/Arman/Documents/GitHub/OOP_Project -IC:/Users/Arman/Documents/GitHub/OOP_Project/View/spice -IC:/Users/Arman/Documents/GitHub/OOP_Project/View/spice/cereal/include -isystem C:/Users/Arman/Documents/GitHub/OOP_Project/cmake-build-debug-mingw-1/OOP_Project_autogen/include -isystem C:/msys64/ucrt64/include/eigen3 -isystem C:/msys64/ucrt64/include/QtWidgets -isystem C:/msys64/ucrt64/include/QtGui -isystem C:/msys64/ucrt64/include/QtCore -isystem C:/msys64/ucrt64/share/qt5/mkspecs/win32-g++
   OBJECT_DIR = CMakeFiles\OOP_Project.dir
   OBJECT_FILE_DIR = CMakeFiles\OOP_Project.dir\Model
-  dyndep = CMakeFiles/OOP_Project.dir/CXX.dd
 
-build CMakeFiles/OOP_Project.dir/CXX.dd | C$:/Users/Arman/Documents/GitHub/OOP_Project/cmake-build-debug-mingw-1/CMakeFiles/OOP_Project.dir/CXXModules.json CMakeFiles/OOP_Project.dir/Model/model.cpp.obj.modmap CMakeFiles/OOP_Project.dir/View/view.cpp.obj.modmap CMakeFiles/OOP_Project.dir/Controller/controller.cpp.obj.modmap CMakeFiles/OOP_Project.dir/main.cpp.obj.modmap CMakeFiles/OOP_Project.dir/Model/CLI_regexes.cpp.obj.modmap CMakeFiles/OOP_Project.dir/Model/solver.cpp.obj.modmap: CXX_DYNDEP__OOP_Project_Debug CMakeFiles/OOP_Project.dir/Model/model.cpp.obj.ddi CMakeFiles/OOP_Project.dir/View/view.cpp.obj.ddi CMakeFiles/OOP_Project.dir/Controller/controller.cpp.obj.ddi CMakeFiles/OOP_Project.dir/main.cpp.obj.ddi CMakeFiles/OOP_Project.dir/Model/CLI_regexes.cpp.obj.ddi CMakeFiles/OOP_Project.dir/Model/solver.cpp.obj.ddi | C$:/Users/Arman/Documents/GitHub/OOP_Project/cmake-build-debug-mingw-1/CMakeFiles/OOP_Project.dir/CXXDependInfo.json
+build CMakeFiles/OOP_Project.dir/View/spice/mainwindow.cpp.obj: CXX_COMPILER__OOP_Project_unscanned_Debug C$:/Users/Arman/Documents/GitHub/OOP_Project/View/spice/mainwindow.cpp || cmake_object_order_depends_target_OOP_Project
+  CONFIG = Debug
+  DEFINES = -DQT_CORE_LIB -DQT_GUI_LIB -DQT_WIDGETS_LIB
+  DEP_FILE = CMakeFiles\OOP_Project.dir\View\spice\mainwindow.cpp.obj.d
+  FLAGS = -g -std=gnu++17 -fdiagnostics-color=always
+  INCLUDES = -IC:/Users/Arman/Documents/GitHub/OOP_Project/cmake-build-debug-mingw-1 -IC:/Users/Arman/Documents/GitHub/OOP_Project -IC:/Users/Arman/Documents/GitHub/OOP_Project/View/spice -IC:/Users/Arman/Documents/GitHub/OOP_Project/View/spice/cereal/include -isystem C:/Users/Arman/Documents/GitHub/OOP_Project/cmake-build-debug-mingw-1/OOP_Project_autogen/include -isystem C:/msys64/ucrt64/include/eigen3 -isystem C:/msys64/ucrt64/include/QtWidgets -isystem C:/msys64/ucrt64/include/QtGui -isystem C:/msys64/ucrt64/include/QtCore -isystem C:/msys64/ucrt64/share/qt5/mkspecs/win32-g++
+  OBJECT_DIR = CMakeFiles\OOP_Project.dir
+  OBJECT_FILE_DIR = CMakeFiles\OOP_Project.dir\View\spice
+
+build CMakeFiles/OOP_Project.dir/View/spice/trandialog.cpp.obj: CXX_COMPILER__OOP_Project_unscanned_Debug C$:/Users/Arman/Documents/GitHub/OOP_Project/View/spice/trandialog.cpp || cmake_object_order_depends_target_OOP_Project
+  CONFIG = Debug
+  DEFINES = -DQT_CORE_LIB -DQT_GUI_LIB -DQT_WIDGETS_LIB
+  DEP_FILE = CMakeFiles\OOP_Project.dir\View\spice\trandialog.cpp.obj.d
+  FLAGS = -g -std=gnu++17 -fdiagnostics-color=always
+  INCLUDES = -IC:/Users/Arman/Documents/GitHub/OOP_Project/cmake-build-debug-mingw-1 -IC:/Users/Arman/Documents/GitHub/OOP_Project -IC:/Users/Arman/Documents/GitHub/OOP_Project/View/spice -IC:/Users/Arman/Documents/GitHub/OOP_Project/View/spice/cereal/include -isystem C:/Users/Arman/Documents/GitHub/OOP_Project/cmake-build-debug-mingw-1/OOP_Project_autogen/include -isystem C:/msys64/ucrt64/include/eigen3 -isystem C:/msys64/ucrt64/include/QtWidgets -isystem C:/msys64/ucrt64/include/QtGui -isystem C:/msys64/ucrt64/include/QtCore -isystem C:/msys64/ucrt64/share/qt5/mkspecs/win32-g++
+  OBJECT_DIR = CMakeFiles\OOP_Project.dir
+  OBJECT_FILE_DIR = CMakeFiles\OOP_Project.dir\View\spice
+
+build CMakeFiles/OOP_Project.dir/View/spice/elements.cpp.obj: CXX_COMPILER__OOP_Project_unscanned_Debug C$:/Users/Arman/Documents/GitHub/OOP_Project/View/spice/elements.cpp || cmake_object_order_depends_target_OOP_Project
+  CONFIG = Debug
+  DEFINES = -DQT_CORE_LIB -DQT_GUI_LIB -DQT_WIDGETS_LIB
+  DEP_FILE = CMakeFiles\OOP_Project.dir\View\spice\elements.cpp.obj.d
+  FLAGS = -g -std=gnu++17 -fdiagnostics-color=always
+  INCLUDES = -IC:/Users/Arman/Documents/GitHub/OOP_Project/cmake-build-debug-mingw-1 -IC:/Users/Arman/Documents/GitHub/OOP_Project -IC:/Users/Arman/Documents/GitHub/OOP_Project/View/spice -IC:/Users/Arman/Documents/GitHub/OOP_Project/View/spice/cereal/include -isystem C:/Users/Arman/Documents/GitHub/OOP_Project/cmake-build-debug-mingw-1/OOP_Project_autogen/include -isystem C:/msys64/ucrt64/include/eigen3 -isystem C:/msys64/ucrt64/include/QtWidgets -isystem C:/msys64/ucrt64/include/QtGui -isystem C:/msys64/ucrt64/include/QtCore -isystem C:/msys64/ucrt64/share/qt5/mkspecs/win32-g++
+  OBJECT_DIR = CMakeFiles\OOP_Project.dir
+  OBJECT_FILE_DIR = CMakeFiles\OOP_Project.dir\View\spice
+
+build CMakeFiles/OOP_Project.dir/View/spice/addelementdialog.cpp.obj: CXX_COMPILER__OOP_Project_unscanned_Debug C$:/Users/Arman/Documents/GitHub/OOP_Project/View/spice/addelementdialog.cpp || cmake_object_order_depends_target_OOP_Project
+  CONFIG = Debug
+  DEFINES = -DQT_CORE_LIB -DQT_GUI_LIB -DQT_WIDGETS_LIB
+  DEP_FILE = CMakeFiles\OOP_Project.dir\View\spice\addelementdialog.cpp.obj.d
+  FLAGS = -g -std=gnu++17 -fdiagnostics-color=always
+  INCLUDES = -IC:/Users/Arman/Documents/GitHub/OOP_Project/cmake-build-debug-mingw-1 -IC:/Users/Arman/Documents/GitHub/OOP_Project -IC:/Users/Arman/Documents/GitHub/OOP_Project/View/spice -IC:/Users/Arman/Documents/GitHub/OOP_Project/View/spice/cereal/include -isystem C:/Users/Arman/Documents/GitHub/OOP_Project/cmake-build-debug-mingw-1/OOP_Project_autogen/include -isystem C:/msys64/ucrt64/include/eigen3 -isystem C:/msys64/ucrt64/include/QtWidgets -isystem C:/msys64/ucrt64/include/QtGui -isystem C:/msys64/ucrt64/include/QtCore -isystem C:/msys64/ucrt64/share/qt5/mkspecs/win32-g++
+  OBJECT_DIR = CMakeFiles\OOP_Project.dir
+  OBJECT_FILE_DIR = CMakeFiles\OOP_Project.dir\View\spice
+
+build CMakeFiles/OOP_Project.dir/View/spice/properties.cpp.obj: CXX_COMPILER__OOP_Project_unscanned_Debug C$:/Users/Arman/Documents/GitHub/OOP_Project/View/spice/properties.cpp || cmake_object_order_depends_target_OOP_Project
+  CONFIG = Debug
+  DEFINES = -DQT_CORE_LIB -DQT_GUI_LIB -DQT_WIDGETS_LIB
+  DEP_FILE = CMakeFiles\OOP_Project.dir\View\spice\properties.cpp.obj.d
+  FLAGS = -g -std=gnu++17 -fdiagnostics-color=always
+  INCLUDES = -IC:/Users/Arman/Documents/GitHub/OOP_Project/cmake-build-debug-mingw-1 -IC:/Users/Arman/Documents/GitHub/OOP_Project -IC:/Users/Arman/Documents/GitHub/OOP_Project/View/spice -IC:/Users/Arman/Documents/GitHub/OOP_Project/View/spice/cereal/include -isystem C:/Users/Arman/Documents/GitHub/OOP_Project/cmake-build-debug-mingw-1/OOP_Project_autogen/include -isystem C:/msys64/ucrt64/include/eigen3 -isystem C:/msys64/ucrt64/include/QtWidgets -isystem C:/msys64/ucrt64/include/QtGui -isystem C:/msys64/ucrt64/include/QtCore -isystem C:/msys64/ucrt64/share/qt5/mkspecs/win32-g++
+  OBJECT_DIR = CMakeFiles\OOP_Project.dir
+  OBJECT_FILE_DIR = CMakeFiles\OOP_Project.dir\View\spice
+
+build CMakeFiles/OOP_Project.dir/View/spice/acdialog.cpp.obj: CXX_COMPILER__OOP_Project_unscanned_Debug C$:/Users/Arman/Documents/GitHub/OOP_Project/View/spice/acdialog.cpp || cmake_object_order_depends_target_OOP_Project
+  CONFIG = Debug
+  DEFINES = -DQT_CORE_LIB -DQT_GUI_LIB -DQT_WIDGETS_LIB
+  DEP_FILE = CMakeFiles\OOP_Project.dir\View\spice\acdialog.cpp.obj.d
+  FLAGS = -g -std=gnu++17 -fdiagnostics-color=always
+  INCLUDES = -IC:/Users/Arman/Documents/GitHub/OOP_Project/cmake-build-debug-mingw-1 -IC:/Users/Arman/Documents/GitHub/OOP_Project -IC:/Users/Arman/Documents/GitHub/OOP_Project/View/spice -IC:/Users/Arman/Documents/GitHub/OOP_Project/View/spice/cereal/include -isystem C:/Users/Arman/Documents/GitHub/OOP_Project/cmake-build-debug-mingw-1/OOP_Project_autogen/include -isystem C:/msys64/ucrt64/include/eigen3 -isystem C:/msys64/ucrt64/include/QtWidgets -isystem C:/msys64/ucrt64/include/QtGui -isystem C:/msys64/ucrt64/include/QtCore -isystem C:/msys64/ucrt64/share/qt5/mkspecs/win32-g++
+  OBJECT_DIR = CMakeFiles\OOP_Project.dir
+  OBJECT_FILE_DIR = CMakeFiles\OOP_Project.dir\View\spice
+
+build CMakeFiles/OOP_Project.dir/View/spice/dcdialog.cpp.obj: CXX_COMPILER__OOP_Project_unscanned_Debug C$:/Users/Arman/Documents/GitHub/OOP_Project/View/spice/dcdialog.cpp || cmake_object_order_depends_target_OOP_Project
+  CONFIG = Debug
+  DEFINES = -DQT_CORE_LIB -DQT_GUI_LIB -DQT_WIDGETS_LIB
+  DEP_FILE = CMakeFiles\OOP_Project.dir\View\spice\dcdialog.cpp.obj.d
+  FLAGS = -g -std=gnu++17 -fdiagnostics-color=always
+  INCLUDES = -IC:/Users/Arman/Documents/GitHub/OOP_Project/cmake-build-debug-mingw-1 -IC:/Users/Arman/Documents/GitHub/OOP_Project -IC:/Users/Arman/Documents/GitHub/OOP_Project/View/spice -IC:/Users/Arman/Documents/GitHub/OOP_Project/View/spice/cereal/include -isystem C:/Users/Arman/Documents/GitHub/OOP_Project/cmake-build-debug-mingw-1/OOP_Project_autogen/include -isystem C:/msys64/ucrt64/include/eigen3 -isystem C:/msys64/ucrt64/include/QtWidgets -isystem C:/msys64/ucrt64/include/QtGui -isystem C:/msys64/ucrt64/include/QtCore -isystem C:/msys64/ucrt64/share/qt5/mkspecs/win32-g++
+  OBJECT_DIR = CMakeFiles\OOP_Project.dir
+  OBJECT_FILE_DIR = CMakeFiles\OOP_Project.dir\View\spice
+
+build CMakeFiles/OOP_Project.dir/View/spice/phasedialog.cpp.obj: CXX_COMPILER__OOP_Project_unscanned_Debug C$:/Users/Arman/Documents/GitHub/OOP_Project/View/spice/phasedialog.cpp || cmake_object_order_depends_target_OOP_Project
+  CONFIG = Debug
+  DEFINES = -DQT_CORE_LIB -DQT_GUI_LIB -DQT_WIDGETS_LIB
+  DEP_FILE = CMakeFiles\OOP_Project.dir\View\spice\phasedialog.cpp.obj.d
+  FLAGS = -g -std=gnu++17 -fdiagnostics-color=always
+  INCLUDES = -IC:/Users/Arman/Documents/GitHub/OOP_Project/cmake-build-debug-mingw-1 -IC:/Users/Arman/Documents/GitHub/OOP_Project -IC:/Users/Arman/Documents/GitHub/OOP_Project/View/spice -IC:/Users/Arman/Documents/GitHub/OOP_Project/View/spice/cereal/include -isystem C:/Users/Arman/Documents/GitHub/OOP_Project/cmake-build-debug-mingw-1/OOP_Project_autogen/include -isystem C:/msys64/ucrt64/include/eigen3 -isystem C:/msys64/ucrt64/include/QtWidgets -isystem C:/msys64/ucrt64/include/QtGui -isystem C:/msys64/ucrt64/include/QtCore -isystem C:/msys64/ucrt64/share/qt5/mkspecs/win32-g++
+  OBJECT_DIR = CMakeFiles\OOP_Project.dir
+  OBJECT_FILE_DIR = CMakeFiles\OOP_Project.dir\View\spice
+
+build CMakeFiles/OOP_Project.dir/View/spice/node.cpp.obj: CXX_COMPILER__OOP_Project_unscanned_Debug C$:/Users/Arman/Documents/GitHub/OOP_Project/View/spice/node.cpp || cmake_object_order_depends_target_OOP_Project
+  CONFIG = Debug
+  DEFINES = -DQT_CORE_LIB -DQT_GUI_LIB -DQT_WIDGETS_LIB
+  DEP_FILE = CMakeFiles\OOP_Project.dir\View\spice\node.cpp.obj.d
+  FLAGS = -g -std=gnu++17 -fdiagnostics-color=always
+  INCLUDES = -IC:/Users/Arman/Documents/GitHub/OOP_Project/cmake-build-debug-mingw-1 -IC:/Users/Arman/Documents/GitHub/OOP_Project -IC:/Users/Arman/Documents/GitHub/OOP_Project/View/spice -IC:/Users/Arman/Documents/GitHub/OOP_Project/View/spice/cereal/include -isystem C:/Users/Arman/Documents/GitHub/OOP_Project/cmake-build-debug-mingw-1/OOP_Project_autogen/include -isystem C:/msys64/ucrt64/include/eigen3 -isystem C:/msys64/ucrt64/include/QtWidgets -isystem C:/msys64/ucrt64/include/QtGui -isystem C:/msys64/ucrt64/include/QtCore -isystem C:/msys64/ucrt64/share/qt5/mkspecs/win32-g++
+  OBJECT_DIR = CMakeFiles\OOP_Project.dir
+  OBJECT_FILE_DIR = CMakeFiles\OOP_Project.dir\View\spice
+
+build CMakeFiles/OOP_Project.dir/View/spice/wire.cpp.obj: CXX_COMPILER__OOP_Project_unscanned_Debug C$:/Users/Arman/Documents/GitHub/OOP_Project/View/spice/wire.cpp || cmake_object_order_depends_target_OOP_Project
+  CONFIG = Debug
+  DEFINES = -DQT_CORE_LIB -DQT_GUI_LIB -DQT_WIDGETS_LIB
+  DEP_FILE = CMakeFiles\OOP_Project.dir\View\spice\wire.cpp.obj.d
+  FLAGS = -g -std=gnu++17 -fdiagnostics-color=always
+  INCLUDES = -IC:/Users/Arman/Documents/GitHub/OOP_Project/cmake-build-debug-mingw-1 -IC:/Users/Arman/Documents/GitHub/OOP_Project -IC:/Users/Arman/Documents/GitHub/OOP_Project/View/spice -IC:/Users/Arman/Documents/GitHub/OOP_Project/View/spice/cereal/include -isystem C:/Users/Arman/Documents/GitHub/OOP_Project/cmake-build-debug-mingw-1/OOP_Project_autogen/include -isystem C:/msys64/ucrt64/include/eigen3 -isystem C:/msys64/ucrt64/include/QtWidgets -isystem C:/msys64/ucrt64/include/QtGui -isystem C:/msys64/ucrt64/include/QtCore -isystem C:/msys64/ucrt64/share/qt5/mkspecs/win32-g++
+  OBJECT_DIR = CMakeFiles\OOP_Project.dir
+  OBJECT_FILE_DIR = CMakeFiles\OOP_Project.dir\View\spice
+
+build CMakeFiles/OOP_Project.dir/OOP_Project_autogen/QNVEOS2RTE/qrc_resources.cpp.obj: CXX_COMPILER__OOP_Project_unscanned_Debug C$:/Users/Arman/Documents/GitHub/OOP_Project/cmake-build-debug-mingw-1/OOP_Project_autogen/QNVEOS2RTE/qrc_resources.cpp || cmake_object_order_depends_target_OOP_Project
+  CONFIG = Debug
+  DEFINES = -DQT_CORE_LIB -DQT_GUI_LIB -DQT_WIDGETS_LIB
+  DEP_FILE = CMakeFiles\OOP_Project.dir\OOP_Project_autogen\QNVEOS2RTE\qrc_resources.cpp.obj.d
+  FLAGS = -g -std=gnu++17 -fdiagnostics-color=always
+  INCLUDES = -IC:/Users/Arman/Documents/GitHub/OOP_Project/cmake-build-debug-mingw-1 -IC:/Users/Arman/Documents/GitHub/OOP_Project -IC:/Users/Arman/Documents/GitHub/OOP_Project/View/spice -IC:/Users/Arman/Documents/GitHub/OOP_Project/View/spice/cereal/include -isystem C:/Users/Arman/Documents/GitHub/OOP_Project/cmake-build-debug-mingw-1/OOP_Project_autogen/include -isystem C:/msys64/ucrt64/include/eigen3 -isystem C:/msys64/ucrt64/include/QtWidgets -isystem C:/msys64/ucrt64/include/QtGui -isystem C:/msys64/ucrt64/include/QtCore -isystem C:/msys64/ucrt64/share/qt5/mkspecs/win32-g++
+  OBJECT_DIR = CMakeFiles\OOP_Project.dir
+  OBJECT_FILE_DIR = CMakeFiles\OOP_Project.dir\OOP_Project_autogen\QNVEOS2RTE
 
 
 # =============================================================================
@@ -167,10 +219,11 @@ build CMakeFiles/OOP_Project.dir/CXX.dd | C$:/Users/Arman/Documents/GitHub/OOP_P
 #############################################
 # Link the executable OOP_Project.exe
 
-build OOP_Project.exe: CXX_EXECUTABLE_LINKER__OOP_Project_Debug CMakeFiles/OOP_Project.dir/Model/model.cpp.obj CMakeFiles/OOP_Project.dir/View/view.cpp.obj CMakeFiles/OOP_Project.dir/Controller/controller.cpp.obj CMakeFiles/OOP_Project.dir/main.cpp.obj CMakeFiles/OOP_Project.dir/Model/CLI_regexes.cpp.obj CMakeFiles/OOP_Project.dir/Model/solver.cpp.obj
+build OOP_Project.exe: CXX_EXECUTABLE_LINKER__OOP_Project_Debug CMakeFiles/OOP_Project.dir/OOP_Project_autogen/mocs_compilation.cpp.obj CMakeFiles/OOP_Project.dir/Model/model.cpp.obj CMakeFiles/OOP_Project.dir/View/view.cpp.obj CMakeFiles/OOP_Project.dir/Controller/controller.cpp.obj CMakeFiles/OOP_Project.dir/main.cpp.obj CMakeFiles/OOP_Project.dir/Model/CLI_regexes.cpp.obj CMakeFiles/OOP_Project.dir/Model/solver.cpp.obj CMakeFiles/OOP_Project.dir/View/spice/mainwindow.cpp.obj CMakeFiles/OOP_Project.dir/View/spice/trandialog.cpp.obj CMakeFiles/OOP_Project.dir/View/spice/elements.cpp.obj CMakeFiles/OOP_Project.dir/View/spice/addelementdialog.cpp.obj CMakeFiles/OOP_Project.dir/View/spice/properties.cpp.obj CMakeFiles/OOP_Project.dir/View/spice/acdialog.cpp.obj CMakeFiles/OOP_Project.dir/View/spice/dcdialog.cpp.obj CMakeFiles/OOP_Project.dir/View/spice/phasedialog.cpp.obj CMakeFiles/OOP_Project.dir/View/spice/node.cpp.obj CMakeFiles/OOP_Project.dir/View/spice/wire.cpp.obj CMakeFiles/OOP_Project.dir/OOP_Project_autogen/QNVEOS2RTE/qrc_resources.cpp.obj | C$:/msys64/ucrt64/lib/libQt5Widgets.dll.a C$:/msys64/ucrt64/lib/libQt5Gui.dll.a C$:/msys64/ucrt64/lib/libQt5Core.dll.a C$:/msys64/ucrt64/lib/libqtmain.a || OOP_Project_autogen OOP_Project_autogen_timestamp_deps
   CONFIG = Debug
   FLAGS = -g
-  LINK_LIBRARIES = -lkernel32 -luser32 -lgdi32 -lwinspool -lshell32 -lole32 -loleaut32 -luuid -lcomdlg32 -ladvapi32
+  LINK_FLAGS = -mwindows
+  LINK_LIBRARIES = C:/msys64/ucrt64/lib/libQt5Widgets.dll.a  C:/msys64/ucrt64/lib/libQt5Gui.dll.a  C:/msys64/ucrt64/lib/libQt5Core.dll.a  C:/msys64/ucrt64/lib/libqtmain.a  -lkernel32 -luser32 -lgdi32 -lwinspool -lshell32 -lole32 -loleaut32 -luuid -lcomdlg32 -ladvapi32
   OBJECT_DIR = CMakeFiles\OOP_Project.dir
   POST_BUILD = cd .
   PRE_LINK = cd .
@@ -201,6 +254,86 @@ build CMakeFiles/rebuild_cache.util: CUSTOM_COMMAND
 
 build rebuild_cache: phony CMakeFiles/rebuild_cache.util
 
+
+#############################################
+# Utility command for list_install_components
+
+build list_install_components: phony
+
+
+#############################################
+# Utility command for install
+
+build CMakeFiles/install.util: CUSTOM_COMMAND all
+  COMMAND = C:\WINDOWS\system32\cmd.exe /C "cd /D C:\Users\Arman\Documents\GitHub\OOP_Project\cmake-build-debug-mingw-1 && C:\msys64\ucrt64\bin\cmake.exe -P cmake_install.cmake"
+  DESC = Install the project...
+  pool = console
+  restat = 1
+
+build install: phony CMakeFiles/install.util
+
+
+#############################################
+# Utility command for install/local
+
+build CMakeFiles/install/local.util: CUSTOM_COMMAND all
+  COMMAND = C:\WINDOWS\system32\cmd.exe /C "cd /D C:\Users\Arman\Documents\GitHub\OOP_Project\cmake-build-debug-mingw-1 && C:\msys64\ucrt64\bin\cmake.exe -DCMAKE_INSTALL_LOCAL_ONLY=1 -P cmake_install.cmake"
+  DESC = Installing only the local directory...
+  pool = console
+  restat = 1
+
+build install/local: phony CMakeFiles/install/local.util
+
+
+#############################################
+# Utility command for install/strip
+
+build CMakeFiles/install/strip.util: CUSTOM_COMMAND all
+  COMMAND = C:\WINDOWS\system32\cmd.exe /C "cd /D C:\Users\Arman\Documents\GitHub\OOP_Project\cmake-build-debug-mingw-1 && C:\msys64\ucrt64\bin\cmake.exe -DCMAKE_INSTALL_DO_STRIP=1 -P cmake_install.cmake"
+  DESC = Installing the project stripped...
+  pool = console
+  restat = 1
+
+build install/strip: phony CMakeFiles/install/strip.util
+
+
+#############################################
+# Utility command for OOP_Project_autogen_timestamp_deps
+
+build OOP_Project_autogen_timestamp_deps: phony
+
+
+#############################################
+# Utility command for OOP_Project_autogen
+
+build OOP_Project_autogen: phony CMakeFiles/OOP_Project_autogen OOP_Project_autogen/include/View/spice/ui_mainwindow.h OOP_Project_autogen/include/View/spice/ui_trandialog.h OOP_Project_autogen/include/View/spice/ui_addelementdialog.h OOP_Project_autogen/include/View/spice/ui_properties.h OOP_Project_autogen/include/View/spice/ui_acdialog.h OOP_Project_autogen/include/View/spice/ui_dcdialog.h OOP_Project_autogen/include/View/spice/ui_phasedialog.h OOP_Project_autogen/timestamp OOP_Project_autogen/mocs_compilation.cpp OOP_Project_autogen_timestamp_deps
+
+
+#############################################
+# Custom command for OOP_Project_autogen\timestamp
+
+build OOP_Project_autogen/timestamp OOP_Project_autogen/mocs_compilation.cpp | ${cmake_ninja_workdir}OOP_Project_autogen/timestamp ${cmake_ninja_workdir}OOP_Project_autogen/mocs_compilation.cpp: CUSTOM_COMMAND C$:/msys64/ucrt64/bin/moc.exe C$:/msys64/ucrt64/bin/uic.exe || OOP_Project_autogen_timestamp_deps
+  COMMAND = C:\WINDOWS\system32\cmd.exe /C "cd /D C:\Users\Arman\Documents\GitHub\OOP_Project\cmake-build-debug-mingw-1 && C:\msys64\ucrt64\bin\cmake.exe -E cmake_autogen C:/Users/Arman/Documents/GitHub/OOP_Project/cmake-build-debug-mingw-1/CMakeFiles/OOP_Project_autogen.dir/AutogenInfo.json Debug && C:\msys64\ucrt64\bin\cmake.exe -E touch C:/Users/Arman/Documents/GitHub/OOP_Project/cmake-build-debug-mingw-1/OOP_Project_autogen/timestamp && C:\msys64\ucrt64\bin\cmake.exe -E cmake_transform_depfile Ninja gccdepfile C:/Users/Arman/Documents/GitHub/OOP_Project C:/Users/Arman/Documents/GitHub/OOP_Project C:/Users/Arman/Documents/GitHub/OOP_Project/cmake-build-debug-mingw-1 C:/Users/Arman/Documents/GitHub/OOP_Project/cmake-build-debug-mingw-1 C:/Users/Arman/Documents/GitHub/OOP_Project/cmake-build-debug-mingw-1/OOP_Project_autogen/deps C:/Users/Arman/Documents/GitHub/OOP_Project/cmake-build-debug-mingw-1/CMakeFiles/d/7f7271ee013803c27071e9a16e3cf0138620bddd86005c4c23395dae64fdb8ad.d"
+  DESC = Automatic MOC and UIC for target OOP_Project
+  depfile = CMakeFiles\d\7f7271ee013803c27071e9a16e3cf0138620bddd86005c4c23395dae64fdb8ad.d
+  deps = gcc
+  restat = 1
+
+
+#############################################
+# Custom command for OOP_Project_autogen\QNVEOS2RTE\qrc_resources.cpp
+
+build OOP_Project_autogen/QNVEOS2RTE/qrc_resources.cpp | ${cmake_ninja_workdir}OOP_Project_autogen/QNVEOS2RTE/qrc_resources.cpp: CUSTOM_COMMAND C$:/Users/Arman/Documents/GitHub/OOP_Project/View/spice/resources.qrc CMakeFiles/OOP_Project_autogen.dir/AutoRcc_resources_QNVEOS2RTE_Info.json C$:/Users/Arman/Documents/GitHub/OOP_Project/View/spice/assets/resistor.png C$:/Users/Arman/Documents/GitHub/OOP_Project/View/spice/assets/computer.png C$:/Users/Arman/Documents/GitHub/OOP_Project/View/spice/assets/open-folder.png C$:/Users/Arman/Documents/GitHub/OOP_Project/View/spice/assets/electrical.png C$:/Users/Arman/Documents/GitHub/OOP_Project/View/spice/assets/diagram$ (2).png C$:/Users/Arman/Documents/GitHub/OOP_Project/View/spice/assets/delete.png C$:/Users/Arman/Documents/GitHub/OOP_Project/View/spice/assets/electrical$ (3).png C$:/Users/Arman/Documents/GitHub/OOP_Project/View/spice/assets/resistor$ (1).png C$:/Users/Arman/Documents/GitHub/OOP_Project/View/spice/assets/ac.png C$:/Users/Arman/Documents/GitHub/OOP_Project/View/spice/assets/diagram$ (1).png C$:/Users/Arman/Documents/GitHub/OOP_Project/View/spice/assets/inductor.png C$:/Users/Arman/Documents/GitHub/OOP_Project/View/spice/assets/potential-energy.png C$:/Users/Arman/Documents/GitHub/OOP_Project/View/spice/assets/electrical$ (2).png C$:/Users/Arman/Documents/GitHub/OOP_Project/View/spice/assets/symbol.png C$:/Users/Arman/Documents/GitHub/OOP_Project/View/spice/assets/diagram.png C$:/Users/Arman/Documents/GitHub/OOP_Project/View/spice/assets/Inductor_symbol.svg C$:/Users/Arman/Documents/GitHub/OOP_Project/View/spice/assets/disk.png C$:/Users/Arman/Documents/GitHub/OOP_Project/View/spice/assets/electrical-component.png C$:/Users/Arman/Documents/GitHub/OOP_Project/View/spice/assets/integrated.png C$:/Users/Arman/Documents/GitHub/OOP_Project/View/spice/assets/duplicate.png C$:/Users/Arman/Documents/GitHub/OOP_Project/View/spice/assets/wire.png C$:/Users/Arman/Documents/GitHub/OOP_Project/View/spice/assets/capacitor.png C$:/Users/Arman/Documents/GitHub/OOP_Project/View/spice/assets/dc.png C$:/Users/Arman/Documents/GitHub/OOP_Project/View/spice/assets/semiconductor.png C$:/Users/Arman/Documents/GitHub/OOP_Project/View/spice/assets/new.png C$:/msys64/ucrt64/bin/rcc.exe C$:/msys64/ucrt64/bin/rcc.exe || OOP_Project_autogen OOP_Project_autogen_timestamp_deps
+  COMMAND = C:\WINDOWS\system32\cmd.exe /C "cd /D C:\Users\Arman\Documents\GitHub\OOP_Project\cmake-build-debug-mingw-1 && C:\msys64\ucrt64\bin\cmake.exe -E cmake_autorcc C:/Users/Arman/Documents/GitHub/OOP_Project/cmake-build-debug-mingw-1/CMakeFiles/OOP_Project_autogen.dir/AutoRcc_resources_QNVEOS2RTE_Info.json Debug"
+  DESC = Automatic RCC for View/spice/resources.qrc
+  restat = 1
+
+
+#############################################
+# Phony custom command for CMakeFiles\OOP_Project_autogen
+
+build CMakeFiles/OOP_Project_autogen OOP_Project_autogen/include/View/spice/ui_mainwindow.h OOP_Project_autogen/include/View/spice/ui_trandialog.h OOP_Project_autogen/include/View/spice/ui_addelementdialog.h OOP_Project_autogen/include/View/spice/ui_properties.h OOP_Project_autogen/include/View/spice/ui_acdialog.h OOP_Project_autogen/include/View/spice/ui_dcdialog.h OOP_Project_autogen/include/View/spice/ui_phasedialog.h | ${cmake_ninja_workdir}CMakeFiles/OOP_Project_autogen ${cmake_ninja_workdir}OOP_Project_autogen/include/View/spice/ui_mainwindow.h ${cmake_ninja_workdir}OOP_Project_autogen/include/View/spice/ui_trandialog.h ${cmake_ninja_workdir}OOP_Project_autogen/include/View/spice/ui_addelementdialog.h ${cmake_ninja_workdir}OOP_Project_autogen/include/View/spice/ui_properties.h ${cmake_ninja_workdir}OOP_Project_autogen/include/View/spice/ui_acdialog.h ${cmake_ninja_workdir}OOP_Project_autogen/include/View/spice/ui_dcdialog.h ${cmake_ninja_workdir}OOP_Project_autogen/include/View/spice/ui_phasedialog.h: phony OOP_Project_autogen/timestamp || OOP_Project_autogen_timestamp_deps
+
 # =============================================================================
 # Target aliases.
 
@@ -230,20 +363,27 @@ build all: phony OOP_Project.exe
 #############################################
 # Re-run CMake if any of its inputs changed.
 
-build build.ninja C$:/Users/Arman/Documents/GitHub/OOP_Project/cmake-build-debug-mingw-1/cmake_install.cmake: RERUN_CMAKE | C$:/Users/Arman/Documents/GitHub/OOP_Project/CMakeLists.txt C$:/msys64/ucrt64/share/cmake/Modules/CMakeCInformation.cmake C$:/msys64/ucrt64/share/cmake/Modules/CMakeCXXInformation.cmake C$:/msys64/ucrt64/share/cmake/Modules/CMakeCommonLanguageInclude.cmake C$:/msys64/ucrt64/share/cmake/Modules/CMakeGenericSystem.cmake C$:/msys64/ucrt64/share/cmake/Modules/CMakeInitializeConfigs.cmake C$:/msys64/ucrt64/share/cmake/Modules/CMakeLanguageInformation.cmake C$:/msys64/ucrt64/share/cmake/Modules/CMakeRCInformation.cmake C$:/msys64/ucrt64/share/cmake/Modules/CMakeSystemSpecificInformation.cmake C$:/msys64/ucrt64/share/cmake/Modules/CMakeSystemSpecificInitialize.cmake C$:/msys64/ucrt64/share/cmake/Modules/Compiler/CMakeCommonCompilerMacros.cmake C$:/msys64/ucrt64/share/cmake/Modules/Compiler/GNU-C.cmake C$:/msys64/ucrt64/share/cmake/Modules/Compiler/GNU-CXX.cmake C$:/msys64/ucrt64/share/cmake/Modules/Compiler/GNU.cmake C$:/msys64/ucrt64/share/cmake/Modules/FindEigen3.cmake C$:/msys64/ucrt64/share/cmake/Modules/Internal/CMakeCLinkerInformation.cmake C$:/msys64/ucrt64/share/cmake/Modules/Internal/CMakeCXXLinkerInformation.cmake C$:/msys64/ucrt64/share/cmake/Modules/Internal/CMakeCommonLinkerInformation.cmake C$:/msys64/ucrt64/share/cmake/Modules/Linker/GNU-C.cmake C$:/msys64/ucrt64/share/cmake/Modules/Linker/GNU-CXX.cmake C$:/msys64/ucrt64/share/cmake/Modules/Linker/GNU.cmake C$:/msys64/ucrt64/share/cmake/Modules/Platform/Linker/GNU.cmake C$:/msys64/ucrt64/share/cmake/Modules/Platform/Linker/Windows-GNU-C.cmake C$:/msys64/ucrt64/share/cmake/Modules/Platform/Linker/Windows-GNU-CXX.cmake C$:/msys64/ucrt64/share/cmake/Modules/Platform/Linker/Windows-GNU.cmake C$:/msys64/ucrt64/share/cmake/Modules/Platform/Windows-GNU-C-ABI.cmake C$:/msys64/ucrt64/share/cmake/Modules/Platform/Windows-GNU-C.cmake C$:/msys64/ucrt64/share/cmake/Modules/Platform/Windows-GNU-CXX-ABI.cmake C$:/msys64/ucrt64/share/cmake/Modules/Platform/Windows-GNU-CXX.cmake C$:/msys64/ucrt64/share/cmake/Modules/Platform/Windows-GNU.cmake C$:/msys64/ucrt64/share/cmake/Modules/Platform/Windows-Initialize.cmake C$:/msys64/ucrt64/share/cmake/Modules/Platform/Windows-windres.cmake C$:/msys64/ucrt64/share/cmake/Modules/Platform/Windows.cmake C$:/msys64/ucrt64/share/cmake/Modules/Platform/WindowsPaths.cmake CMakeCache.txt CMakeFiles/4.0.2/CMakeCCompiler.cmake CMakeFiles/4.0.2/CMakeCXXCompiler.cmake CMakeFiles/4.0.2/CMakeRCCompiler.cmake CMakeFiles/4.0.2/CMakeSystem.cmake
+build build.ninja C$:/Users/Arman/Documents/GitHub/OOP_Project/cmake-build-debug-mingw-1/cmake_install.cmake: RERUN_CMAKE | C$:/Users/Arman/Documents/GitHub/OOP_Project/CMakeLists.txt C$:/Users/Arman/Documents/GitHub/OOP_Project/View/spice/resources.qrc C$:/msys64/ucrt64/lib/cmake/Qt5Core/Qt5CoreConfig.cmake C$:/msys64/ucrt64/lib/cmake/Qt5Core/Qt5CoreConfigExtras.cmake C$:/msys64/ucrt64/lib/cmake/Qt5Core/Qt5CoreConfigExtrasMkspecDir.cmake C$:/msys64/ucrt64/lib/cmake/Qt5Core/Qt5CoreConfigVersion.cmake C$:/msys64/ucrt64/lib/cmake/Qt5Core/Qt5CoreMacros.cmake C$:/msys64/ucrt64/lib/cmake/Qt5Gui/Qt5GuiConfig.cmake C$:/msys64/ucrt64/lib/cmake/Qt5Gui/Qt5GuiConfigExtras.cmake C$:/msys64/ucrt64/lib/cmake/Qt5Gui/Qt5GuiConfigVersion.cmake C$:/msys64/ucrt64/lib/cmake/Qt5Gui/Qt5Gui_QGifPlugin.cmake C$:/msys64/ucrt64/lib/cmake/Qt5Gui/Qt5Gui_QICOPlugin.cmake C$:/msys64/ucrt64/lib/cmake/Qt5Gui/Qt5Gui_QJpegPlugin.cmake C$:/msys64/ucrt64/lib/cmake/Qt5Gui/Qt5Gui_QMinimalIntegrationPlugin.cmake C$:/msys64/ucrt64/lib/cmake/Qt5Gui/Qt5Gui_QOffscreenIntegrationPlugin.cmake C$:/msys64/ucrt64/lib/cmake/Qt5Gui/Qt5Gui_QSvgIconPlugin.cmake C$:/msys64/ucrt64/lib/cmake/Qt5Gui/Qt5Gui_QSvgPlugin.cmake C$:/msys64/ucrt64/lib/cmake/Qt5Gui/Qt5Gui_QTuioTouchPlugin.cmake C$:/msys64/ucrt64/lib/cmake/Qt5Gui/Qt5Gui_QWindowsDirect2DIntegrationPlugin.cmake C$:/msys64/ucrt64/lib/cmake/Qt5Gui/Qt5Gui_QWindowsIntegrationPlugin.cmake C$:/msys64/ucrt64/lib/cmake/Qt5Widgets/Qt5WidgetsConfig.cmake C$:/msys64/ucrt64/lib/cmake/Qt5Widgets/Qt5WidgetsConfigExtras.cmake C$:/msys64/ucrt64/lib/cmake/Qt5Widgets/Qt5WidgetsConfigVersion.cmake C$:/msys64/ucrt64/lib/cmake/Qt5Widgets/Qt5WidgetsMacros.cmake C$:/msys64/ucrt64/lib/cmake/Qt5Widgets/Qt5Widgets_QWindowsVistaStylePlugin.cmake C$:/msys64/ucrt64/lib/cmake/Qt5/Qt5Config.cmake C$:/msys64/ucrt64/lib/cmake/Qt5/Qt5ConfigVersion.cmake C$:/msys64/ucrt64/lib/cmake/Qt5/Qt5ModuleLocation.cmake C$:/msys64/ucrt64/share/cmake/Modules/CMakeCXXInformation.cmake C$:/msys64/ucrt64/share/cmake/Modules/CMakeCommonLanguageInclude.cmake C$:/msys64/ucrt64/share/cmake/Modules/CMakeGenericSystem.cmake C$:/msys64/ucrt64/share/cmake/Modules/CMakeInitializeConfigs.cmake C$:/msys64/ucrt64/share/cmake/Modules/CMakeLanguageInformation.cmake C$:/msys64/ucrt64/share/cmake/Modules/CMakeParseArguments.cmake C$:/msys64/ucrt64/share/cmake/Modules/CMakeRCInformation.cmake C$:/msys64/ucrt64/share/cmake/Modules/CMakeSystemSpecificInformation.cmake C$:/msys64/ucrt64/share/cmake/Modules/CMakeSystemSpecificInitialize.cmake C$:/msys64/ucrt64/share/cmake/Modules/Compiler/CMakeCommonCompilerMacros.cmake C$:/msys64/ucrt64/share/cmake/Modules/Compiler/GNU-CXX.cmake C$:/msys64/ucrt64/share/cmake/Modules/Compiler/GNU.cmake C$:/msys64/ucrt64/share/cmake/Modules/FindEigen3.cmake C$:/msys64/ucrt64/share/cmake/Modules/GNUInstallDirs.cmake C$:/msys64/ucrt64/share/cmake/Modules/Internal/CMakeCXXLinkerInformation.cmake C$:/msys64/ucrt64/share/cmake/Modules/Internal/CMakeCommonLinkerInformation.cmake C$:/msys64/ucrt64/share/cmake/Modules/Linker/GNU-CXX.cmake C$:/msys64/ucrt64/share/cmake/Modules/Linker/GNU.cmake C$:/msys64/ucrt64/share/cmake/Modules/Platform/Linker/GNU.cmake C$:/msys64/ucrt64/share/cmake/Modules/Platform/Linker/Windows-GNU-CXX.cmake C$:/msys64/ucrt64/share/cmake/Modules/Platform/Linker/Windows-GNU.cmake C$:/msys64/ucrt64/share/cmake/Modules/Platform/Windows-GNU-CXX-ABI.cmake C$:/msys64/ucrt64/share/cmake/Modules/Platform/Windows-GNU-CXX.cmake C$:/msys64/ucrt64/share/cmake/Modules/Platform/Windows-GNU.cmake C$:/msys64/ucrt64/share/cmake/Modules/Platform/Windows-Initialize.cmake C$:/msys64/ucrt64/share/cmake/Modules/Platform/Windows-windres.cmake C$:/msys64/ucrt64/share/cmake/Modules/Platform/Windows.cmake C$:/msys64/ucrt64/share/cmake/Modules/Platform/WindowsPaths.cmake CMakeCache.txt CMakeFiles/4.0.3/CMakeCXXCompiler.cmake CMakeFiles/4.0.3/CMakeRCCompiler.cmake CMakeFiles/4.0.3/CMakeSystem.cmake
   pool = console
 
 
 #############################################
 # A missing CMake input file is not an error.
 
-build C$:/Users/Arman/Documents/GitHub/OOP_Project/CMakeLists.txt C$:/msys64/ucrt64/share/cmake/Modules/CMakeCInformation.cmake C$:/msys64/ucrt64/share/cmake/Modules/CMakeCXXInformation.cmake C$:/msys64/ucrt64/share/cmake/Modules/CMakeCommonLanguageInclude.cmake C$:/msys64/ucrt64/share/cmake/Modules/CMakeGenericSystem.cmake C$:/msys64/ucrt64/share/cmake/Modules/CMakeInitializeConfigs.cmake C$:/msys64/ucrt64/share/cmake/Modules/CMakeLanguageInformation.cmake C$:/msys64/ucrt64/share/cmake/Modules/CMakeRCInformation.cmake C$:/msys64/ucrt64/share/cmake/Modules/CMakeSystemSpecificInformation.cmake C$:/msys64/ucrt64/share/cmake/Modules/CMakeSystemSpecificInitialize.cmake C$:/msys64/ucrt64/share/cmake/Modules/Compiler/CMakeCommonCompilerMacros.cmake C$:/msys64/ucrt64/share/cmake/Modules/Compiler/GNU-C.cmake C$:/msys64/ucrt64/share/cmake/Modules/Compiler/GNU-CXX.cmake C$:/msys64/ucrt64/share/cmake/Modules/Compiler/GNU.cmake C$:/msys64/ucrt64/share/cmake/Modules/FindEigen3.cmake C$:/msys64/ucrt64/share/cmake/Modules/Internal/CMakeCLinkerInformation.cmake C$:/msys64/ucrt64/share/cmake/Modules/Internal/CMakeCXXLinkerInformation.cmake C$:/msys64/ucrt64/share/cmake/Modules/Internal/CMakeCommonLinkerInformation.cmake C$:/msys64/ucrt64/share/cmake/Modules/Linker/GNU-C.cmake C$:/msys64/ucrt64/share/cmake/Modules/Linker/GNU-CXX.cmake C$:/msys64/ucrt64/share/cmake/Modules/Linker/GNU.cmake C$:/msys64/ucrt64/share/cmake/Modules/Platform/Linker/GNU.cmake C$:/msys64/ucrt64/share/cmake/Modules/Platform/Linker/Windows-GNU-C.cmake C$:/msys64/ucrt64/share/cmake/Modules/Platform/Linker/Windows-GNU-CXX.cmake C$:/msys64/ucrt64/share/cmake/Modules/Platform/Linker/Windows-GNU.cmake C$:/msys64/ucrt64/share/cmake/Modules/Platform/Windows-GNU-C-ABI.cmake C$:/msys64/ucrt64/share/cmake/Modules/Platform/Windows-GNU-C.cmake C$:/msys64/ucrt64/share/cmake/Modules/Platform/Windows-GNU-CXX-ABI.cmake C$:/msys64/ucrt64/share/cmake/Modules/Platform/Windows-GNU-CXX.cmake C$:/msys64/ucrt64/share/cmake/Modules/Platform/Windows-GNU.cmake C$:/msys64/ucrt64/share/cmake/Modules/Platform/Windows-Initialize.cmake C$:/msys64/ucrt64/share/cmake/Modules/Platform/Windows-windres.cmake C$:/msys64/ucrt64/share/cmake/Modules/Platform/Windows.cmake C$:/msys64/ucrt64/share/cmake/Modules/Platform/WindowsPaths.cmake CMakeCache.txt CMakeFiles/4.0.2/CMakeCCompiler.cmake CMakeFiles/4.0.2/CMakeCXXCompiler.cmake CMakeFiles/4.0.2/CMakeRCCompiler.cmake CMakeFiles/4.0.2/CMakeSystem.cmake: phony
+build C$:/Users/Arman/Documents/GitHub/OOP_Project/CMakeLists.txt C$:/Users/Arman/Documents/GitHub/OOP_Project/View/spice/resources.qrc C$:/msys64/ucrt64/lib/cmake/Qt5Core/Qt5CoreConfig.cmake C$:/msys64/ucrt64/lib/cmake/Qt5Core/Qt5CoreConfigExtras.cmake C$:/msys64/ucrt64/lib/cmake/Qt5Core/Qt5CoreConfigExtrasMkspecDir.cmake C$:/msys64/ucrt64/lib/cmake/Qt5Core/Qt5CoreConfigVersion.cmake C$:/msys64/ucrt64/lib/cmake/Qt5Core/Qt5CoreMacros.cmake C$:/msys64/ucrt64/lib/cmake/Qt5Gui/Qt5GuiConfig.cmake C$:/msys64/ucrt64/lib/cmake/Qt5Gui/Qt5GuiConfigExtras.cmake C$:/msys64/ucrt64/lib/cmake/Qt5Gui/Qt5GuiConfigVersion.cmake C$:/msys64/ucrt64/lib/cmake/Qt5Gui/Qt5Gui_QGifPlugin.cmake C$:/msys64/ucrt64/lib/cmake/Qt5Gui/Qt5Gui_QICOPlugin.cmake C$:/msys64/ucrt64/lib/cmake/Qt5Gui/Qt5Gui_QJpegPlugin.cmake C$:/msys64/ucrt64/lib/cmake/Qt5Gui/Qt5Gui_QMinimalIntegrationPlugin.cmake C$:/msys64/ucrt64/lib/cmake/Qt5Gui/Qt5Gui_QOffscreenIntegrationPlugin.cmake C$:/msys64/ucrt64/lib/cmake/Qt5Gui/Qt5Gui_QSvgIconPlugin.cmake C$:/msys64/ucrt64/lib/cmake/Qt5Gui/Qt5Gui_QSvgPlugin.cmake C$:/msys64/ucrt64/lib/cmake/Qt5Gui/Qt5Gui_QTuioTouchPlugin.cmake C$:/msys64/ucrt64/lib/cmake/Qt5Gui/Qt5Gui_QWindowsDirect2DIntegrationPlugin.cmake C$:/msys64/ucrt64/lib/cmake/Qt5Gui/Qt5Gui_QWindowsIntegrationPlugin.cmake C$:/msys64/ucrt64/lib/cmake/Qt5Widgets/Qt5WidgetsConfig.cmake C$:/msys64/ucrt64/lib/cmake/Qt5Widgets/Qt5WidgetsConfigExtras.cmake C$:/msys64/ucrt64/lib/cmake/Qt5Widgets/Qt5WidgetsConfigVersion.cmake C$:/msys64/ucrt64/lib/cmake/Qt5Widgets/Qt5WidgetsMacros.cmake C$:/msys64/ucrt64/lib/cmake/Qt5Widgets/Qt5Widgets_QWindowsVistaStylePlugin.cmake C$:/msys64/ucrt64/lib/cmake/Qt5/Qt5Config.cmake C$:/msys64/ucrt64/lib/cmake/Qt5/Qt5ConfigVersion.cmake C$:/msys64/ucrt64/lib/cmake/Qt5/Qt5ModuleLocation.cmake C$:/msys64/ucrt64/share/cmake/Modules/CMakeCXXInformation.cmake C$:/msys64/ucrt64/share/cmake/Modules/CMakeCommonLanguageInclude.cmake C$:/msys64/ucrt64/share/cmake/Modules/CMakeGenericSystem.cmake C$:/msys64/ucrt64/share/cmake/Modules/CMakeInitializeConfigs.cmake C$:/msys64/ucrt64/share/cmake/Modules/CMakeLanguageInformation.cmake C$:/msys64/ucrt64/share/cmake/Modules/CMakeParseArguments.cmake C$:/msys64/ucrt64/share/cmake/Modules/CMakeRCInformation.cmake C$:/msys64/ucrt64/share/cmake/Modules/CMakeSystemSpecificInformation.cmake C$:/msys64/ucrt64/share/cmake/Modules/CMakeSystemSpecificInitialize.cmake C$:/msys64/ucrt64/share/cmake/Modules/Compiler/CMakeCommonCompilerMacros.cmake C$:/msys64/ucrt64/share/cmake/Modules/Compiler/GNU-CXX.cmake C$:/msys64/ucrt64/share/cmake/Modules/Compiler/GNU.cmake C$:/msys64/ucrt64/share/cmake/Modules/FindEigen3.cmake C$:/msys64/ucrt64/share/cmake/Modules/GNUInstallDirs.cmake C$:/msys64/ucrt64/share/cmake/Modules/Internal/CMakeCXXLinkerInformation.cmake C$:/msys64/ucrt64/share/cmake/Modules/Internal/CMakeCommonLinkerInformation.cmake C$:/msys64/ucrt64/share/cmake/Modules/Linker/GNU-CXX.cmake C$:/msys64/ucrt64/share/cmake/Modules/Linker/GNU.cmake C$:/msys64/ucrt64/share/cmake/Modules/Platform/Linker/GNU.cmake C$:/msys64/ucrt64/share/cmake/Modules/Platform/Linker/Windows-GNU-CXX.cmake C$:/msys64/ucrt64/share/cmake/Modules/Platform/Linker/Windows-GNU.cmake C$:/msys64/ucrt64/share/cmake/Modules/Platform/Windows-GNU-CXX-ABI.cmake C$:/msys64/ucrt64/share/cmake/Modules/Platform/Windows-GNU-CXX.cmake C$:/msys64/ucrt64/share/cmake/Modules/Platform/Windows-GNU.cmake C$:/msys64/ucrt64/share/cmake/Modules/Platform/Windows-Initialize.cmake C$:/msys64/ucrt64/share/cmake/Modules/Platform/Windows-windres.cmake C$:/msys64/ucrt64/share/cmake/Modules/Platform/Windows.cmake C$:/msys64/ucrt64/share/cmake/Modules/Platform/WindowsPaths.cmake CMakeCache.txt CMakeFiles/4.0.3/CMakeCXXCompiler.cmake CMakeFiles/4.0.3/CMakeRCCompiler.cmake CMakeFiles/4.0.3/CMakeSystem.cmake: phony
+
+
+#############################################
+# Clean additional files.
+
+build CMakeFiles/clean.additional: CLEAN_ADDITIONAL
+  CONFIG = Debug
 
 
 #############################################
 # Clean all the built files.
 
-build clean: CLEAN
+build clean: CLEAN CMakeFiles/clean.additional
 
 
 #############################################
