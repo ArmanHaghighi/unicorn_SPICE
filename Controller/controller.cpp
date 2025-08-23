@@ -52,15 +52,10 @@ void Controller::addElement(string type, string name, string n1, string n2, doub
         circuit->getNodes().emplace(node2);
     }
 
-<<<<<<< Updated upstream
-    ctrlNode1 = circuit->checkNodeNameExistence(cN1);
-    ctrlNode2 = circuit->checkNodeNameExistence(cN2);
-    Element *ctrlElement = circuit->checkElementNameExistence(cN1);
-=======
     ctrlNode1=circuit->checkNodeNameExistence(cN1);
     ctrlNode2=circuit->checkNodeNameExistence(cN2);
     Element_back* ctrlElement=circuit->checkElementNameExistence(cN1);
->>>>>>> Stashed changes
+
     if (node1->idx == -1) {
         node1->idx = next;
         next++;
@@ -71,11 +66,8 @@ void Controller::addElement(string type, string name, string n1, string n2, doub
         next++;
     }
 
-<<<<<<< Updated upstream
-    Element *e = nullptr;
-=======
+
     Element_back*e = nullptr;
->>>>>>> Stashed changes
     switch (name[0]) {
         case 'R':
             e = new Resistor(name, node1, node2, value);
@@ -149,15 +141,9 @@ void Controller::addElement(string type, string name, string n1, string n2, doub
     }
 }
 
-<<<<<<< Updated upstream
-void Controller::deleteElement(string name, string element) {
-    Element *elm = nullptr;
-    for (auto e: circuit->getElements()) {
-=======
 void Controller::deleteElement(string name,string element) {
     Element_back* elm=nullptr;
     for (auto e:circuit->getElements()) {
->>>>>>> Stashed changes
         if (e->getName() == name)
             elm = e;
     }
@@ -196,15 +182,10 @@ void Controller::listNodes() const {
 void Controller::listElements() const {
     string s;
     if (circuit->getElements().empty())
-<<<<<<< Updated upstream
-        throw ParsingException(2, "");
-    for (Element *e: circuit->getElements()) {
-        s.append(e->getName() + ", ");
-=======
+
         throw ParsingException(2,"");
     for (Element_back* e:circuit->getElements()) {
         s.append(e->getName()+", ");
->>>>>>> Stashed changes
     }
     s.pop_back();
     s.pop_back();
@@ -215,15 +196,9 @@ void Controller::listElementsByType(string type) const {
     string s;
     if (circuit->getElements().empty())
         throw ParsingException(2, type);
-<<<<<<< Updated upstream
-    for (Element *e: circuit->getElements()) {
-        if (tolower(e->getName()[0]) == tolower(type[0]))
-            s.append(e->getName() + ", ");
-=======
     for (Element_back* e:circuit->getElements()) {
         if (tolower(e->getName()[0])==tolower(type[0]))
             s.append(e->getName()+", ");
->>>>>>> Stashed changes
     }
     try {
         s.pop_back();
@@ -310,11 +285,7 @@ ParsingException::ParsingException(int code, string parameterName): code(code) {
             error = parameterName + " cannot be zero or negative";
             break;
         case 2:
-<<<<<<< Updated upstream
             error = "Element " + parameterName + " not found in library";
-=======
-            error="Element_back "+parameterName+" not found in library";
->>>>>>> Stashed changes
             break;
         case 3:
             error = " Invalid syntax - correct format:\n.rename node <old_name> <new_name>";

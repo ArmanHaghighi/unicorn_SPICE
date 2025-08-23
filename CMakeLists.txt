@@ -12,9 +12,18 @@ set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
 # Find dependencies
 find_package(Eigen3 REQUIRED)
-find_package(QT NAMES Qt6 Qt5 REQUIRED COMPONENTS Widgets)
-find_package(Qt${QT_VERSION_MAJOR} REQUIRED COMPONENTS Widgets)
+find_package(QT NAMES Qt6 Qt5 REQUIRED COMPONENTS Widgets PrintSupport )
+find_package(Qt${QT_VERSION_MAJOR} REQUIRED COMPONENTS Widgets PrintSupport )
 
+# 🔍 Print Qt version and installation path for debugging
+message(STATUS "Qt ${QT_VERSION_MAJOR} found: ${Qt${QT_VERSION_MAJOR}_VERSION}")
+message(STATUS "Qt ${QT_VERSION_MAJOR} location: ${Qt${QT_VERSION_MAJOR}_DIR}")
+
+add_definitions(
+        -DNOMINMAX
+        -DWIN32_LEAN_AND_MEAN
+        -DVC_EXTRALEAN
+)
 # Include directories
 include_directories(
         View/spice
@@ -67,6 +76,11 @@ set(SPICE_SOURCES
         View/spice/node.cpp
         View/spice/wire.h
         View/spice/wire.cpp
+        View/spice/qcustomplot.h
+        View/spice/qcustomplot.cpp
+        View/spice/Scope.h
+        View/spice/Scope.cpp
+
 )
 
 # Create executable with all sources
@@ -79,6 +93,7 @@ add_executable(OOP_Project
 target_link_libraries(OOP_Project PRIVATE
         Eigen3::Eigen
         Qt${QT_VERSION_MAJOR}::Widgets
+        Qt${QT_VERSION_MAJOR}::PrintSupport
 )
 
 # Windows-specific properties

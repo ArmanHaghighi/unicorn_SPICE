@@ -132,3 +132,5 @@
 ../files/autosave/46_autosave.txt
 ../files/autosave/46_autosave.txt
 >>>>>>> Stashed changes
+../files/autosave/29_autosave.txt
+../files/autosave/30_autosave.txt
