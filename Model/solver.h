@@ -18,6 +18,7 @@ public:
     MatrixXd G;
     VectorXd RHS, sol;
     enum class Mode { DC, TRAN };
+    bool firstStep = true;
     struct Opt {
         Mode mode{Mode::DC};
         double dt{0};// for transient analysis
