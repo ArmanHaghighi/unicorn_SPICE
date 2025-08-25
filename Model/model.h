@@ -10,11 +10,11 @@
 using namespace std;
 using namespace Eigen;
 class Node;
-class Element;
+class Element_back;
 
 class Circuit {
 private:
-    set<Element*> elements;
+    set<Element_back*> elements;
     set<Node*> nodes;
     MatrixXd conductanceMatrix;
     Solver* solver{nullptr};
@@ -25,7 +25,7 @@ public:
     Circuit() {
         solver =new Solver(this);
     }
-    Element* checkElementNameExistence(const string &name) const;
+    Element_back* checkElementNameExistence(const string &name) const;
     const auto& getResults() const { return results; }
     virtual void initializeCurrentVector();
     virtual void initializeConductanceMatrix();
@@ -34,19 +34,19 @@ public:
     // virtual bool checkElementNameExistence(const string& name);
     Node* checkNodeNameExistence(const string &name) const;
 
-    void addElement(Element* element);
-    void removeElement(Element* element);
+    void addElement(Element_back* element);
+    void removeElement(Element_back* element);
     void removeNode(Node* node);
     MatrixXd getMatrix();
     void analyse(string type);// probably needs to be a class itself
     set<Node*> getNodes();
-    set<Element*> getElements();
+    set<Element_back*> getElements();
 };
 
 class Node {
 private:
     string name;
-    map<Element*,optional<double>> elements; //elements connected to node (and their currents?)
+    map<Element_back*,optional<double>> elements; //elements connected to node (and their currents?)
 //so that we can change the voltage for a ground
 protected:
     double voltage;
@@ -57,19 +57,19 @@ public:
         return idx;
     }
     explicit Node(const string &name,int idx=-1):name(name),idx(idx){}
-    void connectElement(Element* element);
-    bool removeElement(Element* element);
-    double KCL_CurrentCalc(Element* element);
+    void connectElement(Element_back* element);
+    bool removeElement(Element_back* element);
+    double KCL_CurrentCalc(Element_back* element);
     double getVoltage();
     void setVoltage(double v){
         voltage = v;
     }
     void renameNode(string name);
-    map<Element*, double> returnConnectedElements();
+    map<Element_back*, double> returnConnectedElements();
     void makeGround();
 };
 
-class Element {
+class Element_back {
 private:
 protected:
     double value;
@@ -79,8 +79,8 @@ public:
     string getName();
     Node* node1;
     Node* node2;
-    virtual ~Element() = default;
-    Element(string name,Node* node1,Node* node2, double value):name(std::move(name)),node1(node1),node2(node2),value(value){}
+    virtual ~Element_back() = default;
+    Element_back(string name,Node* node1,Node* node2, double value):name(std::move(name)),node1(node1),node2(node2),value(value){}
     virtual bool usesBranchCurrent() const { return false; }
     // stamping API (DC & Transient)
     virtual void stampDC(Eigen::MatrixXd&, Eigen::VectorXd&) = 0;
@@ -114,9 +114,9 @@ public:
 };
 
 
-class Resistor : public Element {
+class Resistor : public Element_back {
 public:
-    using Element::Element;//----Inheriting the constructor from Element.
+    using Element_back::Element_back;//----Inheriting the constructor from Element_back.
     void addToMatrix  (MatrixXd& matrix) override;;//add resistor to circuit matrix
     double getCurrent() override {
         return (node1->getVoltage()-node2->getVoltage())/value;
@@ -126,9 +126,9 @@ public:
         double dt, double t, bool first) override;
 
 };
-class Capacitor : public Element {
+class Capacitor : public Element_back {
 public:
-    using Element::Element;
+    using Element_back::Element_back;
     double prevVoltage {0.0};
     double lastDt {1.0};
     void addToMatrix(MatrixXd &matrix) override;;//add resistor to circuit matrix
@@ -140,9 +140,9 @@ public:
 
 };
 
-class VoltageSource : public Element {
+class VoltageSource : public Element_back {
 public:
-    using Element::Element;
+    using Element_back::Element_back;
     void addToMatrix(MatrixXd &matrix) override;
     double getCurrent() override{//calculate current passing through voltage source
         //using kcl in one of the nodes
@@ -154,12 +154,12 @@ public:
                         double dt, double t, bool first) override;
 };
 
-class VoltageSin : public Element {
+class VoltageSin : public Element_back {
     double vOffset;
     double vAmp;
     double freq;
 public:
-    VoltageSin(string name,Node* n1,Node* n2,double vOffset,double vAmp,double freq):Element(name,n1,n2,vAmp/sqrt(2)),vAmp(vAmp),vOffset(vOffset),freq(freq){}
+    VoltageSin(string name,Node* n1,Node* n2,double vOffset,double vAmp,double freq):Element_back(name,n1,n2,vAmp/sqrt(2)),vAmp(vAmp),vOffset(vOffset),freq(freq){}
     void addToMatrix(MatrixXd &matrix) override;
     double getCurrent() override{//calculate current passing through voltage source
         //using kcl in one of the nodes
@@ -170,9 +170,9 @@ public:
                     double dt, double t, bool first) override;
 };
 
-class Inductor : public Element {
+class Inductor : public Element_back {
 public:
-    using Element::Element;
+    using Element_back::Element_back;
     void addToMatrix(MatrixXd &matrix) override;;//add resistor to circuit matrix
     double getCurrent() override;;// calculate the current passing through resistor
     bool usesBranchCurrent() const override { return true; }
@@ -183,9 +183,9 @@ public:
     void postStepUpdate(double dt) override;
 };
 
-class CurrentSource : public Element {
+class CurrentSource : public Element_back {
 public:
-    using Element::Element;
+    using Element_back::Element_back;
     void addToMatrix(MatrixXd &matrix) override;;
     double getCurrent() override {
         return value;
@@ -195,9 +195,9 @@ public:
     void stampTransient(Eigen::MatrixXd &G, Eigen::VectorXd &I,double dt, double t, bool first) override ;
 };
 
-class Diode : public Element {
+class Diode : public Element_back {
 public:
-    using Element::Element;
+    using Element_back::Element_back;
     void addToMatrix(MatrixXd &matrix) override;
     double getCurrent() override;
     void stampDC(Eigen::MatrixXd& G, Eigen::VectorXd& I) override;
@@ -205,9 +205,9 @@ public:
                         double dt, double t, bool first) override;
 };
 
-class Zener : public Element {
+class Zener : public Element_back {
 public:
-    using Element::Element;
+    using Element_back::Element_back;
     void addToMatrix(MatrixXd &matrix) override;
     double getCurrent() override;
     void stampDC(Eigen::MatrixXd& G, Eigen::VectorXd& I) override;
@@ -215,14 +215,14 @@ public:
                         double dt, double t, bool first) override;
 };
 
-class CCVS : public Element {
-    Element* controllingElement;
+class CCVS : public Element_back {
+    Element_back* controllingElement;
     double gain; //Ohms
 public:
-    CCVS(string name, Node* n1, Node* n2, Element* ctrlElem, double gain);
+    CCVS(string name, Node* n1, Node* n2, Element_back* ctrlElem, double gain);
     void addToMatrix(MatrixXd &matrix) override;
     double getCurrent() override;
-    Element* getControllingElement() const {
+    Element_back* getControllingElement() const {
         return controllingElement;
     }
     double getGain() const {
@@ -234,14 +234,14 @@ public:
                         double dt, double t, bool first) override;
 };
 
-class CCCS : public Element {
-    Element* controllingElement;
+class CCCS : public Element_back {
+    Element_back* controllingElement;
     double gain; //no unit
 public:
-    CCCS(string name, Node* n1, Node* n2, Element* ctrlElem, double gain);
+    CCCS(string name, Node* n1, Node* n2, Element_back* ctrlElem, double gain);
     void addToMatrix(MatrixXd &matrix) override;
     double getCurrent() override;
-    Element* getControllingElement() const {
+    Element_back* getControllingElement() const {
         return controllingElement;
     }
     double getGain() const {
@@ -253,7 +253,7 @@ public:
                         double dt, double t, bool first) override;
 };
 
-class VCCS : public Element {
+class VCCS : public Element_back {
     Node* controlNode1; //positive
     Node* controlNode2; //negative
     double gain; //siemens
@@ -275,7 +275,7 @@ public:
     void stampDC(Eigen::MatrixXd& G, Eigen::VectorXd& I) override;
 };
 
-class VCVS : public Element {
+class VCVS : public Element_back {
     Node* controlNode1; //positive
     Node* controlNode2; //negative
     double gain; //no unit
