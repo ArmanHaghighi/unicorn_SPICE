@@ -94,3 +94,6 @@
 ../files/autosave/30_autosave.txt
 ../files/autosave/31_autosave.txt
 ../files/autosave/32_autosave.txt
+../files/autosave/32_autosave.txt
+../files/autosave/33_autosave.txt
+../files/autosave/34_autosave.txt
