@@ -1,0 +1,381 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>MainWindow</class>
+ <widget class="QMainWindow" name="MainWindow">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>1022</width>
+    <height>694</height>
+   </rect>
+  </property>
+  <property name="windowTitle">
+   <string>MainWindow</string>
+  </property>
+  <widget class="QWidget" name="centralwidget">
+   <layout class="QGridLayout" name="gridLayout">
+    <item row="0" column="0">
+     <widget class="QMdiArea" name="mdiArea">
+      <property name="viewMode">
+       <enum>QMdiArea::ViewMode::SubWindowView</enum>
+      </property>
+      <widget class="QWidget" name="Schematic">
+       <property name="windowTitle">
+        <string>Schematic</string>
+       </property>
+       <layout class="QGridLayout" name="gridLayout_2">
+        <item row="0" column="0">
+         <widget class="SchematicView" name="schematicView">
+          <property name="transformationAnchor">
+           <enum>QGraphicsView::ViewportAnchor::AnchorViewCenter</enum>
+          </property>
+         </widget>
+        </item>
+       </layout>
+      </widget>
+      <widget class="QWidget" name="Simulation">
+       <property name="windowTitle">
+        <string>Simulation</string>
+       </property>
+       <layout class="QVBoxLayout" name="verticalLayout">
+        <item>
+         <widget class="QCustomPlot" name="customePlot" native="true"/>
+        </item>
+       </layout>
+      </widget>
+     </widget>
+    </item>
+   </layout>
+  </widget>
+  <widget class="QMenuBar" name="menubar">
+   <property name="geometry">
+    <rect>
+     <x>0</x>
+     <y>0</y>
+     <width>1022</width>
+     <height>21</height>
+    </rect>
+   </property>
+   <widget class="QMenu" name="menuFile">
+    <property name="title">
+     <string>File</string>
+    </property>
+    <addaction name="actionNew"/>
+    <addaction name="actionOpen"/>
+    <addaction name="actionSave"/>
+   </widget>
+   <widget class="QMenu" name="menuSimulation">
+    <property name="title">
+     <string>Simulation</string>
+    </property>
+    <addaction name="actionTransient"/>
+    <addaction name="actionAc_Sweep"/>
+    <addaction name="actionDc_Sweep"/>
+    <addaction name="actionPhase"/>
+   </widget>
+   <widget class="QMenu" name="menuSchematic">
+    <property name="title">
+     <string>Schematic</string>
+    </property>
+    <addaction name="actionAdd_Element"/>
+    <addaction name="actionResistor"/>
+    <addaction name="actionCapacitor"/>
+    <addaction name="actionInductor"/>
+    <addaction name="actionWire"/>
+    <addaction name="actionGnd"/>
+    <addaction name="separator"/>
+    <addaction name="actionDelete"/>
+   </widget>
+   <widget class="QMenu" name="menuScope">
+    <property name="title">
+     <string>Scope</string>
+    </property>
+    <addaction name="actionCursor"/>
+    <addaction name="actionAdd_Cursor"/>
+    <addaction name="actionRemove_Cursor"/>
+    <addaction name="actionSnap"/>
+   </widget>
+   <addaction name="menuFile"/>
+   <addaction name="menuSchematic"/>
+   <addaction name="menuSimulation"/>
+   <addaction name="menuScope"/>
+  </widget>
+  <widget class="QStatusBar" name="statusbar"/>
+  <widget class="QToolBar" name="toolBar">
+   <property name="windowTitle">
+    <string>toolBar</string>
+   </property>
+   <attribute name="toolBarArea">
+    <enum>TopToolBarArea</enum>
+   </attribute>
+   <attribute name="toolBarBreak">
+    <bool>false</bool>
+   </attribute>
+   <addaction name="actionNew"/>
+   <addaction name="actionOpen"/>
+   <addaction name="actionSave"/>
+   <addaction name="separator"/>
+   <addaction name="actionTransient"/>
+   <addaction name="actionAc_Sweep"/>
+   <addaction name="actionDc_Sweep"/>
+   <addaction name="actionPhase"/>
+   <addaction name="separator"/>
+   <addaction name="actionAdd_Element"/>
+   <addaction name="actionResistor"/>
+   <addaction name="actionCapacitor"/>
+   <addaction name="actionInductor"/>
+   <addaction name="actionGnd"/>
+   <addaction name="actionWire"/>
+   <addaction name="separator"/>
+   <addaction name="actionDelete"/>
+   <addaction name="separator"/>
+   <addaction name="actionVoltageProbe"/>
+   <addaction name="actionCurrentProbe"/>
+   <addaction name="actionPowerProbe"/>
+  </widget>
+  <action name="actionNew">
+   <property name="icon">
+    <iconset resource="resources.qrc">
+     <normaloff>:/icons/assets/new.png</normaloff>:/icons/assets/new.png</iconset>
+   </property>
+   <property name="text">
+    <string>New</string>
+   </property>
+  </action>
+  <action name="actionOpen">
+   <property name="icon">
+    <iconset resource="resources.qrc">
+     <normaloff>:/icons/assets/open-folder.png</normaloff>:/icons/assets/open-folder.png</iconset>
+   </property>
+   <property name="text">
+    <string>Open</string>
+   </property>
+  </action>
+  <action name="actionSave">
+   <property name="icon">
+    <iconset resource="resources.qrc">
+     <normaloff>:/icons/assets/disk.png</normaloff>:/icons/assets/disk.png</iconset>
+   </property>
+   <property name="text">
+    <string>Save</string>
+   </property>
+   <property name="shortcut">
+    <string>Ctrl+S</string>
+   </property>
+  </action>
+  <action name="actionTransient">
+   <property name="text">
+    <string>Transient</string>
+   </property>
+  </action>
+  <action name="actionAc_Sweep">
+   <property name="text">
+    <string>AC Sweep</string>
+   </property>
+  </action>
+  <action name="actionDc_Sweep">
+   <property name="text">
+    <string>DC Sweep</string>
+   </property>
+  </action>
+  <action name="actionPhase">
+   <property name="text">
+    <string>Phase</string>
+   </property>
+  </action>
+  <action name="actionAdd_Element">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="icon">
+    <iconset resource="resources.qrc">
+     <normaloff>:/icons/assets/electrical-component.png</normaloff>:/icons/assets/electrical-component.png</iconset>
+   </property>
+   <property name="text">
+    <string>Add Element</string>
+   </property>
+  </action>
+  <action name="actionResistor">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="icon">
+    <iconset resource="resources.qrc">
+     <normaloff>:/icons/assets/resistor.png</normaloff>:/icons/assets/resistor.png</iconset>
+   </property>
+   <property name="text">
+    <string>Resistor</string>
+   </property>
+   <property name="shortcut">
+    <string>R</string>
+   </property>
+  </action>
+  <action name="actionCapacitor">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="icon">
+    <iconset resource="resources.qrc">
+     <normaloff>:/icons/assets/capacitor.png</normaloff>:/icons/assets/capacitor.png</iconset>
+   </property>
+   <property name="text">
+    <string>Capacitor</string>
+   </property>
+   <property name="shortcut">
+    <string>C</string>
+   </property>
+  </action>
+  <action name="actionInductor">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="icon">
+    <iconset resource="resources.qrc">
+     <normaloff>:/icons/assets/electrical (3).png</normaloff>:/icons/assets/electrical (3).png</iconset>
+   </property>
+   <property name="text">
+    <string>Inductor</string>
+   </property>
+   <property name="shortcut">
+    <string>I</string>
+   </property>
+  </action>
+  <action name="actionDelete">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="icon">
+    <iconset resource="resources.qrc">
+     <normaloff>:/icons/assets/delete.png</normaloff>:/icons/assets/delete.png</iconset>
+   </property>
+   <property name="text">
+    <string>Delete</string>
+   </property>
+   <property name="shortcut">
+    <string>Del</string>
+   </property>
+  </action>
+  <action name="actionWire">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="icon">
+    <iconset resource="resources.qrc">
+     <normaloff>:/icons/assets/wire.png</normaloff>:/icons/assets/wire.png</iconset>
+   </property>
+   <property name="text">
+    <string>Wire</string>
+   </property>
+   <property name="shortcut">
+    <string>W</string>
+   </property>
+  </action>
+  <action name="actionGnd">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="icon">
+    <iconset resource="resources.qrc">
+     <normaloff>:/icons/assets/computer.png</normaloff>:/icons/assets/computer.png</iconset>
+   </property>
+   <property name="text">
+    <string>GND</string>
+   </property>
+   <property name="toolTip">
+    <string>Ground</string>
+   </property>
+   <property name="shortcut">
+    <string>G</string>
+   </property>
+  </action>
+  <action name="actionAdd_Cursor">
+   <property name="text">
+    <string>Add Cursor</string>
+   </property>
+  </action>
+  <action name="actionRemove_Cursor">
+   <property name="text">
+    <string>Remove Cursor</string>
+   </property>
+  </action>
+  <action name="actionSnap">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="checked">
+    <bool>true</bool>
+   </property>
+   <property name="text">
+    <string>Snap</string>
+   </property>
+  </action>
+  <action name="actionCursor">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="checked">
+    <bool>true</bool>
+   </property>
+   <property name="text">
+    <string>Cursor</string>
+   </property>
+  </action>
+  <action name="actionVoltageProbe">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="icon">
+    <iconset resource="resources.qrc">
+     <normaloff>:/icons/assets/voltage-meter.png</normaloff>:/icons/assets/voltage-meter.png</iconset>
+   </property>
+   <property name="text">
+    <string>Voltage probe</string>
+   </property>
+  </action>
+  <action name="actionCurrentProbe">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="icon">
+    <iconset resource="resources.qrc">
+     <normaloff>:/icons/assets/ammeter (1).png</normaloff>:/icons/assets/ammeter (1).png</iconset>
+   </property>
+   <property name="text">
+    <string>Current Probe</string>
+   </property>
+  </action>
+  <action name="actionPowerProbe">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="icon">
+    <iconset resource="resources.qrc">
+     <normaloff>:/icons/assets/electrical (4).png</normaloff>:/icons/assets/electrical (4).png</iconset>
+   </property>
+   <property name="text">
+    <string>Power Probe</string>
+   </property>
+  </action>
+ </widget>
+ <customwidgets>
+  <customwidget>
+   <class>SchematicView</class>
+   <extends>QGraphicsView</extends>
+   <header location="global">mainwindow.h</header>
+  </customwidget>
+  <customwidget>
+   <class>QCustomPlot</class>
+   <extends>QWidget</extends>
+   <header>qcustomplot.h</header>
+   <container>1</container>
+  </customwidget>
+ </customwidgets>
+ <tabstops>
+  <tabstop>schematicView</tabstop>
+ </tabstops>
+ <resources>
+  <include location="resources.qrc"/>
+ </resources>
+ <connections/>
+</ui>
