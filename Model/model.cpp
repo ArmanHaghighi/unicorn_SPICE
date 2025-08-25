@@ -223,48 +223,8 @@ double Capacitor::getCurrent() {
     return (dV / lastDt) * value; // i(t) = C * dV/dt
 }
 
-
 void Capacitor::stampDC(MatrixXd&, VectorXd&) {} //for dc
 
-/*void Capacitor::stampTransient(MatrixXd& G, VectorXd& I, double dt, double, bool first) {
-    double GC = value / dt;
-    int n1 = node1->getIdx(), n2 = node2->getIdx();
-    G(n1,n1) += GC;
-    G(n2,n2) += GC;
-    G(n1,n2) -= GC;
-    G(n2,n1) -= GC;
-
-    double Ieq = GC * prevVoltage;
-    I(n1) -= Ieq;
-    I(n2) += Ieq;
-}*/
-
-/*void Capacitor::stampTransient(MatrixXd& G, VectorXd& RHS, double dt, double t, bool initial) {
-    if (initial) {
-        prevVoltage = 0.0;
-    }
-
-    double conductance = value / dt;
-    double currentSource = conductance * prevVoltage;
-
-    int n1 = node1->getIdx(), n2 = node2->getIdx();
-
-    if (n1 >= 0) {
-        G(n1, n1) += conductance;
-        RHS(n1) += currentSource;
-    }
-    if (n2 >= 0) {
-        G(n2, n2) += conductance;
-        RHS(n2) += currentSource;
-    }
-    if (n1 >= 0 && n2 >= 0) {
-        G(n1, n2) -= conductance;
-        G(n2, n1) -= conductance;
-        RHS(n1) -= currentSource;
-        RHS(n1) -= currentSource;
-    }
-}*/
-// In model.cpp:
 
 void Capacitor::stampTransient(MatrixXd& G, VectorXd& I, double dt, double /*t*/, bool /*first*/) {
     double Gc  = value / dt;
@@ -292,16 +252,6 @@ void Capacitor::postStepUpdate(double /*dt*/) {
     prevVoltage = node1->getVoltage() - node2->getVoltage();
 }
 
-/*void Capacitor::postStepUpdate(double dt) {
-    lastDt = dt; //temp
-    double v1 = node1->getVoltage();
-    double v2 = node2->getVoltage();
-    double V = v1 - v2;
-    cachedCurrent = value * (V - prevVoltage) / dt; //temp
-    prevVoltage = V;
-
-    //cout << "dt=" << dt << ", V=" << node1->getVoltage() - node2->getVoltage() << ", Icap=" << cachedCurrent << endl; //temporary
-}*/
 
 // DC voltage source
 void VoltageSource::addToMatrix(MatrixXd &G) {
@@ -350,9 +300,9 @@ void VoltageSin::addToMatrix(MatrixXd &matrix) {}
 void VoltageSin::stampTransient(MatrixXd& G, VectorXd& I, double dt, double t, bool first) {
     int n1 = node1->getIdx(), n2 = node2->getIdx(), k = currentIdx;
     double v = vOffset + vAmp * sin(2 * M_PI * freq * t);
-    G(k,n1) = 1; G(k,n2) = -1;
-    G(n1,k) = 1; G(n2,k) = -1;
-    I(k) = v;
+    G(k,n1) += 1; G(k,n2) += -1;
+    G(n1,k) += 1; G(n2,k) += -1;
+    I(k) += v;
 }
 
 void VoltageSin::stampDC(MatrixXd& G, VectorXd& I) {
@@ -388,28 +338,24 @@ double Inductor::getCurrent() {
 
 void Inductor::stampDC(MatrixXd& G, VectorXd& I){ /* short in DC */ }
 
-void Inductor::stampTransient(MatrixXd& G, VectorXd& I, double dt, double t, bool first) {
-    double R = value / dt;  // inductor's resistance for transient analysis: L * di/dt
+void Inductor::stampTransient(MatrixXd& G, VectorXd& I, double dt, double /*t*/, bool /*first*/) {
+    const double a = dt / value; // dt / L
     int n1 = node1->getIdx(), n2 = node2->getIdx(), k = currentIdx;
 
-    if (n1 < 0 || n2 < 0 || k < 0) {
-        cerr << "Invalid node indices for Inductor: " << n1 << ", " << n2 << ", " << k << endl;
-        throw out_of_range("Node index out of range");
-    }
-
-    G(k, n1) += 1;
-    G(k, n2) += -1;
-    G(n1, k) += 1;
+    // Node coupling
+    G(n1, k) +=  1;
     G(n2, k) += -1;
-    G(k, k) += -R;
 
-    I(k) = -R * prevCurrent;
+    // Branch equation
+    G(k, n1) += -a;
+    G(k, n2) +=  a;
+    G(k, k)  +=  1;
 
-    prevCurrent = cachedCurrent;
+    I(k) += prevCurrent;
 }
 
 
-void Inductor::postStepUpdate(double dt){ lastDt=dt; prevCurrent=cachedCurrent; }
+void Inductor::postStepUpdate(double dt) { lastDt = dt; prevCurrent = cachedCurrent; }
 
 // dc current source
 void CurrentSource::addToMatrix(MatrixXd &G) {
@@ -422,11 +368,7 @@ void CurrentSource::addToMatrix(MatrixXd &G) {
     }
 }
 
-void CurrentSource::stampDC(MatrixXd& G, VectorXd& I) {
-    //int n1 = node1->getIdx(), n2 = node2->getIdx();
-    //I(n1) -= value;
-    //I(n2) += value;
-}
+void CurrentSource::stampDC(MatrixXd& G, VectorXd& I) {} //for dc
 
 void CurrentSource::stampTransient(MatrixXd& G, VectorXd& I, double dt, double t, bool first) {
     int n1 = node1->getIdx(), n2 = node2->getIdx();
@@ -653,17 +595,19 @@ void Circuit::analyseTRAN(double dt, double stop, double start) {
 
     results.clear();
     Solver::Opt opt{Solver::Mode::TRAN, dt, start};
+    bool first = true;
+
     for (double t = start; t < stop; t += dt) {
         opt.t = t;
+
         const VectorXd& sol = solver->solveOnce(opt);
-        results.push_back({t, sol});
+
+        // where the results are stored.
+        results.emplace_back(t, sol);
+        first = false;
     }
     cout << "Transient analysis completed. Results are available." << endl;
 }
-
-
-
-
 
 
 VectorXd Circuit::analyseDC(){
