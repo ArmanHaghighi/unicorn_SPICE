@@ -6,7 +6,7 @@
 
 #include "elements.h"
 
-Wire::Wire(Node* startNode, Node* endNode, QGraphicsItem* parent)
+Wire::Wire(Spice::Node* startNode, Spice::Node* endNode, QGraphicsItem* parent)
     : QGraphicsObject(parent),pathItem(new QGraphicsPathItem(this)), m_startNode(startNode), m_endNode(endNode)
 {
     setFlag(QGraphicsItem::ItemIsSelectable);
@@ -15,17 +15,17 @@ Wire::Wire(Node* startNode, Node* endNode, QGraphicsItem* parent)
 
     setZValue(-1);
     // Connect to node movement signals
-    connect(startNode, &Node::scenePositionChanged, this, &Wire::updatePath);
-    connect(endNode, &Node::scenePositionChanged, this, &Wire::updatePath);
+    connect(startNode, &Spice::Node::scenePositionChanged, this, &Wire::updatePath);
+    connect(endNode, &Spice::Node::scenePositionChanged, this, &Wire::updatePath);
     updatePath();
 
 }
 
-Node* Wire::startNode() const {
+Spice::Node* Wire::startNode() const {
     return m_startNode;
 }
 
-Node* Wire::endNode() const {
+Spice::Node* Wire::endNode() const {
     return m_endNode;
 
 }
@@ -104,8 +104,8 @@ void Wire::updateConnection() {
     disconnect(m_startNode, nullptr, this, nullptr);
     disconnect(m_endNode,nullptr, this, nullptr);
 
-    connect(m_startNode, &Node::scenePositionChanged, this, &Wire::updatePath);
-    connect(m_endNode, &Node::scenePositionChanged, this, &Wire::updatePath);
+    connect(m_startNode, &Spice::Node::scenePositionChanged, this, &Wire::updatePath);
+    connect(m_endNode, &Spice::Node::scenePositionChanged, this, &Wire::updatePath);
     QPen pen(isSelected() ? Qt::darkCyan : Qt::black);
     if (isSelected()) {
         pen.setStyle(Qt::DashLine);

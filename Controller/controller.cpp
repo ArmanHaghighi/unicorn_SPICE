@@ -42,13 +42,13 @@ void Controller::addElement(string type, string name, string n1, string n2, doub
                             const double offset, double freq, const string &cN1, const string &cN2) {
     if (circuit->checkElementNameExistence(name))
         throw ExistExp(type, name);
-    Node *node1, *node2, *ctrlNode1, *ctrlNode2;
+    back::Node *node1, *node2, *ctrlNode1, *ctrlNode2;
     if (!((node1 = circuit->checkNodeNameExistence(n1)))) {
-        node1 = new Node(n1);
+        node1 = new back::Node(n1);
         circuit->getNodes().emplace(node1);
     }
     if (!(node2 = circuit->checkNodeNameExistence(n2))) {
-        node2 = new Node(n2);
+        node2 = new back::Node(n2);
         circuit->getNodes().emplace(node2);
     }
 
@@ -153,7 +153,7 @@ void Controller::deleteElement(string name,string element) {
 }
 
 void Controller::renameNode(string old, string name) {
-    Node *oldNode = nullptr;
+    back::Node *oldNode = nullptr;
     for (auto n: circuit->getNodes()) {
         if (n->getName() == old)
             oldNode = n;
@@ -171,7 +171,7 @@ void Controller::listNodes() const {
     if (circuit->getNodes().empty())
         throw NodeNotFound("");
     cout << "Available nodes:" << endl;
-    for (Node *n: circuit->getNodes()) {
+    for (back::Node *n: circuit->getNodes()) {
         s.append(n->getName() + ", ");
     }
     s.pop_back();
@@ -211,7 +211,7 @@ void Controller::listElementsByType(string type) const {
 }
 
 void Controller::addGnd(string nodeName) {
-    Node *node = nullptr;
+    back::Node *node = nullptr;
     for (const auto &n: circuit->getNodes()) {
         string name = n->getName();
         if (name == nodeName)
@@ -225,7 +225,7 @@ void Controller::addGnd(string nodeName) {
 }
 
 void Controller::deleteGnd(string nodeName) {
-    Node *node = nullptr;
+    back::Node *node = nullptr;
     for (const auto &n: circuit->getNodes()) {
         string name = n->getName();
         if (name == nodeName + "(gnd)")

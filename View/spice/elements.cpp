@@ -134,12 +134,12 @@ QString Element::getName() {
     return name;
 }
 
-Resistor::Resistor() : Element() {
+Spice::Resistor::Resistor() : Element() {
 
 
 }
 
-void Resistor::setName(QString name) {
+void Spice::Resistor::setName(QString name) {
     if (name.isEmpty())
         return;
     if (name.at(0) != 'R') {
@@ -148,11 +148,11 @@ void Resistor::setName(QString name) {
     this->name = name;
 }
 
-QString Resistor::getTypeName() const {
+QString Spice::Resistor::getTypeName() const {
     return "Resistor";
 }
 
-void Resistor::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget) {
+void Spice::Resistor::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget) {
     Element::paint(painter, option, widget);
         static const QPointF points[] = {
         {-25, 0},
@@ -174,10 +174,10 @@ void Resistor::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, 
     }
 }
 
-Capacitor::Capacitor() : Element() {
+Spice::Capacitor::Capacitor() : Element() {
 }
 
-void Capacitor::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget) {
+void Spice::Capacitor::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget) {
     Element::paint(painter, option, widget);
 
     static const QPointF pointsPairs[] = {
@@ -196,7 +196,7 @@ void Capacitor::paint(QPainter *painter, const QStyleOptionGraphicsItem *option,
     }
 }
 
-void Capacitor::setName(QString name) {
+void Spice::Capacitor::setName(QString name) {
     if (name.isEmpty())
         return;
     char const c = 'C';
@@ -206,10 +206,10 @@ void Capacitor::setName(QString name) {
     this->name = name;
 }
 
-Inductor::Inductor() : Element() {
+Spice::Inductor::Inductor() : Element() {
 }
 
-void Inductor::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget) {
+void Spice::Inductor::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget) {
     Element::paint(painter, option, widget);
 
     Q_UNUSED(option);
@@ -232,7 +232,7 @@ void Inductor::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, 
     }
 }
 
-void Inductor::setName(QString name) {
+void Spice::Inductor::setName(QString name) {
     if (name.isEmpty())
         return;
     char const c = 'I';
@@ -441,10 +441,9 @@ void ACVoltageSource::mouseDoubleClickEvent(QGraphicsSceneMouseEvent *event) {
             this->setValue(properties->getUi()->ValTxt->text());
             this->offset=offsetTxt->text();
             this->phase=phaseTxt->text();
-
         }
 
-        delete properties;
+        //delete properties;
 
         event->accept();
     } else
@@ -536,7 +535,7 @@ void DependantSource::addNodes() {
     nodes.append(node4);
 }
 
-void VCVS::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget) {
+void Spice::VCVS::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget) {
     // Diamond shape
     QPolygonF diamond;
     diamond << QPointF(0, -10)
@@ -567,13 +566,13 @@ void VCVS::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWid
         painter->drawRect(boundingRect());
     }}
 
-void VCVS::setName(QString name) {
+void Spice::VCVS::setName(QString name) {
     Element::setName(name);
 }
 
 
 
-void VCCS::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget) {
+void Spice::VCCS::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget) {
     Element::paint(painter, option, widget);
 
     // Diamond shape
@@ -607,12 +606,12 @@ void VCCS::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWid
     }
 }
 
-void VCCS::setName(QString name) {
+void Spice::VCCS::setName(QString name) {
     Element::setName(name);
 }
 
 
-void CCVS::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget) {
+void Spice::CCVS::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget) {
     // Diamond shape
     QPolygonF diamond;
     diamond << QPointF(0, -10)
@@ -644,12 +643,12 @@ void CCVS::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWid
     }
 }
 
-void CCVS::setName(QString name) {
+void Spice::CCVS::setName(QString name) {
     Element::setName(name);
 }
 
 
-void CCCS::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget) {
+void Spice::CCCS::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget) {
       // Diamond shape
     QPolygonF diamond;
     diamond << QPointF(0, -10)
@@ -680,7 +679,7 @@ void CCCS::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWid
         painter->drawRect(boundingRect());
     }}
 
-void CCCS::setName(QString name) {
+void Spice::CCCS::setName(QString name) {
     Element::setName(name);
 }
 

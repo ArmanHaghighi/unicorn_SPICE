@@ -102,3 +102,12 @@
 ../files/autosave/37_autosave.txt
 ../files/autosave/38_autosave.txt
 ../files/autosave/39_autosave.txt
+../files/autosave/31_autosave.txt
+../files/autosave/32_autosave.txt
+../files/autosave/33_autosave.txt
+../files/autosave/34_autosave.txt
+../files/autosave/35_autosave.txt
+../files/autosave/36_autosave.txt
+../files/autosave/37_autosave.txt
+../files/autosave/38_autosave.txt
+../files/autosave/39_autosave.txt

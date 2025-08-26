@@ -10,11 +10,11 @@ using namespace Spice;
 class Wire :  public QGraphicsObject{
     Q_OBJECT
 public:
-    Wire(Node* startNode, Node* endNode, QGraphicsItem* parent = nullptr);
+    Wire(Spice::Node* startNode, Spice::Node* endNode, QGraphicsItem* parent = nullptr);
 
     // Connection management
-    Node* startNode() const;
-    Node* endNode() const;
+    Spice::Node* startNode() const;
+    Spice::Node* endNode() const;
 
     // Update visual representation
     void updatePath();
@@ -37,8 +37,8 @@ public:
 // friend class cereal::access;
 private:
     QGraphicsPathItem* pathItem;
-   Node* m_startNode;
-   Node* m_endNode;
+   Spice::Node* m_startNode;
+   Spice::Node* m_endNode;
     int startNodeId = -1;
     int endNodeId = -1;
 };

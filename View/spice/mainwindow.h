@@ -9,6 +9,7 @@
 #include <bits/stdc++.h>
 #include "elements.h"
 #include "addelementdialog.h"
+#include "BackendFacade.h"
 #include <cereal/archives/binary.hpp>
 #include <cereal/types/vector.hpp>
 #include <cereal/types/memory.hpp>
@@ -77,7 +78,7 @@ namespace Spice {
         Q_OBJECT
 
     public:
-        MainWindow(QWidget *parent = nullptr);
+        explicit MainWindow(QWidget *parent = nullptr);
         ~MainWindow() override;
         Ui::MainWindow *ui;
         void deleteSelectedItems();
@@ -142,6 +143,12 @@ namespace Spice {
 
         void on_actionPowerProbe_triggered(bool checked);
 
+        void onAddElementAccepted(QString type, QString name, QString n1, QString n2, double value);
+
+        void onRunTran(double tstop, double dt, QStringList probeNodes);
+
+        void onWave(QString node, QVector<double> t, QVector<double> v);
+
     signals:
         void nodeNamePropagationRequested(Node* source, const QString& name);
     private:
@@ -154,8 +161,10 @@ namespace Spice {
 
         void showEvent(QShowEvent *event);
 
+        BackendFacade* backend;
+        //Scope* scope;
         SchematicView* schematic=nullptr;
-        Scope* scope=nullptr;
+        Scope* scope;//=nullptr;
         QShortcut *escapeShortcut;
         std::vector<Element*> elements;
         Node* wireStartNode = nullptr;

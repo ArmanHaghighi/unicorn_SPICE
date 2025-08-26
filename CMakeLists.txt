@@ -80,6 +80,10 @@ set(SPICE_SOURCES
         View/spice/qcustomplot.cpp
         View/spice/Scope.h
         View/spice/Scope.cpp
+        View/spice/backendFacade.h
+        View/spice/backendFacade.cpp
+        View/spice/netlister.h
+        View/spice/netlister.cpp
 
 )
 

@@ -27,6 +27,11 @@ MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent)
     , ui(new Ui::MainWindow)
 {
+    backend = new BackendFacade(this);
+    connect(backend, &BackendFacade::waveReady, this, &MainWindow::onWave);
+    connect(backend, &BackendFacade::simError, this, [&](auto m){
+        QMessageBox::critical(this, "Simulation error", m);
+    });
     ui->setupUi(this);
     for (QAction *action : ui->menuFile->actions()) {
         action->setIconVisibleInMenu(false);  // Hides icons in menus
@@ -58,6 +63,37 @@ MainWindow::MainWindow(QWidget *parent)
     scope->enableCursors(true);
     on_actionCursor_toggled(true);
 
+}
+
+void MainWindow::onAddElementAccepted(QString type, QString name, QString n1, QString n2, double value) {
+    backend->ensureGround(); // safe to call often
+    if (type=="R") backend->addResistor(name, n1, n2, value);
+    else if (type=="C") backend->addCapacitor(name, n1, n2, value);
+    else if (type=="L") backend->addInductor(name, n1, n2, value);
+    else if (type=="V") backend->addVdc(name, n1, n2, value);
+    else if (type=="I") backend->addIsrc(name, n1, n2, value);
+    // If your "AC" dialog is for a sine source:
+    // backend->addVsin(name, n1, n2, vOffset, vAmp, freq);
+
+    // When the user is done adding or on run:
+    backend->freeze();
+}
+
+void MainWindow::onRunTran(double tstop, double dt, QStringList probeNodes) {
+    // Run in a worker thread to keep UI snappy
+    auto* worker = new QObject(); worker->moveToThread(new QThread(this));
+    connect(worker->thread(), &QThread::started, this, [=](){
+        backend->runTransient(tstop, dt, probeNodes);
+        worker->thread()->quit();
+    });
+    connect(worker->thread(), &QThread::finished, worker->thread(), &QObject::deleteLater);
+    worker->thread()->start();
+}
+
+void MainWindow::onWave(QString node, QVector<double> t, QVector<double> v) {
+    // Your Scope has addSignal(x,y,name,color). You can choose color or let it pick default.
+    scope->addSignal(t, v, node);
+    //scope->autoRange(); // if you implemented it; otherwise rescale axes here
 }
 
 MainWindow::~MainWindow()
@@ -734,7 +770,7 @@ void MainWindow::handleMouseRelease(QMouseEvent *event) {
 }
 
 
-Node* MainWindow::createJunctionAt(const QPointF& scenePos) {
+Spice::Node* MainWindow::createJunctionAt(const QPointF& scenePos) {
     // Create new junction node
     Node* junction = new Node(nullptr,Node::Junction);
     junction->setPos(scenePos);
