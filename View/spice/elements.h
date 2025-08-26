@@ -119,6 +119,7 @@ namespace Spice {
     private:
         QString phase;
         QString offset;
+        QString frequency;
     };
 
     class DCCurrentSource : public Element {

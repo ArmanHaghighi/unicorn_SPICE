@@ -424,6 +424,8 @@ void ACVoltageSource::mouseDoubleClickEvent(QGraphicsSceneMouseEvent *event) {
         properties->getUi()->ValTxt->setText(value);
         const auto phase = new QLabel("Phase",properties);
         const auto phaseTxt = new QLineEdit(properties);
+        const auto Freq = new QLabel("Frequency",properties);
+        const auto freqtxt = new QLineEdit(properties);
         const auto offset = new QLabel("Offset",properties);
         const auto offsetTxt = new QLineEdit(properties);
         // Get the existing grid layout
@@ -436,11 +438,14 @@ void ACVoltageSource::mouseDoubleClickEvent(QGraphicsSceneMouseEvent *event) {
         gridLayout->addWidget(phaseTxt, nextRow + 1, 0);
         gridLayout->addWidget(offset, nextRow + 2, 0);
         gridLayout->addWidget(offsetTxt, nextRow + 3, 0);
+        gridLayout->addWidget(Freq, nextRow + 4, 0);
+        gridLayout->addWidget(freqtxt, nextRow + 5, 0);
         if (properties->exec() == QDialog::Accepted) {
             this->setName(properties->getUi()->NameTxt->text());
             this->setValue(properties->getUi()->ValTxt->text());
             this->offset=offsetTxt->text();
             this->phase=phaseTxt->text();
+            this->frequency=freqtxt->text();
         }
 
         properties->deleteLater();
