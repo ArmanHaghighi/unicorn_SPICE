@@ -10,6 +10,7 @@
 #include "../../../View/spice/mainwindow.h"
 #include <QtCore/qbytearray.h>
 #include <QtCore/qmetatype.h>
+#include <QtCore/QVector>
 #if !defined(Q_MOC_OUTPUT_REVISION)
 #error "The header file 'mainwindow.h' doesn't include <QObject>."
 #elif Q_MOC_OUTPUT_REVISION != 67
@@ -22,8 +23,8 @@ QT_BEGIN_MOC_NAMESPACE
 QT_WARNING_PUSH
 QT_WARNING_DISABLE_DEPRECATED
 struct qt_meta_stringdata_Spice__MainWindow_t {
-    QByteArrayData data[41];
-    char stringdata0[816];
+    QByteArrayData data[55];
+    char stringdata0[916];
 };
 #define QT_MOC_LITERAL(idx, ofs, len) \
     Q_STATIC_BYTE_ARRAY_DATA_HEADER_INITIALIZER_WITH_OFFSET(len, \
@@ -72,7 +73,21 @@ QT_MOC_LITERAL(36, 690, 23), // "on_actionCursor_toggled"
 QT_MOC_LITERAL(37, 714, 31), // "on_actionVoltageProbe_triggered"
 QT_MOC_LITERAL(38, 746, 7), // "checked"
 QT_MOC_LITERAL(39, 754, 31), // "on_actionCurrentProbe_triggered"
-QT_MOC_LITERAL(40, 786, 29) // "on_actionPowerProbe_triggered"
+QT_MOC_LITERAL(40, 786, 29), // "on_actionPowerProbe_triggered"
+QT_MOC_LITERAL(41, 816, 20), // "onAddElementAccepted"
+QT_MOC_LITERAL(42, 837, 4), // "type"
+QT_MOC_LITERAL(43, 842, 2), // "n1"
+QT_MOC_LITERAL(44, 845, 2), // "n2"
+QT_MOC_LITERAL(45, 848, 5), // "value"
+QT_MOC_LITERAL(46, 854, 9), // "onRunTran"
+QT_MOC_LITERAL(47, 864, 5), // "tstop"
+QT_MOC_LITERAL(48, 870, 2), // "dt"
+QT_MOC_LITERAL(49, 873, 10), // "probeNodes"
+QT_MOC_LITERAL(50, 884, 6), // "onWave"
+QT_MOC_LITERAL(51, 891, 4), // "node"
+QT_MOC_LITERAL(52, 896, 15), // "QVector<double>"
+QT_MOC_LITERAL(53, 912, 1), // "t"
+QT_MOC_LITERAL(54, 914, 1) // "v"
 
     },
     "Spice::MainWindow\0nodeNamePropagationRequested\0"
@@ -98,7 +113,10 @@ QT_MOC_LITERAL(40, 786, 29) // "on_actionPowerProbe_triggered"
     "on_actionSnap_toggled\0on_actionCursor_toggled\0"
     "on_actionVoltageProbe_triggered\0checked\0"
     "on_actionCurrentProbe_triggered\0"
-    "on_actionPowerProbe_triggered"
+    "on_actionPowerProbe_triggered\0"
+    "onAddElementAccepted\0type\0n1\0n2\0value\0"
+    "onRunTran\0tstop\0dt\0probeNodes\0onWave\0"
+    "node\0QVector<double>\0t\0v"
 };
 #undef QT_MOC_LITERAL
 
@@ -108,7 +126,7 @@ static const uint qt_meta_data_Spice__MainWindow[] = {
        8,       // revision
        0,       // classname
        0,    0, // classinfo
-      29,   14, // methods
+      32,   14, // methods
        0,    0, // properties
        0,    0, // enums/sets
        0,    0, // constructors
@@ -116,37 +134,40 @@ static const uint qt_meta_data_Spice__MainWindow[] = {
        1,       // signalCount
 
  // signals: name, argc, parameters, tag, flags
-       1,    2,  159,    2, 0x06 /* Public */,
+       1,    2,  174,    2, 0x06 /* Public */,
 
  // slots: name, argc, parameters, tag, flags
-       6,    0,  164,    2, 0x08 /* Private */,
-       7,    0,  165,    2, 0x08 /* Private */,
-       8,    0,  166,    2, 0x08 /* Private */,
-       9,    0,  167,    2, 0x08 /* Private */,
-      10,    0,  168,    2, 0x08 /* Private */,
-      11,    0,  169,    2, 0x08 /* Private */,
-      12,    0,  170,    2, 0x08 /* Private */,
-      13,    0,  171,    2, 0x08 /* Private */,
-      14,    1,  172,    2, 0x08 /* Private */,
-      16,    1,  175,    2, 0x08 /* Private */,
-      17,    1,  178,    2, 0x08 /* Private */,
-      18,    1,  181,    2, 0x08 /* Private */,
-      19,    1,  184,    2, 0x08 /* Private */,
-      20,    1,  187,    2, 0x08 /* Private */,
-      21,    1,  190,    2, 0x08 /* Private */,
-      22,    1,  193,    2, 0x08 /* Private */,
-      23,    1,  196,    2, 0x08 /* Private */,
-      26,    1,  199,    2, 0x08 /* Private */,
-      28,    3,  202,    2, 0x08 /* Private */,
-      28,    2,  209,    2, 0x28 /* Private | MethodCloned */,
-      32,    2,  214,    2, 0x08 /* Private */,
-      33,    0,  219,    2, 0x08 /* Private */,
-      34,    0,  220,    2, 0x08 /* Private */,
-      35,    1,  221,    2, 0x08 /* Private */,
-      36,    1,  224,    2, 0x08 /* Private */,
-      37,    1,  227,    2, 0x08 /* Private */,
-      39,    1,  230,    2, 0x08 /* Private */,
-      40,    1,  233,    2, 0x08 /* Private */,
+       6,    0,  179,    2, 0x08 /* Private */,
+       7,    0,  180,    2, 0x08 /* Private */,
+       8,    0,  181,    2, 0x08 /* Private */,
+       9,    0,  182,    2, 0x08 /* Private */,
+      10,    0,  183,    2, 0x08 /* Private */,
+      11,    0,  184,    2, 0x08 /* Private */,
+      12,    0,  185,    2, 0x08 /* Private */,
+      13,    0,  186,    2, 0x08 /* Private */,
+      14,    1,  187,    2, 0x08 /* Private */,
+      16,    1,  190,    2, 0x08 /* Private */,
+      17,    1,  193,    2, 0x08 /* Private */,
+      18,    1,  196,    2, 0x08 /* Private */,
+      19,    1,  199,    2, 0x08 /* Private */,
+      20,    1,  202,    2, 0x08 /* Private */,
+      21,    1,  205,    2, 0x08 /* Private */,
+      22,    1,  208,    2, 0x08 /* Private */,
+      23,    1,  211,    2, 0x08 /* Private */,
+      26,    1,  214,    2, 0x08 /* Private */,
+      28,    3,  217,    2, 0x08 /* Private */,
+      28,    2,  224,    2, 0x28 /* Private | MethodCloned */,
+      32,    2,  229,    2, 0x08 /* Private */,
+      33,    0,  234,    2, 0x08 /* Private */,
+      34,    0,  235,    2, 0x08 /* Private */,
+      35,    1,  236,    2, 0x08 /* Private */,
+      36,    1,  239,    2, 0x08 /* Private */,
+      37,    1,  242,    2, 0x08 /* Private */,
+      39,    1,  245,    2, 0x08 /* Private */,
+      40,    1,  248,    2, 0x08 /* Private */,
+      41,    5,  251,    2, 0x08 /* Private */,
+      46,    3,  262,    2, 0x08 /* Private */,
+      50,    3,  269,    2, 0x08 /* Private */,
 
  // signals: parameters
     QMetaType::Void, 0x80000000 | 3, QMetaType::QString,    4,    5,
@@ -180,6 +201,9 @@ static const uint qt_meta_data_Spice__MainWindow[] = {
     QMetaType::Void, QMetaType::Bool,   38,
     QMetaType::Void, QMetaType::Bool,   38,
     QMetaType::Void, QMetaType::Bool,   38,
+    QMetaType::Void, QMetaType::QString, QMetaType::QString, QMetaType::QString, QMetaType::QString, QMetaType::Double,   42,    5,   43,   44,   45,
+    QMetaType::Void, QMetaType::Double, QMetaType::Double, QMetaType::QStringList,   47,   48,   49,
+    QMetaType::Void, QMetaType::QString, 0x80000000 | 52, 0x80000000 | 52,   51,   53,   54,
 
        0        // eod
 };
@@ -220,7 +244,22 @@ void Spice::MainWindow::qt_static_metacall(QObject *_o, QMetaObject::Call _c, in
         case 26: _t->on_actionVoltageProbe_triggered((*reinterpret_cast< bool(*)>(_a[1]))); break;
         case 27: _t->on_actionCurrentProbe_triggered((*reinterpret_cast< bool(*)>(_a[1]))); break;
         case 28: _t->on_actionPowerProbe_triggered((*reinterpret_cast< bool(*)>(_a[1]))); break;
+        case 29: _t->onAddElementAccepted((*reinterpret_cast< QString(*)>(_a[1])),(*reinterpret_cast< QString(*)>(_a[2])),(*reinterpret_cast< QString(*)>(_a[3])),(*reinterpret_cast< QString(*)>(_a[4])),(*reinterpret_cast< double(*)>(_a[5]))); break;
+        case 30: _t->onRunTran((*reinterpret_cast< double(*)>(_a[1])),(*reinterpret_cast< double(*)>(_a[2])),(*reinterpret_cast< QStringList(*)>(_a[3]))); break;
+        case 31: _t->onWave((*reinterpret_cast< QString(*)>(_a[1])),(*reinterpret_cast< QVector<double>(*)>(_a[2])),(*reinterpret_cast< QVector<double>(*)>(_a[3]))); break;
         default: ;
+        }
+    } else if (_c == QMetaObject::RegisterMethodArgumentMetaType) {
+        switch (_id) {
+        default: *reinterpret_cast<int*>(_a[0]) = -1; break;
+        case 31:
+            switch (*reinterpret_cast<int*>(_a[1])) {
+            default: *reinterpret_cast<int*>(_a[0]) = -1; break;
+            case 2:
+            case 1:
+                *reinterpret_cast<int*>(_a[0]) = qRegisterMetaType< QVector<double> >(); break;
+            }
+            break;
         }
     } else if (_c == QMetaObject::IndexOfMethod) {
         int *result = reinterpret_cast<int *>(_a[0]);
@@ -263,13 +302,13 @@ int Spice::MainWindow::qt_metacall(QMetaObject::Call _c, int _id, void **_a)
     if (_id < 0)
         return _id;
     if (_c == QMetaObject::InvokeMetaMethod) {
-        if (_id < 29)
+        if (_id < 32)
             qt_static_metacall(this, _c, _id, _a);
-        _id -= 29;
+        _id -= 32;
     } else if (_c == QMetaObject::RegisterMethodArgumentMetaType) {
-        if (_id < 29)
-            *reinterpret_cast<int*>(_a[0]) = -1;
-        _id -= 29;
+        if (_id < 32)
+            qt_static_metacall(this, _c, _id, _a);
+        _id -= 32;
     }
     return _id;
 }

@@ -419,7 +419,7 @@ void ACVoltageSource::setName(QString name) {
 
 void ACVoltageSource::mouseDoubleClickEvent(QGraphicsSceneMouseEvent *event) {
     if (event->button() == Qt::LeftButton) {
-        auto *properties = new Properties(reinterpret_cast<QWidget *>(this));
+        auto *properties = new Properties(nullptr);
         properties->getUi()->NameTxt->setText(name);
         properties->getUi()->ValTxt->setText(value);
         const auto phase = new QLabel("Phase",properties);
@@ -443,8 +443,7 @@ void ACVoltageSource::mouseDoubleClickEvent(QGraphicsSceneMouseEvent *event) {
             this->phase=phaseTxt->text();
         }
 
-        //delete properties;
-
+        properties->deleteLater();
         event->accept();
     } else
         QGraphicsItem::mouseDoubleClickEvent(event);

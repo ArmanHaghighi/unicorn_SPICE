@@ -2,6 +2,7 @@
 #include "QNVEOS2RTE/moc_Scope.cpp"
 #include "QNVEOS2RTE/moc_acdialog.cpp"
 #include "QNVEOS2RTE/moc_addelementdialog.cpp"
+#include "QNVEOS2RTE/moc_backendFacade.cpp"
 #include "QNVEOS2RTE/moc_dcdialog.cpp"
 #include "QNVEOS2RTE/moc_mainwindow.cpp"
 #include "QNVEOS2RTE/moc_node.cpp"
