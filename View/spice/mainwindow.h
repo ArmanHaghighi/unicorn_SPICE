@@ -209,7 +209,7 @@ public slots:
         explicit SchematicView(MainWindow* mainWindow);
         SchematicView(QWidget* wid);
         ~SchematicView() override{
-            delete schematicScene;
+            //delete schematicScene;
         }
      signals:
             void mousePressed(QMouseEvent* event);

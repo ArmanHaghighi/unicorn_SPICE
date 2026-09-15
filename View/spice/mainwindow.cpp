@@ -94,11 +94,19 @@ void MainWindow::onRunTran(double tstop, double dt, QStringList probeNodes) {
     });
     connect(worker->thread(), &QThread::finished, worker->thread(), &QObject::deleteLater);
     worker->thread()->start();
+
+    //clear the scope
+    scope->clear();
 }
 
 void MainWindow::onWave(QString node, QVector<double> t, QVector<double> v) {
     // Your Scope has addSignal(x,y,name,color). You can choose color or let it pick default.
-    scope->addSignal(t, v, node);
+    QColor color(
+       QRandomGenerator::global()->bounded(256),
+       QRandomGenerator::global()->bounded(256),
+       QRandomGenerator::global()->bounded(256)
+   );
+    scope->addSignal(t, v, node,color);
     //scope->autoRange(); // if you implemented it; otherwise rescale axes here
 }
 
@@ -800,7 +808,7 @@ void MainWindow::handleMouseRelease(QMouseEvent *event) {
 
 Spice::Node* MainWindow::createJunctionAt(const QPointF& scenePos) {
     // Create new junction node
-    Node* junction = new Node(nullptr,Node::Junction);
+    Node* junction = new Node(nullptr,Node::Junction,this);
     junction->setPos(scenePos);
     junction->setFlag(QGraphicsItem::ItemIsMovable);
     junction->setFlag(QGraphicsItem::ItemSendsScenePositionChanges);

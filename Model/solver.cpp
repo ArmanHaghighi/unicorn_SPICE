@@ -29,8 +29,8 @@ const VectorXd& Solver::solveOnce(const Opt& o) {
     G.setZero();
     RHS.setZero();
 
-    //std::cout << "\n--- solveOnce t=" << o.t
-      //        << " mode=" << (o.mode==Mode::DC?"DC":"TRAN") << " ---\n"; // temp
+    std::cout << "\n--- solveOnce t=" << o.t
+              << " mode=" << (o.mode==Mode::DC?"DC":"TRAN") << " ---\n"; // temp
 
     for (auto *el : ckt->getElements()) {
         if (o.mode == Mode::DC)
@@ -39,7 +39,7 @@ const VectorXd& Solver::solveOnce(const Opt& o) {
             el->stampTransient(G, RHS, o.dt, o.t,firstStep);
     }
 
-    //std::cout << "G =\n" << G << "\nRHS = " << RHS.transpose() << "\n\n"; // temp
+    std::cout << "G =\n" << G << "\nRHS = " << RHS.transpose() << "\n\n"; // temp
 
     try {
         sol = G.fullPivLu().solve(RHS);

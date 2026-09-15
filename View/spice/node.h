@@ -21,7 +21,7 @@ namespace Spice {
         static int getNextId() { return nextId; }
         static void setNextId(int value) { nextId = value; }
         enum NodeType { Default, Junction };
-        explicit Node(Element* parent=nullptr,NodeType type=Default);
+        explicit Node(Element* parent=nullptr,NodeType type=Default,MainWindow* mainWin=nullptr);
         QRectF boundingRect() const override;
         // Identification
         void setName(const QString& name);

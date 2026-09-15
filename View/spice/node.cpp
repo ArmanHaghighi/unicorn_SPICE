@@ -16,7 +16,7 @@
 
  int Spice::Node::nextId=0;
 
-Spice::Node::Node(Element* parent,NodeType type)
+Spice::Node::Node(Element* parent,NodeType type,MainWindow *mainWin)
     :QGraphicsObject(parent),id(nextId++),type(type)
 ,ellipse(new QGraphicsEllipseItem()) {
     setFlag(QGraphicsItem::ItemIsSelectable);
@@ -26,18 +26,8 @@ Spice::Node::Node(Element* parent,NodeType type)
         // ellipse->setFlag(ItemIsMovable);
         // ellipse->setBrush(Qt::green);
     }
-    MainWindow *mainWin;
-    if (scene()) {
-        // 2. Get the view(s) displaying the scene
-        QList<QGraphicsView*> views = scene()->views();
-
-        if (!views.isEmpty()) {
-            // 3. Get the first view's parent window (which is usually your MainWindow)
-            mainWin = qobject_cast<MainWindow*>(views.first()->window());
-        }
-    }
-
-    connect(this,&Node::clicked,mainWin,&MainWindow::onProbingVoltage);
+    if (mainWin)
+        connect(this,&Node::clicked,mainWin,&MainWindow::onProbingVoltage);
 }
 QRectF Spice::Node::boundingRect() const {
     return ellipse->boundingRect();
