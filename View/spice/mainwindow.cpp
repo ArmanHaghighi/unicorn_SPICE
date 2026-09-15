@@ -47,33 +47,39 @@ MainWindow::MainWindow(QWidget *parent)
     schematic = new SchematicView(this);
     scope=new Scope(this,ui->customePlot);
     tileSubWindowsVertically(ui->mdiArea);
+
+
 //______________________________________________________________________Just for testing TODO:Implement probing system and pass output of simulation to scope
-    //TODO: ADD and remove traces
-    QVector<double> x(1000), y1(1000), y2(1000);
-    for (int i = 0; i < 1000; ++i) {
-        x[i] = i / 100.0; // Time from 0 to 10 seconds
-        y1[i] = 5 * sin(2 * M_PI * 0.5 * x[i]); // 0.5 Hz sine wave
-        y2[i] = 3 * cos(2 * M_PI * 1.0 * x[i]) + QRandomGenerator::global()->bounded(1.0); // 1.0 Hz cosine with noise
-    }
+    // TODO: ADD and remove traces
+     // QVector<double> x(1000), y1(1000), y2(1000);
+     // for (int i = 0; i < 1000; ++i) {
+     //     x[i] = i / 100.0; // Time from 0 to 10 seconds
+     //     y1[i] = 5 * sin(2 * M_PI * 0.5 * x[i]); // 0.5 Hz sine wave
+     //     y2[i] = 3 * cos(2 * M_PI * 1.0 * x[i]) + QRandomGenerator::global()->bounded(1.0); // 1.0 Hz cosine with noise
+     // }
 
     // Add signals to scope
-    scope->addSignal(x, y1, "Sine Wave", Qt::blue);
-    scope->addSignal(x, y2, "Noisy Cosine", Qt::red);
+    // scope->addSignal(x, y1, "Sine Wave", Qt::blue);
+    // scope->addSignal(x, y2, "Noisy Cosine", Qt::red);
 //_______________________________________________________________________________________
     scope->enableCursors(true);
     on_actionCursor_toggled(true);
 
 }
 
-void MainWindow::onAddElementAccepted(QString type, QString name, QString n1, QString n2, double value) {
+void MainWindow::onAddElementAccepted(Element* e) {
     backend->ensureGround(); // safe to call often
-    if (type=="R") backend->addResistor(name, n1, n2, value);
-    else if (type=="C") backend->addCapacitor(name, n1, n2, value);
-    else if (type=="L") backend->addInductor(name, n1, n2, value);
-    else if (type=="V") backend->addVdc(name, n1, n2, value);
-    else if (type=="I") backend->addIsrc(name, n1, n2, value);
-    // If your "AC" dialog is for a sine source:
-    // backend->addVsin(name, n1, n2, vOffset, vAmp, freq);
+    QString name =e->getName(), n1=e->nodes[0]->name(), n2=e->nodes[0]->name();
+    double value =e->getValue().toDouble();
+    if (e->getTypeName()=="Resistor") backend->addResistor(name, n1, n2, value);
+    else if (e->getTypeName()=="Capacitor") backend->addCapacitor(name, n1, n2, value);
+    else if (e->getTypeName()=="Inductor") backend->addInductor(name, n1, n2, value);
+    else if (e->getTypeName()=="DCVoltageSource") backend->addVdc(name, n1, n2, value);
+    else if (e->getTypeName()=="ACVoltageSource") {
+        auto s=dynamic_cast<ACVoltageSource*>(e);
+        backend->addVsin(name, n1, n2, s->offset.toDouble(), s->getValue().toDouble(), s->frequency.toDouble());
+    }
+    else if (e->getTypeName()=="DCCurrentSource") backend->addIsrc(name, n1, n2, value);
 
     // When the user is done adding or on run:
     backend->freeze();
@@ -94,6 +100,19 @@ void MainWindow::onWave(QString node, QVector<double> t, QVector<double> v) {
     // Your Scope has addSignal(x,y,name,color). You can choose color or let it pick default.
     scope->addSignal(t, v, node);
     //scope->autoRange(); // if you implemented it; otherwise rescale axes here
+}
+
+void MainWindow::onProbingVoltage(Node* n) {
+    if (probing&&n&&currentTool==ToolType::VoltageProbe) {
+        probingNodes.append(n);
+        n->ellipse->setBrush(Qt::cyan);
+    }
+}
+void MainWindow::onProbingCurrent(Element*e) {
+    if (probing&&e&&currentTool==ToolType::CurrentProbe) {
+        // probingNodes.append(n);                                                                  //TODO: make current probing
+        e->color=Qt::cyan;
+    }
 }
 
 MainWindow::~MainWindow()
@@ -296,8 +315,7 @@ void MainWindow::on_actionCapacitor_toggled(bool checked)
     }
 
 
-void MainWindow::on_actionTransient_triggered()
-{
+void MainWindow::on_actionTransient_triggered() {
     TranDialog *d=new TranDialog(this);
     QString iStop, iStart, iStep;
     if(d->exec()==QDialog::Accepted)
@@ -306,6 +324,14 @@ void MainWindow::on_actionTransient_triggered()
         iStart = d->ui->inputStart->text();
         iStep = d->ui->inputStep->text();
     }
+    QStringList pn;
+    pn.clear();
+    for (const auto& n:probingNodes) {
+        pn.push_back(n->name());
+    }
+    try{
+        onRunTran(iStop.toDouble(),iStep.toDouble(),pn);
+    }catch(...){ throw;}
     delete d;
 }
 
@@ -479,6 +505,8 @@ void MainWindow::placeElementOnClick(QMouseEvent *event)
 
         newElement->addNodes();
         elements.emplace_back(newElement);
+        onAddElementAccepted(newElement);
+
     }
     if (currentTool == ToolType::Wire && event->button() == Qt::LeftButton) {
         QPointF scenePos = ui->schematicView->mapToScene(event->pos());
@@ -1112,7 +1140,14 @@ void MainWindow::on_actionVoltageProbe_triggered(bool checked)
             if (a != ui->actionVoltageProbe) a->setChecked(false);
         }
         ui->schematicView->setCursor(Qt::PointingHandCursor);
+        currentTool=ToolType::VoltageProbe;
+        probing=true;
 
+    }
+    else {
+        ui->schematicView->setCursor(Qt::ArrowCursor);
+        currentTool=ToolType::None;
+        probing=false;
     }
 }
 
@@ -1124,6 +1159,14 @@ void MainWindow::on_actionCurrentProbe_triggered(bool checked)
             if (a != ui->actionCurrentProbe) a->setChecked(false);
         }
         ui->schematicView->setCursor(Qt::SizeHorCursor);
+        currentTool=ToolType::CurrentProbe;
+        probing=true;
+
+    }
+    else {
+        ui->schematicView->setCursor(Qt::ArrowCursor);
+        currentTool=ToolType::None;
+        probing=false;
     }
 }
 
@@ -1135,6 +1178,14 @@ void MainWindow::on_actionPowerProbe_triggered(bool checked)
             if (a != ui->actionPowerProbe) a->setChecked(false);
         }
         ui->schematicView->setCursor(QCursor(QPixmap(":/icons/assets/probe.png")));
+        currentTool=ToolType::PowerProbe;
+        probing=true;
+
+    }
+    else {
+        ui->schematicView->setCursor(Qt::ArrowCursor);
+        currentTool=ToolType::None;
+        probing=false;
     }
 
 

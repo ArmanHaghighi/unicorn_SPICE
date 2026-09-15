@@ -4,7 +4,6 @@
 #include <QGraphicsSceneDragDropEvent>
 #include <qpainter.h>
 #include <QPixmap>
-
 #include "node.h"
 #include "properties.h"
 #include "ui_properties.h"
@@ -18,6 +17,8 @@ Element::Element(QGraphicsScene* parent) {
     firstLead = {Element::boundingRect().right(), 0};
     secondLead = {Element::boundingRect().left(), 0};
     setTransformOriginPoint(Element::boundingRect().center());
+
+
 }
 
 
@@ -44,6 +45,19 @@ void Element::addNodes() {
 
     nodes.append(node1);
     nodes.append(node2);
+
+    MainWindow *mainWin = nullptr;
+    if (scene()) {
+        // 2. Get the view(s) displaying the scene
+        QList<QGraphicsView*> views = scene()->views();
+
+        if (!views.isEmpty()) {
+            // 3. Get the first view's parent window (which is usually your MainWindow)
+            mainWin = qobject_cast<MainWindow*>(views.first()->window());
+        }
+    }
+
+    connect(this,&Element::clicked,mainWin,&MainWindow::onProbingCurrent);
 }
 
 
@@ -84,6 +98,7 @@ void Element::mousePressEvent(QGraphicsSceneMouseEvent *event) {
 
         event->accept();
     } else
+        emit clicked(this);
         QGraphicsItem::mousePressEvent(event);
 }
 
@@ -110,7 +125,7 @@ void Element::mouseMoveEvent(QGraphicsSceneMouseEvent *event) {
 }
 
 void Element::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget) {
-    painter->setPen(QPen(Qt::black));
+    painter->setPen(QPen(color));
     painter->drawText(boundingRect().topLeft(), name);
     painter->drawText(QPointF{boundingRect().bottomLeft().x(), boundingRect().bottomLeft().y() + 10}, value);
 }
@@ -165,7 +180,8 @@ void Spice::Resistor::paint(QPainter *painter, const QStyleOptionGraphicsItem *o
         {15, 0},
         {25, 0}
     };
-    painter->setPen(Qt::black);
+painter->setPen(QPen(color));
+
     painter->drawPolyline(points, 9);
     // Optional: Draw component selection highlight
     if (isSelected()) {
@@ -187,7 +203,8 @@ void Spice::Capacitor::paint(QPainter *painter, const QStyleOptionGraphicsItem *
         {25, 0}, {5, 0}
 
     };
-    painter->setPen(Qt::black);
+painter->setPen(QPen(color));
+
     painter->drawLines(pointsPairs, 4);
     // Optional: Draw component selection highlight
     if (isSelected()) {
@@ -223,7 +240,8 @@ void Spice::Inductor::paint(QPainter *painter, const QStyleOptionGraphicsItem *o
     painterPath.arcTo({5, -5, 10, 10}, 180, -180);
     painterPath.lineTo(25, 0);
 
-    painter->setPen(Qt::black);
+painter->setPen(QPen(color));
+
     painter->drawPath(painterPath);
     // Optional: Draw component selection highlight
     if (isSelected()) {
@@ -276,7 +294,8 @@ void Gnd::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidg
         {-3, 30}, {3, 30}
     };
 
-    painter->setPen(Qt::black);
+painter->setPen(QPen(color));
+
     painter->drawLines(pointsPairs, 4);
 
     // Optional selection highlight
@@ -290,6 +309,7 @@ void Gnd::mouseDoubleClickEvent(QGraphicsSceneMouseEvent *event) {
     event->accept();
 }
 
+
 // Ideal Diode
 IdealDiode::IdealDiode() : Element() {
 }
@@ -301,7 +321,8 @@ void IdealDiode::paint(QPainter *painter, const QStyleOptionGraphicsItem *option
     QPolygonF triangle;
     triangle << QPointF(-15, -8) << QPointF(5, 0) << QPointF(-15, 8);
 
-    painter->setPen(Qt::black);
+painter->setPen(QPen(color));
+
     painter->drawPolygon(triangle);
 
     // Bar (cathode)
@@ -336,7 +357,8 @@ void SiliconDiode::paint(QPainter *painter, const QStyleOptionGraphicsItem *opti
     QPolygonF triangle;
     triangle << QPointF(-15, -8) << QPointF(5, 0) << QPointF(-15, 8);
 
-    painter->setPen(Qt::black);
+painter->setPen(QPen(color));
+
     painter->setBrush(Qt::black);
     painter->drawPolygon(triangle, Qt::OddEvenFill);
     painter->setBrush(Qt::NoBrush);

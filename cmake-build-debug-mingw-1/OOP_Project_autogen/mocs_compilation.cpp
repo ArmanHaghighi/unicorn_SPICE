@@ -4,6 +4,7 @@
 #include "QNVEOS2RTE/moc_addelementdialog.cpp"
 #include "QNVEOS2RTE/moc_backendFacade.cpp"
 #include "QNVEOS2RTE/moc_dcdialog.cpp"
+#include "QNVEOS2RTE/moc_elements.cpp"
 #include "QNVEOS2RTE/moc_mainwindow.cpp"
 #include "QNVEOS2RTE/moc_node.cpp"
 #include "QNVEOS2RTE/moc_phasedialog.cpp"

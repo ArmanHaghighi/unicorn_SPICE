@@ -49,11 +49,12 @@ namespace Spice {
         }
     public slots:
        // void handleParentMoved();
+       void mousePressEvent(QGraphicsSceneMouseEvent *event) override;
    signals:
        void positionChanged();
         void scenePositionChanged();
-        void namePropagationRequested(Node* source, const QString& name);
-
+        void namePropagationRequested(Spice::Node* source, const QString& name);
+        void clicked(Spice::Node* n);
 
     private:
         QString m_name;

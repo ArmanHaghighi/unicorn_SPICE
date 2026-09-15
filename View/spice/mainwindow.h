@@ -143,11 +143,14 @@ namespace Spice {
 
         void on_actionPowerProbe_triggered(bool checked);
 
-        void onAddElementAccepted(QString type, QString name, QString n1, QString n2, double value);
+        void onAddElementAccepted(Element* e);
 
         void onRunTran(double tstop, double dt, QStringList probeNodes);
 
         void onWave(QString node, QVector<double> t, QVector<double> v);
+public slots:
+        void onProbingVoltage(Node* n);
+        void onProbingCurrent(Element* e);
 
     signals:
         void nodeNamePropagationRequested(Node* source, const QString& name);
@@ -161,6 +164,7 @@ namespace Spice {
 
         void showEvent(QShowEvent *event);
 
+        bool probing=false;
         BackendFacade* backend;
         //Scope* scope;
         SchematicView* schematic=nullptr;
@@ -170,6 +174,7 @@ namespace Spice {
         Node* wireStartNode = nullptr;
         std::vector<Wire*> wires;
         QVector<Node*> junctionNodes;
+        QVector<Node*> probingNodes;
         enum class ToolType {
             None,
             Resistor,
@@ -183,11 +188,13 @@ namespace Spice {
             ACVoltageSource,
             DCCurrentSource,
             ACCurrentSource,
-            tSource,
             VCVS,
             VCCS,
             CCVS,
-            CCCS
+            CCCS,
+            VoltageProbe,
+            CurrentProbe,
+            PowerProbe
         };
         ToolType currentTool = ToolType::None;
         int nodeCount=0;
@@ -204,9 +211,9 @@ namespace Spice {
         ~SchematicView() override{
             delete schematicScene;
         }
-        signals:
+     signals:
             void mousePressed(QMouseEvent* event);
-        void mouseReleased(QMouseEvent* event);
+            void mouseReleased(QMouseEvent* event);
 
     protected:
         void resizeEvent(QResizeEvent *event) override;

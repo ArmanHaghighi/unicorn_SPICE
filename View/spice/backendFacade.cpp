@@ -79,7 +79,7 @@ void BackendFacade::freeze() {
 
 void BackendFacade::runTransient(double tstop, double dt, QStringList probeNodes) {
     if (dt <= 0 || tstop <= 0 || dt > tstop) { emit simError("Bad dt/tstop"); return; }
-
+    if (probeNodes.empty()) { emit simError("No nodes to simulate"); return; }
     // prep buffers
     time.clear();
     traces.clear();

@@ -13,7 +13,8 @@ class Controller{
     Circuit* circuit;
 public:
     Controller(string type);
-    ~Controller();
+
+    virtual ~Controller();
     static int next;
     void restart();
     void parse(string line);

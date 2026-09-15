@@ -8,13 +8,15 @@
 #include <cereal/types/string.hpp>
 #include <cereal/types/memory.hpp>
 #include <cereal/types/polymorphic.hpp>
+#include <QObject>
 
 using namespace std;
 namespace Spice {
     class Node;
     constexpr double GRID_SIZE =12.5;
-    class Element : public QGraphicsItem
+    class Element : public QGraphicsObject
     {
+        Q_OBJECT
     public:
         explicit Element(QGraphicsScene* parent=nullptr);
         QRectF boundingRect() const override;
@@ -41,8 +43,10 @@ namespace Spice {
         QPointF secondLead;
         QString getName();
         QString getValue();
+        Qt::GlobalColor color =Qt::black;
         signals:
         void elementMoved();
+        void clicked(Spice::Element* e);
 
     protected:
 
@@ -86,6 +90,7 @@ namespace Spice {
         void mouseDoubleClickEvent(QGraphicsSceneMouseEvent *event) override;
         QString getTypeName() const override{return "Gnd";}
     };
+
     class IdealDiode : public Element {
     public:
         IdealDiode();
@@ -116,7 +121,6 @@ namespace Spice {
         void setName(QString name) override;
         void mouseDoubleClickEvent(QGraphicsSceneMouseEvent *event) override;
         QString getTypeName() const override{return "ACVoltageSource";}
-    private:
         QString phase;
         QString offset;
         QString frequency;
