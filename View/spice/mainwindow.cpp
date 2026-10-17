@@ -68,25 +68,44 @@ MainWindow::MainWindow(QWidget *parent)
 }
 
 void MainWindow::onAddElementAccepted(Element* e) {
-    backend->ensureGround(); // safe to call often
-    QString name =e->getName(), n1=e->nodes[0]->name(), n2=e->nodes[0]->name();
-    double value =e->getValue().toDouble();
-    if (e->getTypeName()=="Resistor") backend->addResistor(name, n1, n2, value);
-    else if (e->getTypeName()=="Capacitor") backend->addCapacitor(name, n1, n2, value);
-    else if (e->getTypeName()=="Inductor") backend->addInductor(name, n1, n2, value);
-    else if (e->getTypeName()=="DCVoltageSource") backend->addVdc(name, n1, n2, value);
-    else if (e->getTypeName()=="ACVoltageSource") {
-        auto s=dynamic_cast<ACVoltageSource*>(e);
-        backend->addVsin(name, n1, n2, s->offset.toDouble(), s->getValue().toDouble(), s->frequency.toDouble());
-    }
-    else if (e->getTypeName()=="DCCurrentSource") backend->addIsrc(name, n1, n2, value);
-
-    // When the user is done adding or on run:
-    backend->freeze();
+    // backend->ensureGround(); // safe to call often
+    // QString name =e->getName(), n1=e->nodes[0]->name(), n2=e->nodes[0]->name();
+    // double value =e->getValue().toDouble();
+    // if (e->getTypeName()=="Resistor") backend->addResistor(name, n1, n2, value);
+    // else if (e->getTypeName()=="Capacitor") backend->addCapacitor(name, n1, n2, value);
+    // else if (e->getTypeName()=="Inductor") backend->addInductor(name, n1, n2, value);
+    // else if (e->getTypeName()=="DCVoltageSource") backend->addVdc(name, n1, n2, value);
+    // else if (e->getTypeName()=="ACVoltageSource") {
+    //     auto s=dynamic_cast<ACVoltageSource*>(e);
+    //     backend->addVsin(name, n1, n2, s->offset.toDouble(), s->getValue().toDouble(), s->frequency.toDouble());
+    // }
+    // else if (e->getTypeName()=="DCCurrentSource") backend->addIsrc(name, n1, n2, value);
+    //
+    // // When the user is done adding or on run:
+    // backend->freeze();
 }
 
 void MainWindow::onRunTran(double tstop, double dt, QStringList probeNodes) {
     // Run in a worker thread to keep UI snappy
+    backend->ensureGround(); // safe to call often
+    backend->clear();
+    for (Element* e :elements) {
+        QString name =e->getName(), n1=e->nodes[0]->name(), n2=e->nodes[0]->name();
+        double value =e->getValue().toDouble();
+        if (e->getTypeName()=="Resistor") backend->addResistor(name, n1, n2, value);
+        else if (e->getTypeName()=="Capacitor") backend->addCapacitor(name, n1, n2, value);
+        else if (e->getTypeName()=="Inductor") backend->addInductor(name, n1, n2, value);
+        else if (e->getTypeName()=="DCVoltageSource") backend->addVdc(name, n1, n2, value);
+        else if (e->getTypeName()=="ACVoltageSource") {
+            auto s=dynamic_cast<ACVoltageSource*>(e);
+            backend->addVsin(name, n1, n2, s->offset.toDouble(), s->getValue().toDouble(), s->frequency.toDouble());
+        }
+        else if (e->getTypeName()=="DCCurrentSource") backend->addIsrc(name, n1, n2, value);
+
+        // When the user is done adding or on run:
+    }
+    backend->freeze();
+
     auto* worker = new QObject(); worker->moveToThread(new QThread(this));
     connect(worker->thread(), &QThread::started, this, [=](){
         backend->runTransient(tstop, dt, probeNodes);
