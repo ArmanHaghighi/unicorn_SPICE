@@ -116,5 +116,13 @@ If you're curious about how a circuit simulator might be structured, interested 
 Just don't trust it with your next electronics homework.
 
 ---
+## 📸 Screenshots
 
+### Circuit editor
+![Circuit editor](images/editor.png)
+
+### Waveform viewer
+![Waveform viewer](images/scope.png)
+
+---
 *Made with C++, Qt, and a healthy disregard for how much work this would turn out to be.*
