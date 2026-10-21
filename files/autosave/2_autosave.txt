@@ -1,2 +1,0 @@
-V3 n2 n3 5
-G3 nm mn n2 n3 5

@@ -1,4 +1,0 @@
-R4 n m 3
-C4 n k 3
-GND n
-V1 m k 5

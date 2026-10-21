@@ -86,16 +86,16 @@ There may be long periods without development, and some rough edges may remain u
 
 ## 🛠️ Building from source
 
-The project uses CMake and requires a compatible C++ compiler, Qt, and Eigen3.
+The project uses CMake and requires a compatible C++ compiler, Qt, and Eigen3. We recommend using [MSYS2](https://www.msys2.org/) to manage dependencies and libraries.
 
 ```bash
 git clone https://github.com/ArmanHaghighi/unicorn_SPICE.git
 cd unicorn_SPICE
-cmake -S . -B build
-cmake --build build --config Release
+cmake -S . -B build -G Ninja -DCMAKE_BUILD_TYPE=Release
+cmake --build build
 ```
 
-These are the standard CMake build commands; dependencies must be installed and discoverable by CMake beforehand. Build success may depend on your environment and the current state of the code.
+These are the standard CMake and Ninja build commands; dependencies must be installed and discoverable by CMake beforehand. Build success may depend on your environment and the current state of the code.
 
 ---
 

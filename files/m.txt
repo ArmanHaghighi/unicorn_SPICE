@@ -1,3 +1,0 @@
-5A n m 5
-f g f 4
-sin n1 n2 SINE(5 4 100
